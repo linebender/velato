@@ -62,3 +62,5 @@ Contributions are welcome by pull request. The [Rust code of conduct] applies.
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
 dual licensed as above, without any additional terms or conditions.
+
+[rust code of conduct]: https://www.rust-lang.org/policies/code-of-conduct
