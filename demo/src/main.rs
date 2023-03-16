@@ -34,7 +34,6 @@ use winit::{event_loop::EventLoop, window::Window};
 #[command(about, long_about = None, bin_name="cargo run -p with_winit --")]
 struct Args {
     /// Path to the svg file to render. If not set, the GhostScript Tiger will be rendered
-    #[arg(long)]
     #[cfg(not(target_arch = "wasm32"))]
     file: std::path::PathBuf,
     /// When rendering an svg, what scale to use

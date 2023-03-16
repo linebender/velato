@@ -1,5 +1,9 @@
 ## Usage
 
+```shell
+cargo run -p with_winit -- [PATH_TO_FILE]
+```
+
 ## Controls
 
 - Mouse drag-and-drop will translate the image.
