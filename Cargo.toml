@@ -1,0 +1,30 @@
+[workspace]
+resolver = "2"
+members = ["demo"]
+
+[workspace.package]
+edition = "2021"
+version = "0.0.1"
+license = "MIT/Apache-2.0"
+# homepage = "https://vello.dev" - Domain owned by us, but unused at present
+# rust-version = 
+repository = "https://github.com/linebender/vello"
+
+[package]
+name = "velato"
+description = "Lottie renderer built on vello."
+categories = ["rendering", "graphics"]
+keywords = ["2d", "vector-graphics", "animation", "lottie"]
+
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+repository.workspace = true
+
+[workspace.dependencies]
+vello = { git = "https://github.com/linebender/vello" }
+
+
+[dependencies]
+vello = { workspace = true }
+bodymovin = { git = "https://github.com/dfrg/bodymovin-rs", rev = "c156dda9" }
