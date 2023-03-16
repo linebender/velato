@@ -24,6 +24,7 @@ To run an example, use:
 cargo run -p with_winit -- <PATH_TO_ANIMATION.json>
 ```
 
+<!-- Synced with demo/README.md -->
 Note that at the moment, we do not provide any example animations.
 <!-- TODO: Make one -->
 
