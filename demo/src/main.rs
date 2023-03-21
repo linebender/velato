@@ -16,7 +16,7 @@
 
 use std::{fs, time::Instant};
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use clap::Parser;
 use velato::Composition;
 use vello::RendererOptions;
@@ -39,6 +39,12 @@ struct Args {
     /// When rendering an svg, what scale to use
     #[arg(long)]
     scale: Option<f64>,
+    #[arg(long, global(false), value_parser = parse_color)]
+    base_color: Option<vello::peniko::Color>,
+}
+
+fn parse_color(s: &str) -> Result<Color> {
+    Color::parse(s).ok_or(anyhow!("'{s}' is not a valid color"))
 }
 
 async fn run(event_loop: EventLoop<()>, window: Window, args: Args, composition: Composition) {
@@ -63,6 +69,7 @@ async fn run(event_loop: EventLoop<()>, window: Window, args: Args, composition:
     let mut transform = Affine::scale(args.scale.unwrap_or(1.0));
     let mut mouse_down = false;
     let mut prior_position: Option<Vec2> = None;
+    let mut n = 1u32;
     event_loop.run(move |event, _, control_flow| match event {
         Event::WindowEvent {
             ref event,
@@ -74,6 +81,14 @@ async fn run(event_loop: EventLoop<()>, window: Window, args: Args, composition:
                     match input.virtual_keycode {
                         Some(VirtualKeyCode::Escape) => {
                             *control_flow = ControlFlow::Exit;
+                        }
+                        Some(VirtualKeyCode::X) => {
+                            n = (n * 2).min(256);
+                            println!("n = {n}");
+                        }
+                        Some(VirtualKeyCode::Z) => {
+                            n = (n / 2).max(1);
+                            println!("n = {n}");
                         }
                         _ => {}
                     }
@@ -132,7 +147,16 @@ async fn run(event_loop: EventLoop<()>, window: Window, args: Args, composition:
             let time = start.elapsed().as_secs_f32();
 
             let mut builder = SceneBuilder::for_scene(&mut scene);
-            velato_renderer.render(&composition, time, transform, 1.0, &mut builder);
+            let nx = 1 << (n.ilog2() / 2);
+            for i in 0..n {
+                let x = i % nx;
+                let y = i / nx;
+                let sx = (10000.0 / nx as f64).min(1000.0);
+                let sy = (10000.0 * nx as f64 / n as f64).min(1000.0);
+                let new_t = transform * Affine::translate((x as f64 * sx, y as f64 * sy));
+                let new_time = time + i as f32 * 0.25;
+                velato_renderer.render(&composition, new_time, new_t, 1.0, &mut builder);
+            }
 
             let surface_texture = surface
                 .surface
@@ -146,7 +170,7 @@ async fn run(event_loop: EventLoop<()>, window: Window, args: Args, composition:
                     &scene,
                     &surface_texture,
                     &RenderParams {
-                        base_color: Color::BLACK,
+                        base_color: args.base_color.unwrap_or(Color::WHITE),
                         width,
                         height,
                     },
