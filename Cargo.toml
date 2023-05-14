@@ -22,7 +22,7 @@ edition.workspace = true
 repository.workspace = true
 
 [workspace.dependencies]
-vello = { git = "https://github.com/linebender/vello", rev = "299b47ea064ec3132e294acd9cf243eea7d9ee51" }
+vello = { git = "https://github.com/linebender/vello", rev = "b0303ccf98df15a8b196272720d364a56f7304ba" }
 
 
 [dependencies]
