@@ -12,7 +12,7 @@ use kurbo::PathEl;
 #[derive(Clone, Debug)]
 pub enum Position {
     Point(Value<Point>),
-    SplitComponents((Value<f64>, Value<f64>)),
+    SplitComponents((Value<f32>, Value<f32>)),
 }
 
 /// Animated affine transformation.
@@ -54,8 +54,8 @@ impl Transform {
         let position = match &self.position {
             Position::Point(value) => value.evaluate(frame),
             Position::SplitComponents((x_value, y_value)) => kurbo::Point {
-                x: x_value.evaluate(frame),
-                y: y_value.evaluate(frame),
+                x: x_value.evaluate(frame) as f64,
+                y: y_value.evaluate(frame) as f64,
             },
         };
         let rotation = self.rotation.evaluate(frame) as f64;

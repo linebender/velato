@@ -154,8 +154,8 @@ fn conv_transform(value: &bodymovin::helpers::Transform) -> (Transform, Value<f3
             }
             bodymovin::properties::SplittableMultiDimensional::Split(split_vector) => {
                 Position::SplitComponents((
-                    conv_scalar_f64(&split_vector.x_component),
-                    conv_scalar_f64(&split_vector.y_component),
+                    conv_scalar(&split_vector.x_component),
+                    conv_scalar(&split_vector.y_component),
                 ))
             }
         },
@@ -198,31 +198,6 @@ fn conv_scalar(value: &bodymovin::properties::Scalar) -> Value<f32> {
                         frame: value.start_time as f32,
                     });
                     values.push(data.0 as f32);
-                }
-                last_value = Some(value.end_value.as_ref());
-            }
-            Value::Animated(model::Animated {
-                times: frames,
-                values,
-            })
-        }
-    }
-}
-
-fn conv_scalar_f64(value: &bodymovin::properties::Scalar) -> Value<f64> {
-    use bodymovin::properties::Value::*;
-    match &value.value {
-        Fixed(value) => Value::Fixed(*value),
-        Animated(animated) => {
-            let mut frames = vec![];
-            let mut values = vec![];
-            let mut last_value = None;
-            for value in animated {
-                if let Some(data) = value.start_value.as_ref().or(last_value.flatten()) {
-                    frames.push(Time {
-                        frame: value.start_time as f32,
-                    });
-                    values.push(data.0);
                 }
                 last_value = Some(value.end_value.as_ref());
             }
