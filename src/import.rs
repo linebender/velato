@@ -1,6 +1,8 @@
 // Copyright 2023 Google LLC
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use crate::model::animated::Position;
+
 use super::{model, model::*, Composition};
 
 use vello::kurbo::{Point, Size, Vec2};
@@ -148,10 +150,13 @@ fn conv_transform(value: &bodymovin::helpers::Transform) -> (Transform, Value<f3
         anchor: conv_point(&value.anchor_point),
         position: match &value.position {
             bodymovin::properties::SplittableMultiDimensional::Uniform(position) => {
-                conv_point(position)
+                Position::Point(conv_point(position))
             }
-            bodymovin::properties::SplittableMultiDimensional::Split(_) => {
-                unimplemented!("positions with Split Vectors not yet supported")
+            bodymovin::properties::SplittableMultiDimensional::Split(split_vector) => {
+                Position::SplitComponents((
+                    conv_scalar_f64(&split_vector.x_component),
+                    conv_scalar_f64(&split_vector.y_component),
+                ))
             }
         },
         scale: conv_vec2(&value.scale),
@@ -166,7 +171,7 @@ fn conv_transform(value: &bodymovin::helpers::Transform) -> (Transform, Value<f3
 fn conv_shape_transform(value: &bodymovin::shapes::Transform) -> GroupTransform {
     let transform = animated::Transform {
         anchor: conv_point(&value.anchor_point),
-        position: conv_point(&value.position),
+        position: Position::Point(conv_point(&value.position)),
         scale: conv_vec2(&value.scale),
         rotation: conv_scalar(&value.rotation),
         skew: conv_scalar(&value.skew),
@@ -193,6 +198,31 @@ fn conv_scalar(value: &bodymovin::properties::Scalar) -> Value<f32> {
                         frame: value.start_time as f32,
                     });
                     values.push(data.0 as f32);
+                }
+                last_value = Some(value.end_value.as_ref());
+            }
+            Value::Animated(model::Animated {
+                times: frames,
+                values,
+            })
+        }
+    }
+}
+
+fn conv_scalar_f64(value: &bodymovin::properties::Scalar) -> Value<f64> {
+    use bodymovin::properties::Value::*;
+    match &value.value {
+        Fixed(value) => Value::Fixed(*value),
+        Animated(animated) => {
+            let mut frames = vec![];
+            let mut values = vec![];
+            let mut last_value = None;
+            for value in animated {
+                if let Some(data) = value.start_value.as_ref().or(last_value.flatten()) {
+                    frames.push(Time {
+                        frame: value.start_time as f32,
+                    });
+                    values.push(data.0);
                 }
                 last_value = Some(value.end_value.as_ref());
             }
