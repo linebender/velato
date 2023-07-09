@@ -1,6 +1,8 @@
 // Copyright 2023 Google LLC
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use crate::model::animated::Position;
+
 use super::{model, model::*, Composition};
 
 use vello::kurbo::{Point, Size, Vec2};
@@ -146,7 +148,17 @@ fn setup_layer<T>(
 fn conv_transform(value: &bodymovin::helpers::Transform) -> (Transform, Value<f32>) {
     let transform = animated::Transform {
         anchor: conv_point(&value.anchor_point),
-        position: conv_point(&value.position),
+        position: match &value.position {
+            bodymovin::properties::SplittableMultiDimensional::Uniform(position) => {
+                Position::Point(conv_point(position))
+            }
+            bodymovin::properties::SplittableMultiDimensional::Split(split_vector) => {
+                Position::SplitComponents((
+                    conv_scalar(&split_vector.x_component),
+                    conv_scalar(&split_vector.y_component),
+                ))
+            }
+        },
         scale: conv_vec2(&value.scale),
         rotation: conv_scalar(&value.rotation),
         skew: conv_scalar(&value.skew),
@@ -159,7 +171,7 @@ fn conv_transform(value: &bodymovin::helpers::Transform) -> (Transform, Value<f3
 fn conv_shape_transform(value: &bodymovin::shapes::Transform) -> GroupTransform {
     let transform = animated::Transform {
         anchor: conv_point(&value.anchor_point),
-        position: conv_point(&value.position),
+        position: Position::Point(conv_point(&value.position)),
         scale: conv_vec2(&value.scale),
         rotation: conv_scalar(&value.rotation),
         skew: conv_scalar(&value.skew),
