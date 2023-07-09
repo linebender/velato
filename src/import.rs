@@ -146,7 +146,14 @@ fn setup_layer<T>(
 fn conv_transform(value: &bodymovin::helpers::Transform) -> (Transform, Value<f32>) {
     let transform = animated::Transform {
         anchor: conv_point(&value.anchor_point),
-        position: conv_point(&value.position),
+        position: match &value.position {
+            bodymovin::properties::SplittableMultiDimensional::Uniform(position) => {
+                conv_point(position)
+            }
+            bodymovin::properties::SplittableMultiDimensional::Split(_) => {
+                unimplemented!("positions with Split Vectors not yet supported")
+            }
+        },
         scale: conv_vec2(&value.scale),
         rotation: conv_scalar(&value.rotation),
         skew: conv_scalar(&value.skew),
