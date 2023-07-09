@@ -9,13 +9,19 @@ use super::*;
 
 use kurbo::PathEl;
 
+#[derive(Clone, Debug)]
+pub enum Position {
+    Point(Value<Point>),
+    SplitComponents((Value<f32>, Value<f32>)),
+}
+
 /// Animated affine transformation.
 #[derive(Clone, Debug)]
 pub struct Transform {
     /// Anchor point.
     pub anchor: Value<Point>,
     /// Translation.
-    pub position: Value<Point>,
+    pub position: Position,
     /// Rotation angle.
     pub rotation: Value<f32>,
     /// Scale factor.
@@ -30,7 +36,12 @@ impl Transform {
     /// Returns true if the transform is fixed.
     pub fn is_fixed(&self) -> bool {
         self.anchor.is_fixed()
-            && self.position.is_fixed()
+            && match &self.position {
+                Position::Point(value) => value.is_fixed(),
+                Position::SplitComponents((x_value, y_value)) => {
+                    x_value.is_fixed() && y_value.is_fixed()
+                }
+            }
             && self.rotation.is_fixed()
             && self.scale.is_fixed()
             && self.skew.is_fixed()
@@ -40,7 +51,13 @@ impl Transform {
     /// Evaluates the transform at the specified frame.
     pub fn evaluate(&self, frame: f32) -> Affine {
         let anchor = self.anchor.evaluate(frame);
-        let position = self.position.evaluate(frame);
+        let position = match &self.position {
+            Position::Point(value) => value.evaluate(frame),
+            Position::SplitComponents((x_value, y_value)) => kurbo::Point {
+                x: x_value.evaluate(frame) as f64,
+                y: y_value.evaluate(frame) as f64,
+            },
+        };
         let rotation = self.rotation.evaluate(frame) as f64;
         let scale = self.scale.evaluate(frame);
         let skew = self.skew.evaluate(frame) as f64;
