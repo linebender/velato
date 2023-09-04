@@ -152,9 +152,9 @@ impl Lerp for kurbo::Size {
 impl Lerp for peniko::Color {
     fn lerp(&self, other: &Self, t: f32) -> Self {
         let r = (self.r as f64 / 255.0).lerp(&(other.r as f64 / 255.0), t);
-        let g = (self.r as f64 / 255.0).lerp(&(other.g as f64 / 255.0), t);
-        let b = (self.r as f64 / 255.0).lerp(&(other.b as f64 / 255.0), t);
-        let a = (self.r as f64 / 255.0).lerp(&(other.a as f64 / 255.0), t);
+        let g = (self.g as f64 / 255.0).lerp(&(other.g as f64 / 255.0), t);
+        let b = (self.b as f64 / 255.0).lerp(&(other.b as f64 / 255.0), t);
+        let a = (self.a as f64 / 255.0).lerp(&(other.a as f64 / 255.0), t);
         peniko::Color::rgba(r, g, b, a)
     }
 }
