@@ -27,4 +27,4 @@ vello = { git = "https://github.com/linebender/vello.git", rev = "34d313d0decc6c
 
 [dependencies]
 vello = { workspace = true }
-bodymovin = { git = "https://github.com/vectorgameexperts/bodymovin-rs" }
+bodymovin = { git = "https://github.com/Traverse-Research/bodymovin-rs.git" }
