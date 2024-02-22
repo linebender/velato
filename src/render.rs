@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2023 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use super::{model::*, Composition};

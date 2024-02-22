@@ -6,9 +6,7 @@ members = ["demo"]
 edition = "2021"
 version = "0.0.1"
 license = "MIT OR Apache-2.0"
-# homepage = "https://vello.dev" - Domain owned by us, but unused at present
-# rust-version = 
-repository = "https://github.com/linebender/vello"
+repository = "https://github.com/linebender/velato"
 
 [package]
 name = "velato"
