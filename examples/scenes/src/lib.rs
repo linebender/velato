@@ -12,6 +12,7 @@ use anyhow::{anyhow, Result};
 use clap::{Args, Subcommand};
 #[cfg(not(target_arch = "wasm32"))]
 use download::Download;
+#[cfg(not(target_arch = "wasm32"))]
 pub use lottie::{default_scene, scene_from_files};
 pub use simple_text::RobotoText;
 pub use test_scenes::test_scenes;
