@@ -1,23 +1,20 @@
-// Copyright 2023 the Velato Authors
-// SPDX-License-Identifier: Apache-2.0 OR MIT
-
+use std::ops::Range;
 use vello::kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2};
 use vello::peniko::{self, BlendMode, Color};
-
-use core::ops::Range;
-
-pub mod animated;
-pub mod fixed;
 
 mod spline;
 mod value;
 
-pub use value::{Animated, Lerp, Time, Value, ValueRef};
+pub mod animated;
+pub mod fixed;
+
+pub use value::{Animated, Easing, EasingHandle, Time, Tweenable, Value, ValueRef};
 
 pub(crate) use spline::SplineToPath;
 
 macro_rules! simple_value {
     ($name:ident) => {
+        #[allow(clippy::large_enum_variant)]
         #[derive(Clone, Debug)]
         pub enum $name {
             Fixed(fixed::$name),
@@ -132,7 +129,7 @@ pub struct GroupTransform {
 }
 
 /// Layer in an animation.
-#[derive(Clone, Default, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Layer {
     /// Name of the layer.
     pub name: String,
@@ -195,7 +192,7 @@ pub enum Content {
     /// Asset instance with the specified name and time remapping.
     Instance {
         name: String,
-        time_remap: Value<f32>,
+        time_remap: Option<Value<f32>>,
     },
     /// Collection of shapes.
     Shape(Vec<Shape>),

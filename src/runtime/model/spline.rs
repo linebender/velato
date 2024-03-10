@@ -1,6 +1,3 @@
-// Copyright 2023 the Velato Authors
-// SPDX-License-Identifier: Apache-2.0 OR MIT
-
 use vello::kurbo::{PathEl, Point};
 
 /// Helper trait for converting cubic splines to paths.
@@ -10,6 +7,9 @@ pub trait SplineToPath {
 
     fn to_path(&self, is_closed: bool, path: &mut Vec<PathEl>) -> Option<()> {
         use PathEl::*;
+        if self.len() == 0 {
+            return None;
+        }
         path.push(MoveTo(self.get(0)));
         let n_vertices = self.len() / 3;
         let mut add_element = |from_vertex, to_vertex| {

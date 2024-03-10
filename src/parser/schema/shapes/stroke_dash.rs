@@ -1,0 +1,20 @@
+use crate::parser::schema::animated_properties::value::FloatValue;
+use crate::parser::schema::constants::stroke_dash_type::StrokeDashType;
+use crate::parser::schema::helpers::visual_object::VisualObject;
+use serde::{Deserialize, Serialize};
+
+/// An item used to described the dashe pattern in a stroked path
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+pub struct StrokeDash {
+    #[serde(flatten)]
+    visual_object: VisualObject,
+
+    #[serde(rename = "n")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    dash_type: Option<StrokeDashType>,
+
+    /// Length of the dash
+    #[serde(rename = "v")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    length: Option<FloatValue>,
+}

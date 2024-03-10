@@ -1,6 +1,3 @@
-// Copyright 2023 the Velato Authors
-// SPDX-License-Identifier: Apache-2.0 OR MIT
-
 /*!
 Representations of animated values.
 */
@@ -11,8 +8,8 @@ use kurbo::PathEl;
 
 #[derive(Clone, Debug)]
 pub enum Position {
-    Point(Value<Point>),
-    SplitComponents((Value<f32>, Value<f32>)),
+    Value(Value<Point>),
+    SplitValues((Value<f32>, Value<f32>)),
 }
 
 /// Animated affine transformation.
@@ -37,8 +34,8 @@ impl Transform {
     pub fn is_fixed(&self) -> bool {
         self.anchor.is_fixed()
             && match &self.position {
-                Position::Point(value) => value.is_fixed(),
-                Position::SplitComponents((x_value, y_value)) => {
+                Position::Value(value) => value.is_fixed(),
+                Position::SplitValues((x_value, y_value)) => {
                     x_value.is_fixed() && y_value.is_fixed()
                 }
             }
@@ -52,8 +49,8 @@ impl Transform {
     pub fn evaluate(&self, frame: f32) -> Affine {
         let anchor = self.anchor.evaluate(frame);
         let position = match &self.position {
-            Position::Point(value) => value.evaluate(frame),
-            Position::SplitComponents((x_value, y_value)) => kurbo::Point {
+            Position::Value(value) => value.evaluate(frame),
+            Position::SplitValues((x_value, y_value)) => kurbo::Point {
                 x: x_value.evaluate(frame) as f64,
                 y: y_value.evaluate(frame) as f64,
             },
@@ -65,11 +62,12 @@ impl Transform {
         let skew_matrix = if skew != 0.0 {
             const SKEW_LIMIT: f64 = 85.0;
             let skew = -skew.min(SKEW_LIMIT).max(-SKEW_LIMIT);
+            let skew = skew.to_radians();
             let angle = skew_angle.to_radians();
             fn make_skew(x: f64) -> Affine {
-                Affine::new([1.0, x.tan(), 0.0, 1.0, 0.0, 0.0])
+                Affine::new([1.0, 0.0, (x).tan(), 1.0, 0.0, 0.0])
             }
-            Affine::rotate(angle) * make_skew(skew) * Affine::rotate(-angle)
+            Affine::rotate(-angle) * make_skew(skew) * Affine::rotate(angle)
         } else {
             Affine::IDENTITY
         };
@@ -193,8 +191,9 @@ impl Spline {
     /// Evalutes the spline at the given frame and emits the elements
     /// to the specified path.
     pub fn evaluate(&self, frame: f32, path: &mut Vec<PathEl>) -> bool {
-        use super::SplineToPath as _;
-        let Some(([ix0, ix1], t)) = Time::frames_and_weight(&self.times, frame) else {
+        let Some(([ix0, ix1], t, _easing, _hold)) = Time::frames_and_weight(&self.times, frame)
+        else {
+            // TODO: evaluate whether hold frame is needed here
             return false;
         };
         let (Some(from), Some(to)) = (self.values.get(ix0), self.values.get(ix1)) else {
@@ -277,11 +276,11 @@ pub struct Stroke {
     /// Width of the stroke.
     pub width: Value<f32>,
     /// Join style.
-    pub join: peniko::Join,
+    pub join: kurbo::Join,
     /// Limit for miter joins.
     pub miter_limit: Option<f32>,
     /// Cap style.
-    pub cap: peniko::Cap,
+    pub cap: kurbo::Cap,
 }
 
 impl Stroke {
@@ -291,13 +290,13 @@ impl Stroke {
     }
 
     /// Evaluates the stroke at the specified frame.
-    pub fn evaluate(&self, frame: f32) -> peniko::Stroke {
+    pub fn evaluate(&self, frame: f32) -> kurbo::Stroke {
         let width = self.width.evaluate(frame);
-        let mut stroke = peniko::Stroke::new(width)
+        let mut stroke = kurbo::Stroke::new(width.into())
             .with_caps(self.cap)
             .with_join(self.join);
         if let Some(miter_limit) = self.miter_limit {
-            stroke.miter_limit = miter_limit;
+            stroke.miter_limit = miter_limit.into();
         }
         stroke
     }
@@ -362,27 +361,22 @@ impl ColorStops {
     }
 
     fn evaluate_inner(&self, frame: f32) -> Option<fixed::ColorStops> {
-        let ([ix0, ix1], t) = Time::frames_and_weight(&self.frames, frame)?;
+        let ([ix0, ix1], t, easing, hold) = Time::frames_and_weight(&self.frames, frame)?;
+
         let v0 = self.values.get(ix0)?;
         let v1 = self.values.get(ix1)?;
-        let opacity_start = if v0.len() > self.count * 4 {
-            Some(self.count * 4)
-        } else {
-            None
-        };
+
         let mut stops: fixed::ColorStops = Default::default();
         for i in 0..self.count {
-            let j = i * 4;
-            let offset = v0.get(j)?.lerp(v1.get(j)?, t);
-            let r = v0.get(j + 1)?.lerp(v1.get(j + 1)?, t) as f64;
-            let g = v0.get(j + 2)?.lerp(v1.get(j + 2)?, t) as f64;
-            let b = v0.get(j + 3)?.lerp(v1.get(j + 3)?, t) as f64;
-            let a = if let Some(_opacity_start) = opacity_start {
-                // TODO: find and lerp opacities
-                1.0
-            } else {
-                1.0
-            };
+            let j = i * 5;
+            let offset = v0.get(j)?.ease(v1.get(j)?, t, &easing);
+            let t = if hold { 0f32 } else { t };
+
+            let r = v0.get(j + 1)?.ease(v1.get(j + 1)?, t, &easing) as f64;
+            let g = v0.get(j + 2)?.ease(v1.get(j + 2)?, t, &easing) as f64;
+            let b = v0.get(j + 3)?.ease(v1.get(j + 3)?, t, &easing) as f64;
+            let a = v0.get(j + 4)?.ease(v1.get(j + 4)?, t, &easing) as f64;
+
             stops.push((offset, fixed::Color::rgba(r, g, b, a)).into())
         }
         Some(stops)

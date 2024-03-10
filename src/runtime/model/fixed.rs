@@ -1,14 +1,9 @@
-// Copyright 2023 the Velato Authors
-// SPDX-License-Identifier: Apache-2.0 OR MIT
-
 /*!
 Representations of fixed (non-animated) values.
 */
 
-use vello::{
-    kurbo::{self, Affine, Point, Vec2},
-    peniko,
-};
+use vello::kurbo::{self, Affine, Point, Vec2};
+use vello::peniko;
 
 /// Fixed affine transformation.
 pub type Transform = kurbo::Affine;
@@ -23,7 +18,7 @@ pub type ColorStops = peniko::ColorStops;
 pub type Brush = peniko::Brush;
 
 /// Fixed stroke style.
-pub type Stroke = peniko::Stroke;
+pub type Stroke = kurbo::Stroke;
 
 /// Fixed repeater effect.
 #[derive(Clone, Debug)]
@@ -62,8 +57,9 @@ impl Repeater {
     }
 }
 
-// TODO: probably move this to peniko. The better option is to add an alpha parameter
-// to the draw methods in vello. This is already handled at the encoding level.
+// TODO: probably move this to peniko. The better option is to add an alpha
+// parameter to the draw methods in vello. This is already handled at the
+// encoding level.
 pub(crate) fn brush_with_alpha(brush: &Brush, alpha: f32) -> Brush {
     if alpha == 1.0 {
         brush.clone()
@@ -71,7 +67,7 @@ pub(crate) fn brush_with_alpha(brush: &Brush, alpha: f32) -> Brush {
         match brush {
             Brush::Solid(color) => color.with_alpha_factor(alpha).into(),
             Brush::Gradient(gradient) => Brush::Gradient(peniko::Gradient {
-                kind: gradient.kind.clone(),
+                kind: gradient.kind,
                 extend: gradient.extend,
                 stops: gradient
                     .stops
