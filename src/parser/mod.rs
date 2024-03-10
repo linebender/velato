@@ -1,2 +1,2 @@
 pub mod schema;
-pub use schema::lottie::Lottie;
+pub use schema::animation::animation::Animation;

@@ -1,6 +1,6 @@
 use self::converters::conv_layer;
 use self::util::NumberExt;
-use crate::parser::{schema, Lottie};
+use crate::parser::{schema, Animation};
 use crate::Composition;
 use std::collections::HashMap;
 
@@ -12,7 +12,7 @@ mod util;
 pub fn import_composition(
     source: impl AsRef<[u8]>,
 ) -> Result<Composition, Box<dyn std::error::Error>> {
-    let source = Lottie::from_slice(source.as_ref())?;
+    let source = Animation::from_slice(source.as_ref())?;
 
     let mut target = Composition {
         frames: source.in_point.unwrap_f32()..source.out_point.unwrap_f32(),

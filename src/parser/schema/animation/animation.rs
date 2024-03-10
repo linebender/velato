@@ -1,13 +1,11 @@
-use super::assets::AnyAsset;
-use super::layers::AnyLayer;
-use crate::parser::schema::helpers::int_boolean::BoolInt;
+use crate::parser::schema::{assets::AnyAsset, helpers::int_boolean::BoolInt, layers::AnyLayer};
 use serde::{Deserialize, Serialize};
 use serde_json::Number;
 use std::fmt::Display;
 
 /// Top level object, describing the animation
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub struct Lottie {
+pub struct Animation {
     /// Lottie file version
     #[serde(rename = "v")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -44,12 +42,12 @@ pub struct Lottie {
     pub layers: Vec<AnyLayer>,
 }
 
-impl Lottie {
-    pub fn from_slice(v: &[u8]) -> Result<Lottie, serde_json::Error> {
+impl Animation {
+    pub fn from_slice(v: &[u8]) -> Result<Animation, serde_json::Error> {
         serde_json::from_slice(v)
     }
 
-    pub fn from_json(v: serde_json::Value) -> Result<Lottie, serde_json::Error> {
+    pub fn from_json(v: serde_json::Value) -> Result<Animation, serde_json::Error> {
         serde_json::from_value(v)
     }
 
@@ -58,7 +56,7 @@ impl Lottie {
     }
 }
 
-impl std::str::FromStr for Lottie {
+impl std::str::FromStr for Animation {
     type Err = serde_json::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -66,7 +64,7 @@ impl std::str::FromStr for Lottie {
     }
 }
 
-impl Display for Lottie {
+impl Display for Animation {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", serde_json::to_string(&self).unwrap())
     }

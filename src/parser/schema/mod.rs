@@ -10,7 +10,6 @@ pub mod constants;
 // todo effects
 pub mod helpers;
 pub mod layers;
-pub mod lottie; // this should be "animation"
 pub mod shapes;
 pub mod styles;
 //todo text

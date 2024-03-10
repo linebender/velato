@@ -18,7 +18,7 @@ static JSON: Lazy<serde_json::Value> = Lazy::new(|| {
         }
     )
 });
-static LOTTIE: Lazy<Lottie> = Lazy::new(|| Lottie {
+static LOTTIE: Lazy<Animation> = Lazy::new(|| Animation {
     version: Some("5.5.2".to_string()),
     name: Some("Example".to_string()),
     frame_rate: Number::from(60),
@@ -43,7 +43,7 @@ fn test_serde_deserialize() {
 
 #[test]
 fn test_deserialize() {
-    let actual = Lottie::from_json(JSON.to_owned());
+    let actual = Animation::from_json(JSON.to_owned());
 
     match actual {
         Ok(actual) => assert_eq!(*LOTTIE, actual),
