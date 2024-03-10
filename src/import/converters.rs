@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::builders::{setup_layer_base, setup_precomp_layer, setup_shape_layer};
 use super::defaults::{FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE, POSITION_ZERO};
 use super::NumberExt;

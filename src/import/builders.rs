@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::converters::{conv_blend_mode, conv_scalar, conv_shape_geometry, conv_transform};
 use super::defaults::FLOAT_VALUE_ONE_HUNDRED;
 use super::NumberExt;

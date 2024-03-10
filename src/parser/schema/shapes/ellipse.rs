@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::shape_element::ShapeElement;
 use crate::parser::schema::animated_properties::multi_dimensional::MultiDimensional;
 use crate::parser::schema::animated_properties::position::Position;

@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::shape::Shape;
 use crate::parser::schema::animated_properties::shape_property::ShapeProperty;
 use serde::{Deserialize, Serialize};

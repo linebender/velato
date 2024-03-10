@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::base_stroke::BaseStroke;
 use super::gradient::Gradient;
 use super::shape_element::ShapeElement;

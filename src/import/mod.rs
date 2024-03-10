@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use self::converters::conv_layer;
 use self::util::NumberExt;
 use crate::parser::{schema, Animation};

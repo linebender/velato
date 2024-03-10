@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::parser::schema::animated_properties::gradient_colors::GradientColors;
 use crate::parser::schema::animated_properties::multi_dimensional::MultiDimensional;
 use crate::parser::schema::animated_properties::value::FloatValue;

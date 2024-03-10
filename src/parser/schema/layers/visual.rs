@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::parser::schema::constants::blend_mode::BlendMode;
 use crate::parser::schema::constants::matte_mode::MatteMode;
 use crate::parser::schema::helpers::int_boolean::BoolInt;

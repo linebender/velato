@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::runtime::model::{Easing, Tweenable};
 use serde_json::Number;
 

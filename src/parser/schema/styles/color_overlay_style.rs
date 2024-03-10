@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::layer_style::LayerStyle;
 use crate::parser::schema::animated_properties::color_value::ColorValue;
 use crate::parser::schema::animated_properties::value::FloatValue;

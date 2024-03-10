@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use super::multi_dimensional::MultiDimensional;
 use serde::{Deserialize, Serialize};
 use serde_json::Number;

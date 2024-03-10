@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 //! Shapes - https://lottiefiles.github.io/lottie-docs/shapes/
 
 use super::visual::VisualLayer;

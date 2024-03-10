@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use serde_json::Number;
 
 /// Colors are represented as arrays with values between 0 and 1 for the RGB

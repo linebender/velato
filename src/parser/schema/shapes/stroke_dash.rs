@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::parser::schema::animated_properties::value::FloatValue;
 use crate::parser::schema::constants::stroke_dash_type::StrokeDashType;
 use crate::parser::schema::helpers::visual_object::VisualObject;

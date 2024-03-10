@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 pub mod blend_mode;
 pub mod composite;
 pub mod fill_rule;

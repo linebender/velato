@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 //! Transform - https://lottiefiles.github.io/lottie-docs/concepts/#transform
 
 use crate::parser::schema::animated_properties::multi_dimensional::MultiDimensional;

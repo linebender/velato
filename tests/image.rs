@@ -1,3 +1,6 @@
+// Copyright 2024 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use once_cell::sync::Lazy;
 use serde_json::{json, Number};
 use velato::parser::schema::assets::asset::Asset;
