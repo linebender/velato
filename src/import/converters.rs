@@ -1,4 +1,4 @@
-// Copyright 2024 the Vello Authors
+// Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use super::builders::{setup_layer_base, setup_precomp_layer, setup_shape_layer};
