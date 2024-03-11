@@ -1,6 +1,6 @@
 ## Usage
 
-Running the viewer without any arguments will render a built-in set of public-domain Lottie images:
+Running the viewer without any arguments will render a built-in set of Lottie images:
 
 ```bash
 $ cargo run -p with_winit --release
