@@ -47,7 +47,7 @@ You can also load an entire folder or individual files.
 cargo run -p with_winit -- examples/assets
 ```
 
-### Web Platform
+### Web platform
 
 Because Vello relies heavily on compute shaders, we rely on the emerging WebGPU standard to run on the web.
 Until browser support becomes widespread, it will probably be necessary to use development browser versions (e.g. Chrome Canary) and explicitly enable WebGPU.
@@ -84,7 +84,7 @@ Licensed under either of
 
 at your option.
 
-The files in subdirectories of the [`examples/assets`](https://github.com/linebender/vello/tree/main/examples/assets) directory are licensed solely under
+The files in subdirectories of the [`examples/assets`](/examples/assets) directory are licensed solely under
 their respective licenses, available in the `LICENSE` file in their directories.
 
 ## Contribution
