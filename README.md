@@ -17,11 +17,11 @@
 </div>
 
 > [!WARNING]
-> The goal of this crate is to provide coverage of the large Lottie spec, up to what vello will support, for use in interactive graphics. We are working towards correctness, but there are several missing features. See [vello](https://github.com/linebender/vello) for more information about limitations.
+> The goal of this crate is to provide coverage of the large Lottie spec, up to what vello can render, for use in interactive graphics. We are working towards correctness, but there are missing features listed below.
 
 ## Missing features
 
-It is not currently feature complete, but is capable of rendering a large number of Lottie animations.
+Several Lottie features are not yet supported, including:
 
 - Non-linear easings
 - Position keyframe (`ti`, `to`) easing
@@ -36,7 +36,7 @@ It is not currently feature complete, but is capable of rendering a large number
 
 ## Examples
 
-### Native
+### Cross platform (Winit)
 
 ```shell
 cargo run -p with_winit
@@ -48,7 +48,7 @@ You can also load an entire folder or individual files.
 cargo run -p with_winit -- examples/assets
 ```
 
-### Web
+### Web Platform
 
 Because Vello relies heavily on compute shaders, we rely on the emerging WebGPU standard to run on the web.
 Until browser support becomes widespread, it will probably be necessary to use development browser versions (e.g. Chrome Canary) and explicitly enable WebGPU.
