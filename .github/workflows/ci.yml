@@ -103,7 +103,6 @@ jobs:
       - name: cargo clippy (all features) (auxiliary)
         run: cargo clippy --workspace --tests --benches --examples --all-features -- -D warnings
 
-      # At the time of writing, we don't have any tests. Nevertheless, it's better to still run this
       - name: cargo test
         run: cargo test --workspace --all-features
         env:
