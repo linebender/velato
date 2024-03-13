@@ -19,7 +19,7 @@ edition.workspace = true
 repository.workspace = true
 
 [workspace.dependencies]
-# Update the README badges to match wgpu and vello version!
+# NOTE: Make sure to keep this in sync with the version badge in README.md
 vello = "0.1.0"
 
 [dependencies]
