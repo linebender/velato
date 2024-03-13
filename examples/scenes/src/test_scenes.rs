@@ -59,7 +59,10 @@ fn splash_screen(scene: &mut Scene, params: &mut SceneParams) {
 }
 
 fn splash_with_tiger() -> impl FnMut(&mut Scene, &mut SceneParams) {
-    let contents = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/../assets/Tiger.json"));
+    let contents = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../assets/google_fonts/Tiger.json"
+    ));
     let mut lottie = crate::lottie::lottie_function_of("Tiger".to_string(), move || contents);
     move |scene, params| {
         lottie(scene, params);
