@@ -6,3168 +6,368 @@ use crate::download::BuiltinLottieProps;
 // This content cannot be formatted by rustfmt because of the long strings, so it's in its own file
 use super::LottieDownload;
 
+macro_rules! google_noto_asset {
+    ($name: expr, $id: expr, $size: expr) => {
+        LottieDownload {
+            name: $name.to_string(),
+            url: format!(
+                "https://fonts.gstatic.com/s/e/notoemoji/latest/{}/lottie.json",
+                $id
+            ),
+            builtin: Some(BuiltinLottieProps {
+                expected_size: $size,
+                info: "https://googlefonts.github.io/noto-emoji-animation/",
+                license: "CC BY 4.0",
+            }),
+        }
+    };
+}
+
 pub(super) fn default_downloads() -> Vec<LottieDownload> {
     vec![
-        LottieDownload {
-            name: "Smile".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f600/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 37328,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Smile-with-big-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 48097,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Grin".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f604/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 48154,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Grinning".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 70876,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Laughing".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f606/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 59130,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Grin-sweat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f605/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 67751,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Joy".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f602/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 59124,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rofl".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f923/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 78237,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Loudly-crying".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 109511,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wink".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f609/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 27737,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kissing".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f617/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 29240,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kissing-smiling-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f619/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 13200,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kissing-closed-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f61a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 20588,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kissing-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f618/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 64904,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Heart-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f970/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58353,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Heart-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 42336,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Star-struck".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f929/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 46757,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Partying-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f973/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 67877,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Melting".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae0/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 155514,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Upside-down-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f643/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 12177,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Slightly-happy".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f642/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 24463,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Happy-cry".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f972/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 30188,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Holding-back-tears".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f979/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 75974,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Blush".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 30013,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Warm-smile".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/263a_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 25877,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Relieved".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21131,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Smirk".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 31466,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sleep".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f634/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 24420,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sleepy".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33013,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Drool".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f924/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 39367,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Yum".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38167,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Stuck-out-tongue".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f61b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 40520,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Squinting-tongue".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f61d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 51166,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Winky-tongue".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f61c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 74487,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Zany-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f92a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 69242,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Woozy".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f974/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 32633,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Pensive".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18003,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Pleading".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f97a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 45677,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Grimacing".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 60270,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Expressionless".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f611/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15581,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Neutral-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f610/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 22574,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Mouth-none".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f636/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21638,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Face-in-clouds".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f636_200d_1f32b_fe0f/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 135831,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dotted-line-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae5/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15473,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Zipper-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f910/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 79614,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Salute".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae1/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 50214,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thinking-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f914/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 68027,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Shushing-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f92b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 60687,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hand-over-mouth".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae2/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 30548,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Smiling-eyes-with-hand-over-mouth".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f92d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58552,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Yawn".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f971/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 40591,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hug-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f917/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 80181,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Peeking".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae3/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 117202,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Screaming".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f631/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 90226,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raised-eyebrow".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f928/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 31912,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Monocle".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 67304,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Unamused".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f612/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 30060,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rolling-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f644/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 29512,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Exhale".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62e_200d_1f4a8/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 57245,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Triumph".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f624/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 128406,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Angry".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f620/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33672,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rage".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f621/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 46289,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cursing".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f92c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 235182,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sad".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f61e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 30944,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sweat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f613/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 35718,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Worried".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f61f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 19906,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Concerned".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f625/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 39143,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cry".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f622/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 47018,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Big-frown".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2639_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 17600,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Frown".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f641/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15949,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Diagonal-mouth".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae4/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 27493,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Slightly-frowning".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f615/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 25699,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Anxious-with-sweat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f630/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 31920,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Scared".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f628/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23708,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Anguished".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f627/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 22195,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Gasp".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f626/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15110,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Mouth-open".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18749,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Surprised".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 27156,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Astonished".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21560,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Flushed".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f633/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 39206,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Mind-blown".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f92f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 143616,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Scrunched-mouth".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f616/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 25776,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Scrunched-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f623/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 35178,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Weary".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f629/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 43145,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Distraught".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f62b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 41299,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "X-eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f635/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 27858,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dizzy-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f635_200d_1f4ab/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 37987,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Shaking-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae8/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 62846,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cold-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f976/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 105845,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hot-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f975/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 66152,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sick".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f922/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38007,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Vomit".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f92e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 113083,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sneeze".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f927/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 62632,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thermometer-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f912/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 35011,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bandage-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f915/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 24897,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Mask".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f637/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 26028,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Liar".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f925/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 110222,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Halo".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f607/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 47770,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cowboy".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f920/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 68918,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Money-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f911/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 62491,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Nerd-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f913/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 34888,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sunglasses-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 25407,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Disguise".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f978/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 49569,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clown".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f921/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 46553,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Imp-smile".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f608/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 43402,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Imp-frown".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f47f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 39216,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Ghost".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f47b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 200747,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Jack-o-lantern".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f383/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 62686,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Poop".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a9/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 257521,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Robot".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f916/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 187153,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Alien".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f47d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 113419,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Moon-face-first-quarter".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f31b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 36591,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Moon-face-last-quarter".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f31c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15486,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sun-with-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f31e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18283,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Fire".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f525/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 29358,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "100".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4af/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 66142,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Glowing-star".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 73203,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sparkles".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2728/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15584,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Collision".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a5/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 87831,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Party-popper".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 67875,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "See-no-evil-monkey".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f648/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 52125,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hear-no-evil-monkey".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f649/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 66440,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Speak-no-evil-monkey".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 76392,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Smiley-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 43360,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Smile-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f638/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 66070,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Joy-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f639/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 86244,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Heart-eyes-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f63b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 54362,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Smirk-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f63c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 46333,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kissing-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f63d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 34296,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Scream-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f640/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 90268,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crying-cat-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f63f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 105822,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Pouting-cat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f63e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 47069,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Red-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8439,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Orange-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9e1/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8378,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Yellow-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f49b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8382,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Green-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f49a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8458,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Light-blue-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fa75/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8456,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Blue-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f499/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8458,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Purple-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f49c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8458,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Brown-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f90e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8458,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Black-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f5a4/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8458,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Grey-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fa76/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8470,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "White-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f90d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8380,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Pink-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fa77/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 8431,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cupid".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f498/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 79374,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Gift-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f49d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 152189,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sparkling-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f496/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 34772,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Heart-grow".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f497/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 12631,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Beating-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f493/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 26352,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Revolving-hearts".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f49e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 31191,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Two-hearts".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f495/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 12457,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Love-letter".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f48c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 66873,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Heart-exclamation-point".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2763_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 19995,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bandaged-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f_200d_1fa79/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 100250,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Broken-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f494/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 87260,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Fire-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f_200d_1f525/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 64140,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kiss".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f48b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 11896,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Footprints".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f463/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21917,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Anatomical-heart".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fac0/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 67731,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Blood".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fa78/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 13119,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Microbe".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9a0/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 65924,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Skull".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f480/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 226657,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Eyes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f440/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28242,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Eye".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f441_fe0f/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 44364,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Biting-lip".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fae6/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18180,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Leg-mechanical".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9bf/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 42593,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Arm-mechanical".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9be/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 51190,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Muscle".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23340,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Muscle-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23476,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Muscle-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23516,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Muscle-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23518,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Muscle-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23521,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Muscle-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23517,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clap".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38150,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clap-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44f_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38819,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clap-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44f_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38824,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clap-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44f_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38855,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clap-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44f_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38745,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clap-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44f_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 38848,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-up".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 57963,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-up-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58034,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-up-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58034,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-up-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58044,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-up-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58035,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-up-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 58044,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-down".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28607,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-down-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28664,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-down-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28665,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-down-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28673,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-down-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28665,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Thumbs-down-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 28673,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raising-hands".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81851,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raising-hands-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64c_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81925,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raising-hands-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64c_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81929,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raising-hands-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64c_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81931,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raising-hands-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64c_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81927,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Raising-hands-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64c_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81925,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wave".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14645,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wave-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14734,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wave-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14739,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wave-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14739,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wave-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14740,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wave-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14733,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Victory".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/270c_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 68888,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Victory-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/270c_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 69086,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Victory-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/270c_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 69069,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Victory-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/270c_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 69077,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Victory-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/270c_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 69061,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Victory-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/270c_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 69054,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crossed-fingers".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f91e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33723,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crossed-fingers-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f91e_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33930,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crossed-fingers-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f91e_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33916,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crossed-fingers-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f91e_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33916,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crossed-fingers-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f91e_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33909,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crossed-fingers-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f91e_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33903,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Index-finger".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/261d_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21113,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Index-finger-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/261d_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21277,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Index-finger-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/261d_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21267,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Index-finger-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/261d_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21271,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Index-finger-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/261d_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21262,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Index-finger-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/261d_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 21256,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Folded-hands".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18592,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Folded-hands-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18658,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Folded-hands-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18676,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Folded-hands-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18682,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Folded-hands-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18682,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Folded-hands-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 18670,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dancer-woman".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f483/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 364759,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dancer-woman-1".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f483_1f3fb/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 364030,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dancer-woman-2".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f483_1f3fc/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 364036,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dancer-woman-3".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f483_1f3fd/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 365020,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dancer-woman-4".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f483_1f3fe/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 364037,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dancer-woman-5".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f483_1f3ff/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 364035,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rose".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f339/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 45174,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wilted-flower".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f940/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 37881,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Fallen-leaf".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f342/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 45536,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Plant".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f331/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 53145,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Luck".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f340/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 70266,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Snowflake".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2744_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 138664,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Volcano".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f30b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 116692,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sunrise".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f305/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 51088,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sunrise-over-mountains".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f304/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 29561,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rainbow".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f308/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 13837,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wind-face".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f32c_fe0f/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 135084,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Electricity".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/26a1/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 89096,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dizzy".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4ab/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 80643,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Comet".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2604_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 170252,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Globe-showing-europe-africa".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f30d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 188658,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Unicorn".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f984/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 278449,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Lizard".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f98e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 104721,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dragon".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f409/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 258884,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "T-rex".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f996/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 131948,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Turtle".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f422/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 55887,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Snake".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f40d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 97973,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Frog".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f438/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 108606,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rabbit".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f407/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81000,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f400/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 124290,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dog".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f415/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 98235,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Pig".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f416/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 143547,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Racehorse".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f40e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 85914,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Donkey".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1facf/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 105494,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Ox".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f402/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 76491,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Goat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f410/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 248917,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Kangaroo".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f998/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 124870,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Tiger".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f405/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 428543,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Monkey".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f412/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 136109,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Chipmunk".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f43f_fe0f/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 144799,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Otter".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9a6/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 94172,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bat".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f987/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33394,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rooster".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f413/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 88968,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hatching-chick".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f423/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 53445,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Baby-chick".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f424/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 30711,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hatched-chick".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f425/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 50066,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Eagle".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f985/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 72897,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Peace".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f54a_fe0f/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 176763,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Goose".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fabf/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 185187,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Peacock".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f99a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 167783,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Seal".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9ad/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 357487,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Dolphin".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f42c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81544,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Whale".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f433/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 91653,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Blowfish".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f421/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 124208,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Crab".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f980/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 160764,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Octopus".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f419/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 234509,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Jellyfish".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fabc/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 97671,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Snail".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f40c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 49014,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Ant".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f41c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 100806,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Mosquito".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f99f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 88334,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bee".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f41d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 482250,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Butterfly".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f98b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 249980,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Paw Prints".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f43e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 17179,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Tomato".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f345/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 142308,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Popcorn".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f37f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 135307,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Hot-beverage".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2615/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 36778,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clinking-beer-mugs".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f37b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 112052,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Clinking-glasses".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f942/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 94364,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bottle-with-popping-cork".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f37e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 37645,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Wine-glass".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f377/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 60942,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Tropical-drink".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f379/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 85325,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Police-car-light".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f6a8/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 65174,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Flying-saucer".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 153261,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Rocket".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81575,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Airplane-departure".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f6eb/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 31939,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Airplane-arrival".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f6ec/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 40894,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Roller-coaster".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f3a2/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 66382,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Confetti-ball".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f38a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 122718,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Balloon".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f388/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 14095,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Birthday-cake".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f382/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 93106,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Fireworks".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f386/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 110210,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Mirror-ball".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1faa9/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 172207,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Soccer-ball".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/26bd/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 41860,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Direct-hit".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f3af/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 45947,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Violin".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f3bb/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 36626,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Drum".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f941/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 37285,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Maracas".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1fa87/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 53870,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Battery-full".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f50b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 64179,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Battery-low".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1faab/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 145891,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Money-with-wings".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4b8/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 97230,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Light-bulb".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a1/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 23436,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Graduation-cap".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f393/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 229903,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Umbrella".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2602_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 27242,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Gem-stone".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f48e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 62646,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Alarm-clock".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/23f0/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 36409,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bellhop-bell".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f6ce_fe0f/lottie.json"
-                .to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 26841,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Bell".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f514/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 36717,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Aries".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2648/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 82667,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Taurus".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2649/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 82769,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Gemini".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/264a/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 106146,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cancer".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/264b/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 89628,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Leo".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/264c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 88502,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Virgo".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/264d/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 101944,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Libra".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/264e/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 81824,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Scorpio".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/264f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 101492,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Sagittarius".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2650/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 94578,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Capricorn".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2651/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 101304,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Aquarius".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2652/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 111335,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Pisces".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2653/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 106574,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Ophiuchus".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/26ce/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 100303,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Exclamation-double".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/203c_fe0f/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 26663,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cross-mark".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/274c/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 7292,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Musical-notes".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f3b6/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 12828,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Check-mark".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2705/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 15925,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Cool".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f192/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 19755,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Plus-sign".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/2795/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 33464,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
-        LottieDownload {
-            name: "Chequered-flag".to_string(),
-            url: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f3c1/lottie.json".to_string(),
-            builtin: Some(BuiltinLottieProps {
-                expected_size: 328109,
-                info: "https://googlefonts.github.io/noto-emoji-animation/",
-                license: "CC BY 4.0",
-            }),
-        },
+        google_noto_asset!("Smile", "1f600", 37328),
+        google_noto_asset!("Smile-with-big-eyes", "1f603", 48097),
+        google_noto_asset!("Grin", "1f604", 48154),
+        google_noto_asset!("Grinning", "1f601", 70876),
+        google_noto_asset!("Laughing", "1f606", 59130),
+        google_noto_asset!("Grin-sweat", "1f605", 67751),
+        google_noto_asset!("Joy", "1f602", 59124),
+        google_noto_asset!("Rofl", "1f923", 78237),
+        google_noto_asset!("Loudly-crying", "1f62d", 109511),
+        google_noto_asset!("Wink", "1f609", 27737),
+        google_noto_asset!("Kissing", "1f617", 29240),
+        google_noto_asset!("Kissing-smiling-eyes", "1f619", 13200),
+        google_noto_asset!("Kissing-closed-eyes", "1f61a", 20588),
+        google_noto_asset!("Kissing-heart", "1f618", 64904),
+        google_noto_asset!("Heart-face", "1f970", 58353),
+        google_noto_asset!("Heart-eyes", "1f60d", 42336),
+        google_noto_asset!("Star-struck", "1f929", 46757),
+        google_noto_asset!("Partying-face", "1f973", 67877),
+        google_noto_asset!("Melting", "1fae0", 155514),
+        google_noto_asset!("Upside-down-face", "1f643", 12177),
+        google_noto_asset!("Slightly-happy", "1f642", 24463),
+        google_noto_asset!("Happy-cry", "1f972", 30188),
+        google_noto_asset!("Holding-back-tears", "1f979", 75974),
+        google_noto_asset!("Blush", "1f60a", 30013),
+        google_noto_asset!("Warm-smile", "263a_fe0f", 25877),
+        google_noto_asset!("Relieved", "1f60c", 21131),
+        google_noto_asset!("Smirk", "1f60f", 31466),
+        google_noto_asset!("Sleep", "1f634", 24420),
+        google_noto_asset!("Sleepy", "1f62a", 33013),
+        google_noto_asset!("Drool", "1f924", 39367),
+        google_noto_asset!("Yum", "1f60b", 38167),
+        google_noto_asset!("Stuck-out-tongue", "1f61b", 40520),
+        google_noto_asset!("Squinting-tongue", "1f61d", 51166),
+        google_noto_asset!("Winky-tongue", "1f61c", 74487),
+        google_noto_asset!("Zany-face", "1f92a", 69242),
+        google_noto_asset!("Woozy", "1f974", 32633),
+        google_noto_asset!("Pensive", "1f614", 18003),
+        google_noto_asset!("Pleading", "1f97a", 45677),
+        google_noto_asset!("Grimacing", "1f62c", 60270),
+        google_noto_asset!("Expressionless", "1f611", 15581),
+        google_noto_asset!("Neutral-face", "1f610", 22574),
+        google_noto_asset!("Mouth-none", "1f636", 21638),
+        google_noto_asset!("Face-in-clouds", "1f636_200d_1f32b_fe0f", 135831),
+        google_noto_asset!("Dotted-line-face", "1fae5", 15473),
+        google_noto_asset!("Zipper-face", "1f910", 79614),
+        google_noto_asset!("Salute", "1fae1", 50214),
+        google_noto_asset!("Thinking-face", "1f914", 68027),
+        google_noto_asset!("Shushing-face", "1f92b", 60687),
+        google_noto_asset!("Hand-over-mouth", "1fae2", 30548),
+        google_noto_asset!("Smiling-eyes-with-hand-over-mouth", "1f92d", 58552),
+        google_noto_asset!("Yawn", "1f971", 40591),
+        google_noto_asset!("Hug-face", "1f917", 80181),
+        google_noto_asset!("Peeking", "1fae3", 117202),
+        google_noto_asset!("Screaming", "1f631", 90226),
+        google_noto_asset!("Raised-eyebrow", "1f928", 31912),
+        google_noto_asset!("Monocle", "1f9d0", 67304),
+        google_noto_asset!("Unamused", "1f612", 30060),
+        google_noto_asset!("Rolling-eyes", "1f644", 29512),
+        google_noto_asset!("Exhale", "1f62e_200d_1f4a8", 57245),
+        google_noto_asset!("Triumph", "1f624", 128406),
+        google_noto_asset!("Angry", "1f620", 33672),
+        google_noto_asset!("Rage", "1f621", 46289),
+        google_noto_asset!("Cursing", "1f92c", 235182),
+        google_noto_asset!("Sad", "1f61e", 30944),
+        google_noto_asset!("Sweat", "1f613", 35718),
+        google_noto_asset!("Worried", "1f61f", 19906),
+        google_noto_asset!("Concerned", "1f625", 39143),
+        google_noto_asset!("Cry", "1f622", 47018),
+        google_noto_asset!("Big-frown", "2639_fe0f", 17600),
+        google_noto_asset!("Frown", "1f641", 15949),
+        google_noto_asset!("Diagonal-mouth", "1fae4", 27493),
+        google_noto_asset!("Slightly-frowning", "1f615", 25699),
+        google_noto_asset!("Anxious-with-sweat", "1f630", 31920),
+        google_noto_asset!("Scared", "1f628", 23708),
+        google_noto_asset!("Anguished", "1f627", 22195),
+        google_noto_asset!("Gasp", "1f626", 15110),
+        google_noto_asset!("Mouth-open", "1f62e", 18749),
+        google_noto_asset!("Surprised", "1f62f", 27156),
+        google_noto_asset!("Astonished", "1f632", 21560),
+        google_noto_asset!("Flushed", "1f633", 39206),
+        google_noto_asset!("Mind-blown", "1f92f", 143616),
+        google_noto_asset!("Scrunched-mouth", "1f616", 25776),
+        google_noto_asset!("Scrunched-eyes", "1f623", 35178),
+        google_noto_asset!("Weary", "1f629", 43145),
+        google_noto_asset!("Distraught", "1f62b", 41299),
+        google_noto_asset!("X-eyes", "1f635", 27858),
+        google_noto_asset!("Dizzy-face", "1f635_200d_1f4ab", 37987),
+        google_noto_asset!("Shaking-face", "1fae8", 62846),
+        google_noto_asset!("Cold-face", "1f976", 105845),
+        google_noto_asset!("Hot-face", "1f975", 66152),
+        google_noto_asset!("Sick", "1f922", 38007),
+        google_noto_asset!("Vomit", "1f92e", 113083),
+        google_noto_asset!("Sneeze", "1f927", 62632),
+        google_noto_asset!("Thermometer-face", "1f912", 35011),
+        google_noto_asset!("Bandage-face", "1f915", 24897),
+        google_noto_asset!("Mask", "1f637", 26028),
+        google_noto_asset!("Liar", "1f925", 110222),
+        google_noto_asset!("Halo", "1f607", 47770),
+        google_noto_asset!("Cowboy", "1f920", 68918),
+        google_noto_asset!("Money-face", "1f911", 62491),
+        google_noto_asset!("Nerd-face", "1f913", 34888),
+        google_noto_asset!("Sunglasses-face", "1f60e", 25407),
+        google_noto_asset!("Disguise", "1f978", 49569),
+        google_noto_asset!("Clown", "1f921", 46553),
+        google_noto_asset!("Imp-smile", "1f608", 43402),
+        google_noto_asset!("Imp-frown", "1f47f", 39216),
+        google_noto_asset!("Ghost", "1f47b", 200747),
+        google_noto_asset!("Jack-o-lantern", "1f383", 62686),
+        google_noto_asset!("Poop", "1f4a9", 257521),
+        google_noto_asset!("Robot", "1f916", 187153),
+        google_noto_asset!("Alien", "1f47d", 113419),
+        google_noto_asset!("Moon-face-first-quarter", "1f31b", 36591),
+        google_noto_asset!("Moon-face-last-quarter", "1f31c", 15486),
+        google_noto_asset!("Sun-with-face", "1f31e", 18283),
+        google_noto_asset!("Fire", "1f525", 29358),
+        google_noto_asset!("100", "1f4af", 66142),
+        google_noto_asset!("Glowing-star", "1f31f", 73203),
+        google_noto_asset!("Sparkles", "2728", 15584),
+        google_noto_asset!("Collision", "1f4a5", 87831),
+        google_noto_asset!("Party-popper", "1f389", 67875),
+        google_noto_asset!("See-no-evil-monkey", "1f648", 52125),
+        google_noto_asset!("Hear-no-evil-monkey", "1f649", 66440),
+        google_noto_asset!("Speak-no-evil-monkey", "1f64a", 76392),
+        google_noto_asset!("Smiley-cat", "1f63a", 43360),
+        google_noto_asset!("Smile-cat", "1f638", 66070),
+        google_noto_asset!("Joy-cat", "1f639", 86244),
+        google_noto_asset!("Heart-eyes-cat", "1f63b", 54362),
+        google_noto_asset!("Smirk-cat", "1f63c", 46333),
+        google_noto_asset!("Kissing-cat", "1f63d", 34296),
+        google_noto_asset!("Scream-cat", "1f640", 90268),
+        google_noto_asset!("Crying-cat-face", "1f63f", 105822),
+        google_noto_asset!("Pouting-cat", "1f63e", 47069),
+        google_noto_asset!("Red-heart", "2764_fe0f", 8439),
+        google_noto_asset!("Orange-heart", "1f9e1", 8378),
+        google_noto_asset!("Yellow-heart", "1f49b", 8382),
+        google_noto_asset!("Green-heart", "1f49a", 8458),
+        google_noto_asset!("Light-blue-heart", "1fa75", 8456),
+        google_noto_asset!("Blue-heart", "1f499", 8458),
+        google_noto_asset!("Purple-heart", "1f49c", 8458),
+        google_noto_asset!("Brown-heart", "1f90e", 8458),
+        google_noto_asset!("Black-heart", "1f5a4", 8458),
+        google_noto_asset!("Grey-heart", "1fa76", 8470),
+        google_noto_asset!("White-heart", "1f90d", 8380),
+        google_noto_asset!("Pink-heart", "1fa77", 8431),
+        google_noto_asset!("Cupid", "1f498", 79374),
+        google_noto_asset!("Gift-heart", "1f49d", 152189),
+        google_noto_asset!("Sparkling-heart", "1f496", 34772),
+        google_noto_asset!("Heart-grow", "1f497", 12631),
+        google_noto_asset!("Beating-heart", "1f493", 26352),
+        google_noto_asset!("Revolving-hearts", "1f49e", 31191),
+        google_noto_asset!("Two-hearts", "1f495", 12457),
+        google_noto_asset!("Love-letter", "1f48c", 66873),
+        google_noto_asset!("Heart-exclamation-point", "2763_fe0f", 19995),
+        google_noto_asset!("Bandaged-heart", "2764_fe0f_200d_1fa79", 100250),
+        google_noto_asset!("Broken-heart", "1f494", 87260),
+        google_noto_asset!("Fire-heart", "2764_fe0f_200d_1f525", 64140),
+        google_noto_asset!("Kiss", "1f48b", 11896),
+        google_noto_asset!("Footprints", "1f463", 21917),
+        google_noto_asset!("Anatomical-heart", "1fac0", 67731),
+        google_noto_asset!("Blood", "1fa78", 13119),
+        google_noto_asset!("Microbe", "1f9a0", 65924),
+        google_noto_asset!("Skull", "1f480", 226657),
+        google_noto_asset!("Eyes", "1f440", 28242),
+        google_noto_asset!("Eye", "1f441_fe0f", 44364),
+        google_noto_asset!("Biting-lip", "1fae6", 18180),
+        google_noto_asset!("Leg-mechanical", "1f9bf", 42593),
+        google_noto_asset!("Arm-mechanical", "1f9be", 51190),
+        google_noto_asset!("Muscle", "1f4aa", 23340),
+        google_noto_asset!("Muscle-1", "1f4aa_1f3fb", 23476),
+        google_noto_asset!("Muscle-2", "1f4aa_1f3fc", 23516),
+        google_noto_asset!("Muscle-3", "1f4aa_1f3fd", 23518),
+        google_noto_asset!("Muscle-4", "1f4aa_1f3fe", 23521),
+        google_noto_asset!("Muscle-5", "1f4aa_1f3ff", 23517),
+        google_noto_asset!("Clap", "1f44f", 38150),
+        google_noto_asset!("Clap-1", "1f44f_1f3fb", 38819),
+        google_noto_asset!("Clap-2", "1f44f_1f3fc", 38824),
+        google_noto_asset!("Clap-3", "1f44f_1f3fd", 38855),
+        google_noto_asset!("Clap-4", "1f44f_1f3fe", 38745),
+        google_noto_asset!("Clap-5", "1f44f_1f3ff", 38848),
+        google_noto_asset!("Thumbs-up", "1f44d", 57963),
+        google_noto_asset!("Thumbs-up-1", "1f44d_1f3fb", 58034),
+        google_noto_asset!("Thumbs-up-2", "1f44d_1f3fc", 58034),
+        google_noto_asset!("Thumbs-up-3", "1f44d_1f3fd", 58044),
+        google_noto_asset!("Thumbs-up-4", "1f44d_1f3fe", 58035),
+        google_noto_asset!("Thumbs-up-5", "1f44d_1f3ff", 58044),
+        google_noto_asset!("Thumbs-down", "1f44e", 28607),
+        google_noto_asset!("Thumbs-down-1", "1f44e_1f3fb", 28664),
+        google_noto_asset!("Thumbs-down-2", "1f44e_1f3fc", 28665),
+        google_noto_asset!("Thumbs-down-3", "1f44e_1f3fd", 28673),
+        google_noto_asset!("Thumbs-down-4", "1f44e_1f3fe", 28665),
+        google_noto_asset!("Thumbs-down-5", "1f44e_1f3ff", 28673),
+        google_noto_asset!("Raising-hands", "1f64c", 81851),
+        google_noto_asset!("Raising-hands-1", "1f64c_1f3fb", 81925),
+        google_noto_asset!("Raising-hands-2", "1f64c_1f3fc", 81929),
+        google_noto_asset!("Raising-hands-3", "1f64c_1f3fd", 81931),
+        google_noto_asset!("Raising-hands-4", "1f64c_1f3fe", 81927),
+        google_noto_asset!("Raising-hands-5", "1f64c_1f3ff", 81925),
+        google_noto_asset!("Wave", "1f44b", 14645),
+        google_noto_asset!("Wave-1", "1f44b_1f3fb", 14734),
+        google_noto_asset!("Wave-2", "1f44b_1f3fc", 14739),
+        google_noto_asset!("Wave-3", "1f44b_1f3fd", 14739),
+        google_noto_asset!("Wave-4", "1f44b_1f3fe", 14740),
+        google_noto_asset!("Wave-5", "1f44b_1f3ff", 14733),
+        google_noto_asset!("Victory", "270c_fe0f", 68888),
+        google_noto_asset!("Victory-1", "270c_1f3fb", 69086),
+        google_noto_asset!("Victory-2", "270c_1f3fc", 69069),
+        google_noto_asset!("Victory-3", "270c_1f3fd", 69077),
+        google_noto_asset!("Victory-4", "270c_1f3fe", 69061),
+        google_noto_asset!("Victory-5", "270c_1f3ff", 69054),
+        google_noto_asset!("Crossed-fingers", "1f91e", 33723),
+        google_noto_asset!("Crossed-fingers-1", "1f91e_1f3fb", 33930),
+        google_noto_asset!("Crossed-fingers-2", "1f91e_1f3fc", 33916),
+        google_noto_asset!("Crossed-fingers-3", "1f91e_1f3fd", 33916),
+        google_noto_asset!("Crossed-fingers-4", "1f91e_1f3fe", 33909),
+        google_noto_asset!("Crossed-fingers-5", "1f91e_1f3ff", 33903),
+        google_noto_asset!("Index-finger", "261d_fe0f", 21113),
+        google_noto_asset!("Index-finger-1", "261d_1f3fb", 21277),
+        google_noto_asset!("Index-finger-2", "261d_1f3fc", 21267),
+        google_noto_asset!("Index-finger-3", "261d_1f3fd", 21271),
+        google_noto_asset!("Index-finger-4", "261d_1f3fe", 21262),
+        google_noto_asset!("Index-finger-5", "261d_1f3ff", 21256),
+        google_noto_asset!("Folded-hands", "1f64f", 18592),
+        google_noto_asset!("Folded-hands-1", "1f64f_1f3fb", 18658),
+        google_noto_asset!("Folded-hands-2", "1f64f_1f3fc", 18676),
+        google_noto_asset!("Folded-hands-3", "1f64f_1f3fd", 18682),
+        google_noto_asset!("Folded-hands-4", "1f64f_1f3fe", 18682),
+        google_noto_asset!("Folded-hands-5", "1f64f_1f3ff", 18670),
+        google_noto_asset!("Dancer-woman", "1f483", 364759),
+        google_noto_asset!("Dancer-woman-1", "1f483_1f3fb", 364030),
+        google_noto_asset!("Dancer-woman-2", "1f483_1f3fc", 364036),
+        google_noto_asset!("Dancer-woman-3", "1f483_1f3fd", 365020),
+        google_noto_asset!("Dancer-woman-4", "1f483_1f3fe", 364037),
+        google_noto_asset!("Dancer-woman-5", "1f483_1f3ff", 364035),
+        google_noto_asset!("Rose", "1f339", 45174),
+        google_noto_asset!("Wilted-flower", "1f940", 37881),
+        google_noto_asset!("Fallen-leaf", "1f342", 45536),
+        google_noto_asset!("Plant", "1f331", 53145),
+        google_noto_asset!("Luck", "1f340", 70266),
+        google_noto_asset!("Snowflake", "2744_fe0f", 138664),
+        google_noto_asset!("Volcano", "1f30b", 116692),
+        google_noto_asset!("Sunrise", "1f305", 51088),
+        google_noto_asset!("Sunrise-over-mountains", "1f304", 29561),
+        google_noto_asset!("Rainbow", "1f308", 13837),
+        google_noto_asset!("Wind-face", "1f32c_fe0f", 135084),
+        google_noto_asset!("Electricity", "26a1", 89096),
+        google_noto_asset!("Dizzy", "1f4ab", 80643),
+        google_noto_asset!("Comet", "2604_fe0f", 170252),
+        google_noto_asset!("Globe-showing-europe-africa", "1f30d", 188658),
+        google_noto_asset!("Unicorn", "1f984", 278449),
+        google_noto_asset!("Lizard", "1f98e", 104721),
+        google_noto_asset!("Dragon", "1f409", 258884),
+        google_noto_asset!("T-rex", "1f996", 131948),
+        google_noto_asset!("Turtle", "1f422", 55887),
+        google_noto_asset!("Snake", "1f40d", 97973),
+        google_noto_asset!("Frog", "1f438", 108606),
+        google_noto_asset!("Rabbit", "1f407", 81000),
+        google_noto_asset!("Rat", "1f400", 124290),
+        google_noto_asset!("Dog", "1f415", 98235),
+        google_noto_asset!("Pig", "1f416", 143547),
+        google_noto_asset!("Racehorse", "1f40e", 85914),
+        google_noto_asset!("Donkey", "1facf", 105494),
+        google_noto_asset!("Ox", "1f402", 76491),
+        google_noto_asset!("Goat", "1f410", 248917),
+        google_noto_asset!("Kangaroo", "1f998", 124870),
+        google_noto_asset!("Tiger", "1f405", 428543),
+        google_noto_asset!("Monkey", "1f412", 136109),
+        google_noto_asset!("Chipmunk", "1f43f_fe0f", 144799),
+        google_noto_asset!("Otter", "1f9a6", 94172),
+        google_noto_asset!("Bat", "1f987", 33394),
+        google_noto_asset!("Rooster", "1f413", 88968),
+        google_noto_asset!("Hatching-chick", "1f423", 53445),
+        google_noto_asset!("Baby-chick", "1f424", 30711),
+        google_noto_asset!("Hatched-chick", "1f425", 50066),
+        google_noto_asset!("Eagle", "1f985", 72897),
+        google_noto_asset!("Peace", "1f54a_fe0f", 176763),
+        google_noto_asset!("Goose", "1fabf", 185187),
+        google_noto_asset!("Peacock", "1f99a", 167783),
+        google_noto_asset!("Seal", "1f9ad", 357487),
+        google_noto_asset!("Dolphin", "1f42c", 81544),
+        google_noto_asset!("Whale", "1f433", 91653),
+        google_noto_asset!("Blowfish", "1f421", 124208),
+        google_noto_asset!("Crab", "1f980", 160764),
+        google_noto_asset!("Octopus", "1f419", 234509),
+        google_noto_asset!("Jellyfish", "1fabc", 97671),
+        google_noto_asset!("Snail", "1f40c", 49014),
+        google_noto_asset!("Ant", "1f41c", 100806),
+        google_noto_asset!("Mosquito", "1f99f", 88334),
+        google_noto_asset!("Bee", "1f41d", 482250),
+        google_noto_asset!("Butterfly", "1f98b", 249980),
+        google_noto_asset!("Paw Prints", "1f43e", 17179),
+        google_noto_asset!("Tomato", "1f345", 142308),
+        google_noto_asset!("Popcorn", "1f37f", 135307),
+        google_noto_asset!("Hot-beverage", "2615", 36778),
+        google_noto_asset!("Clinking-beer-mugs", "1f37b", 112052),
+        google_noto_asset!("Clinking-glasses", "1f942", 94364),
+        google_noto_asset!("Bottle-with-popping-cork", "1f37e", 37645),
+        google_noto_asset!("Wine-glass", "1f377", 60942),
+        google_noto_asset!("Tropical-drink", "1f379", 85325),
+        google_noto_asset!("Police-car-light", "1f6a8", 65174),
+        google_noto_asset!("Flying-saucer", "1f6f8", 153261),
+        google_noto_asset!("Rocket", "1f680", 81575),
+        google_noto_asset!("Airplane-departure", "1f6eb", 31939),
+        google_noto_asset!("Airplane-arrival", "1f6ec", 40894),
+        google_noto_asset!("Roller-coaster", "1f3a2", 66382),
+        google_noto_asset!("Confetti-ball", "1f38a", 122718),
+        google_noto_asset!("Balloon", "1f388", 14095),
+        google_noto_asset!("Birthday-cake", "1f382", 93106),
+        google_noto_asset!("Fireworks", "1f386", 110210),
+        google_noto_asset!("Mirror-ball", "1faa9", 172207),
+        google_noto_asset!("Soccer-ball", "26bd", 41860),
+        google_noto_asset!("Direct-hit", "1f3af", 45947),
+        google_noto_asset!("Violin", "1f3bb", 36626),
+        google_noto_asset!("Drum", "1f941", 37285),
+        google_noto_asset!("Maracas", "1fa87", 53870),
+        google_noto_asset!("Battery-full", "1f50b", 64179),
+        google_noto_asset!("Battery-low", "1faab", 145891),
+        google_noto_asset!("Money-with-wings", "1f4b8", 97230),
+        google_noto_asset!("Light-bulb", "1f4a1", 23436),
+        google_noto_asset!("Graduation-cap", "1f393", 229903),
+        google_noto_asset!("Umbrella", "2602_fe0f", 27242),
+        google_noto_asset!("Gem-stone", "1f48e", 62646),
+        google_noto_asset!("Alarm-clock", "23f0", 36409),
+        google_noto_asset!("Bellhop-bell", "1f6ce_fe0f", 26841),
+        google_noto_asset!("Bell", "1f514", 36717),
+        google_noto_asset!("Aries", "2648", 82667),
+        google_noto_asset!("Taurus", "2649", 82769),
+        google_noto_asset!("Gemini", "264a", 106146),
+        google_noto_asset!("Cancer", "264b", 89628),
+        google_noto_asset!("Leo", "264c", 88502),
+        google_noto_asset!("Virgo", "264d", 101944),
+        google_noto_asset!("Libra", "264e", 81824),
+        google_noto_asset!("Scorpio", "264f", 101492),
+        google_noto_asset!("Sagittarius", "2650", 94578),
+        google_noto_asset!("Capricorn", "2651", 101304),
+        google_noto_asset!("Aquarius", "2652", 111335),
+        google_noto_asset!("Pisces", "2653", 106574),
+        google_noto_asset!("Ophiuchus", "26ce", 100303),
+        google_noto_asset!("Exclamation-double", "203c_fe0f", 26663),
+        google_noto_asset!("Cross-mark", "274c", 7292),
+        google_noto_asset!("Musical-notes", "1f3b6", 12828),
+        google_noto_asset!("Check-mark", "2705", 15925),
+        google_noto_asset!("Cool", "1f192", 19755),
+        google_noto_asset!("Plus-sign", "2795", 33464),
+        google_noto_asset!("Chequered-flag", "1f3c1", 328109),
     ]
 }
