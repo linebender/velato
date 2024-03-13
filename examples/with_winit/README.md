@@ -1,15 +1,15 @@
-## Usage
+# Usage
 
 Running the viewer without any arguments will render a built-in set of Lottie images:
 
-```bash
-$ cargo run -p with_winit --release
+```shell
+cargo run -p with_winit --release
 ```
 
 Optionally, you can pass in paths to Lottie files that you want to render:
 
-```bash
-$ cargo run -p with_winit --release -- [LOTTIE FILES]
+```shell
+cargo run -p with_winit --release -- [LOTTIE FILES]
 ```
 
 ## Controls
