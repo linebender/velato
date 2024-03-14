@@ -7,7 +7,7 @@ edition = "2021"
 version = "0.1.0"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/velato"
-
+publish = false
 [package]
 name = "velato"
 description = "A Lottie integration for vello."
