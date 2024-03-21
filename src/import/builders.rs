@@ -3,14 +3,13 @@
 
 use super::converters::{conv_blend_mode, conv_scalar, conv_shape_geometry, conv_transform};
 use super::defaults::FLOAT_VALUE_ONE_HUNDRED;
-use crate::parser::schema::helpers::int_boolean::BoolInt;
 use crate::runtime::model::Layer;
-use crate::{parser, runtime};
-use parser::schema;
+use crate::schema::helpers::int_boolean::BoolInt;
+use crate::{runtime, schema};
 use vello::peniko::{self, BlendMode, Compose, Mix};
 
 pub fn setup_precomp_layer(
-    source: &parser::schema::layers::precomposition::PrecompositionLayer,
+    source: &schema::layers::precomposition::PrecompositionLayer,
     target: &mut Layer,
 ) -> (usize, Option<BlendMode>) {
     target.name = source.properties.name.clone().unwrap_or_default();
@@ -43,7 +42,7 @@ pub fn setup_precomp_layer(
             .properties
             .blend_mode
             .as_ref()
-            .unwrap_or(&crate::parser::schema::constants::blend_mode::BlendMode::Normal),
+            .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
     );
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
@@ -80,7 +79,7 @@ pub fn setup_precomp_layer(
 }
 
 pub fn setup_shape_layer(
-    source: &parser::schema::layers::shape::ShapeLayer,
+    source: &schema::layers::shape::ShapeLayer,
     target: &mut Layer,
 ) -> (usize, Option<BlendMode>) {
     target.name = source.properties.name.clone().unwrap_or_default();
@@ -111,7 +110,7 @@ pub fn setup_shape_layer(
             .properties
             .blend_mode
             .as_ref()
-            .unwrap_or(&crate::parser::schema::constants::blend_mode::BlendMode::Normal),
+            .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
     );
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
@@ -148,7 +147,7 @@ pub fn setup_shape_layer(
 }
 
 pub fn setup_layer_base(
-    source: &parser::schema::layers::visual::VisualLayer,
+    source: &schema::layers::visual::VisualLayer,
     target: &mut Layer,
 ) -> (usize, Option<BlendMode>) {
     target.name = source.name.clone().unwrap_or_default();
@@ -173,7 +172,7 @@ pub fn setup_layer_base(
         source
             .blend_mode
             .as_ref()
-            .unwrap_or(&crate::parser::schema::constants::blend_mode::BlendMode::Normal),
+            .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
     );
     // TODO: Why do we do this next part?
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {

@@ -6,12 +6,12 @@ mod render;
 use std::collections::HashMap;
 use std::ops::Range;
 
-/// Re-export vello.
-pub use vello;
-
 pub mod model;
 
-pub use render::{RenderSink, Renderer};
+pub use render::Renderer;
+
+use crate::import;
+use crate::schema::Animation;
 
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]
@@ -31,9 +31,27 @@ pub struct Composition {
 }
 
 impl Composition {
-    /// Creates a new composition from the specified buffer containing
-    /// the content of a Lottie file.
-    pub fn from_bytes(bytes: impl AsRef<[u8]>) -> Result<Self, Box<dyn std::error::Error>> {
-        crate::import::import_composition(bytes)
+    /// Creates a new runtime composition from a buffer of Lottie file contents.
+    pub fn from_slice(source: impl AsRef<[u8]>) -> Result<Composition, serde_json::Error> {
+        let source = Animation::from_slice(source.as_ref())?;
+        let composition = import::conv_animation(source);
+        Ok(composition)
+    }
+
+    /// Creates a new runtime composition from a json object of Lottie file contents.
+    pub fn from_json(v: serde_json::Value) -> Result<Composition, serde_json::Error> {
+        let source = Animation::from_json(v)?;
+        let composition = import::conv_animation(source);
+        Ok(composition)
+    }
+}
+
+impl std::str::FromStr for Composition {
+    type Err = serde_json::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let source = Animation::from_str(s)?;
+        let composition = import::conv_animation(source);
+        Ok(composition)
     }
 }

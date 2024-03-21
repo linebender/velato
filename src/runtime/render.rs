@@ -70,20 +70,8 @@ impl Renderer {
         Self::default()
     }
 
-    /// Renders the animation at a given time into the specified scene.
-    pub fn render(
-        &mut self,
-        animation: &Composition,
-        frame: f64,
-        transform: Affine,
-        alpha: f64,
-        sink: &mut impl RenderSink,
-    ) {
-        self.render_frame(animation, frame, transform, alpha, sink);
-    }
-
     /// Renders the animation at a given frame into the specified scene.
-    pub fn render_frame(
+    pub fn render(
         &mut self,
         animation: &Composition,
         frame: f64,
@@ -204,7 +192,7 @@ impl Renderer {
                     let (group_transform, group_alpha) =
                         if let Some(GroupTransform { transform, opacity }) = group_transform {
                             (
-                                transform.evaluate(frame).to_owned(),
+                                transform.evaluate(frame).into_owned(),
                                 opacity.evaluate(frame) / 100.0,
                             )
                         } else {
@@ -242,7 +230,7 @@ impl Renderer {
         global_transform: Affine,
         frame: f64,
     ) -> Affine {
-        let mut transform = layer.transform.evaluate(frame).to_owned();
+        let mut transform = layer.transform.evaluate(frame).into_owned();
         let mut parent_index = layer.parent;
         let mut count = 0usize;
         while let Some(index) = parent_index {
@@ -253,7 +241,7 @@ impl Renderer {
             }
             if let Some(parent) = layer_set.get(index) {
                 parent_index = parent.parent;
-                transform = parent.transform.evaluate(frame).to_owned() * transform;
+                transform = parent.transform.evaluate(frame).into_owned() * transform;
                 count += 1;
             } else {
                 break;
@@ -278,8 +266,8 @@ impl DrawData {
             stroke: draw
                 .stroke
                 .as_ref()
-                .map(|stroke| stroke.evaluate(frame).to_owned()),
-            brush: draw.brush.evaluate(1.0, frame).to_owned(),
+                .map(|stroke| stroke.evaluate(frame).into_owned()),
+            brush: draw.brush.evaluate(1.0, frame).into_owned(),
             alpha: alpha * draw.opacity.evaluate(frame) / 100.0,
             geometry,
         }

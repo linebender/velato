@@ -169,10 +169,11 @@ pub struct Layer {
 pub enum Matte {
     #[default]
     Normal,
-    Alpha,
-    InvertAlpha,
-    Luma,
-    InvertLuma,
+    // TODO: Use these
+    // Alpha,
+    // InvertAlpha,
+    // Luma,
+    // InvertLuma,
 }
 
 /// Mask for a layer.

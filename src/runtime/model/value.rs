@@ -51,7 +51,7 @@ impl<'a, T> AsRef<T> for ValueRef<'a, T> {
 }
 
 impl<'a, T: Clone> ValueRef<'a, T> {
-    pub fn to_owned(self) -> T {
+    pub fn into_owned(self) -> T {
         match self {
             Self::Borrowed(value) => value.clone(),
             Self::Owned(value) => value,

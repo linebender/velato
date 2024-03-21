@@ -1,14 +1,12 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::parser::schema::animated_properties::animated_property::{
-    AnimatedProperty, AnimatedPropertyK,
-};
-use crate::parser::schema::animated_properties::multi_dimensional::MultiDimensional;
-use crate::parser::schema::animated_properties::position::Position;
-use crate::parser::schema::animated_properties::value::FloatValue;
-use crate::parser::schema::helpers::int_boolean::BoolInt;
-use crate::parser::schema::{self};
+use crate::schema::animated_properties::animated_property::{AnimatedProperty, AnimatedPropertyK};
+use crate::schema::animated_properties::multi_dimensional::MultiDimensional;
+use crate::schema::animated_properties::position::Position;
+use crate::schema::animated_properties::value::FloatValue;
+use crate::schema::helpers::int_boolean::BoolInt;
+use crate::schema::{self};
 use once_cell::sync::Lazy;
 
 pub static FLOAT_VALUE_ZERO: Lazy<FloatValue> = Lazy::new(|| FloatValue {

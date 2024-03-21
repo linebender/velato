@@ -82,7 +82,7 @@ impl Transform {
     }
 
     /// Converts the animated value to its model representation.
-    pub fn to_model(self) -> super::Transform {
+    pub fn into_model(self) -> super::Transform {
         if self.is_fixed() {
             super::Transform::Fixed(self.evaluate(0.0))
         } else {
@@ -167,17 +167,18 @@ pub struct Star {
     pub points: Value<f64>,
 }
 
-impl Star {
-    pub fn is_fixed(&self) -> bool {
-        self.position.is_fixed()
-            && self.inner_radius.is_fixed()
-            && self.inner_roundness.is_fixed()
-            && self.outer_radius.is_fixed()
-            && self.outer_roundness.is_fixed()
-            && self.rotation.is_fixed()
-            && self.points.is_fixed()
-    }
-}
+// TODO: Use this.
+//impl Star {
+//    pub fn is_fixed(&self) -> bool {
+//        self.position.is_fixed()
+//            && self.inner_radius.is_fixed()
+//            && self.inner_roundness.is_fixed()
+//            && self.outer_radius.is_fixed()
+//            && self.outer_roundness.is_fixed()
+//            && self.rotation.is_fixed()
+//            && self.points.is_fixed()
+//    }
+//}
 
 /// Animated cubic spline.
 #[derive(Clone, Debug)]
@@ -264,7 +265,7 @@ impl Repeater {
     }
 
     /// Converts the animated value to its model representation.
-    pub fn to_model(self) -> super::Repeater {
+    pub fn into_model(self) -> super::Repeater {
         if self.is_fixed() {
             super::Repeater::Fixed(self.evaluate(0.0))
         } else {
@@ -305,7 +306,7 @@ impl Stroke {
     }
 
     /// Converts the animated value to its model representation.
-    pub fn to_model(self) -> super::Stroke {
+    pub fn into_model(self) -> super::Stroke {
         if self.is_fixed() {
             super::Stroke::Fixed(self.evaluate(0.0))
         } else {
@@ -337,7 +338,7 @@ impl Gradient {
     pub fn evaluate(&self, frame: f64) -> peniko::Brush {
         let start = self.start_point.evaluate(frame);
         let end = self.end_point.evaluate(frame);
-        let stops = self.stops.evaluate(frame).to_owned();
+        let stops = self.stops.evaluate(frame).into_owned();
         if self.is_radial {
             let radius = (end.to_vec2() - start.to_vec2()).hypot();
             let mut grad = peniko::Gradient::new_radial(start, radius as f32);
@@ -412,7 +413,7 @@ impl Brush {
     }
 
     /// Converts the animated value to its model representation.
-    pub fn to_model(self) -> super::Brush {
+    pub fn into_model(self) -> super::Brush {
         if self.is_fixed() {
             super::Brush::Fixed(self.evaluate(1.0, 0.0))
         } else {

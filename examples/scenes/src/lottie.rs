@@ -94,7 +94,7 @@ pub fn lottie_function_of<R: AsRef<str>>(
 ) -> impl FnMut(&mut Scene, &mut SceneParams) {
     let start = Instant::now();
     let lottie = Arc::new(
-        velato::Composition::from_bytes(contents().as_ref().as_bytes())
+        velato::Composition::from_slice(contents().as_ref())
             .unwrap_or_else(|e| panic!("failed to parse lottie file {name}: {e}")),
     );
     eprintln!("Parsed lottie {name} in {:?}", start.elapsed());
