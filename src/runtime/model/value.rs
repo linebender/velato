@@ -6,14 +6,14 @@ use vello::peniko;
 
 /// Fixed or animated value.
 #[derive(Clone, Debug)]
-pub enum Value<T: Tweenable> {
+pub enum Value<T: Tween> {
     /// Fixed value.
     Fixed(T),
     /// Animated value.
     Animated(Animated<T>),
 }
 
-impl<T: Tweenable> Value<T> {
+impl<T: Tween> Value<T> {
     /// Returns true if the value is fixed.
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
@@ -28,7 +28,7 @@ impl<T: Tweenable> Value<T> {
     }
 }
 
-impl<T: Tweenable + Default> Default for Value<T> {
+impl<T: Tween + Default> Default for Value<T> {
     fn default() -> Self {
         Self::Fixed(T::default())
     }
@@ -132,12 +132,12 @@ impl Time {
 }
 
 #[derive(Clone, Debug)]
-pub struct Animated<T: Tweenable> {
+pub struct Animated<T: Tween> {
     pub times: Vec<Time>,
     pub values: Vec<T>,
 }
 
-impl<T: Tweenable> Animated<T> {
+impl<T: Tween> Animated<T> {
     /// Returns the value at the specified frame.
     pub fn evaluate(&self, frame: f64) -> T {
         self.evaluate_inner(frame).unwrap_or_default()
@@ -150,17 +150,17 @@ impl<T: Tweenable> Animated<T> {
         let v1 = self.values.get(ix0)?;
         let v2 = self.values.get(ix1)?;
 
-        Some(v1.ease(v2, t, &easing))
+        Some(v1.tween(v2, t, &easing))
     }
 }
 
 /// Something that can be interpolated with an easing function.
-pub trait Tweenable: Clone + Default {
-    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self;
+pub trait Tween: Clone + Default {
+    fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self;
 }
 
-impl Tweenable for f64 {
-    fn ease(&self, other: &Self, t: f64, _easing: &Easing) -> Self {
+impl Tween for f64 {
+    fn tween(&self, other: &Self, t: f64, _easing: &Easing) -> Self {
         // TODO: We are enforcing linear interpolation for now, but a decent amount of work is done for easings.
         keyframe::ease(keyframe::functions::Linear, *self, *other, t)
 
@@ -177,39 +177,39 @@ impl Tweenable for f64 {
     }
 }
 
-impl Tweenable for kurbo::Point {
-    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
+impl Tween for kurbo::Point {
+    fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         Self::new(
-            self.x.ease(&other.x, t, easing),
-            self.y.ease(&other.y, t, easing),
+            self.x.tween(&other.x, t, easing),
+            self.y.tween(&other.y, t, easing),
         )
     }
 }
 
-impl Tweenable for kurbo::Vec2 {
-    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
+impl Tween for kurbo::Vec2 {
+    fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         Self::new(
-            self.x.ease(&other.x, t, easing),
-            self.y.ease(&other.y, t, easing),
+            self.x.tween(&other.x, t, easing),
+            self.y.tween(&other.y, t, easing),
         )
     }
 }
 
-impl Tweenable for kurbo::Size {
-    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
+impl Tween for kurbo::Size {
+    fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         Self::new(
-            self.width.ease(&other.width, t, easing),
-            self.height.ease(&other.height, t, easing),
+            self.width.tween(&other.width, t, easing),
+            self.height.tween(&other.height, t, easing),
         )
     }
 }
 
-impl Tweenable for peniko::Color {
-    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
-        let r = (self.r as f64 / 255.0).ease(&(other.r as f64 / 255.0), t, easing);
-        let g = (self.g as f64 / 255.0).ease(&(other.g as f64 / 255.0), t, easing);
-        let b = (self.b as f64 / 255.0).ease(&(other.b as f64 / 255.0), t, easing);
-        let a = (self.a as f64 / 255.0).ease(&(other.a as f64 / 255.0), t, easing);
+impl Tween for peniko::Color {
+    fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
+        let r = (self.r as f64 / 255.0).tween(&(other.r as f64 / 255.0), t, easing);
+        let g = (self.g as f64 / 255.0).tween(&(other.g as f64 / 255.0), t, easing);
+        let b = (self.b as f64 / 255.0).tween(&(other.b as f64 / 255.0), t, easing);
+        let a = (self.a as f64 / 255.0).tween(&(other.a as f64 / 255.0), t, easing);
         peniko::Color::rgba(r, g, b, a)
     }
 }

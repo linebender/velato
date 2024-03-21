@@ -372,12 +372,12 @@ impl ColorStops {
         let mut stops: fixed::ColorStops = Default::default();
         for i in 0..self.count {
             let j = i * 5;
-            let offset = v0.get(j)?.ease(v1.get(j)?, t, &easing);
+            let offset = v0.get(j)?.tween(v1.get(j)?, t, &easing);
             let t = if hold { 0.0 } else { t };
-            let r = v0.get(j + 1)?.ease(v1.get(j + 1)?, t, &easing);
-            let g = v0.get(j + 2)?.ease(v1.get(j + 2)?, t, &easing);
-            let b = v0.get(j + 3)?.ease(v1.get(j + 3)?, t, &easing);
-            let a = v0.get(j + 4)?.ease(v1.get(j + 4)?, t, &easing);
+            let r = v0.get(j + 1)?.tween(v1.get(j + 1)?, t, &easing);
+            let g = v0.get(j + 2)?.tween(v1.get(j + 2)?, t, &easing);
+            let b = v0.get(j + 3)?.tween(v1.get(j + 3)?, t, &easing);
+            let a = v0.get(j + 4)?.tween(v1.get(j + 4)?, t, &easing);
             let stop = peniko::ColorStop::from((offset as f32, peniko::Color::rgba(r, g, b, a)));
             stops.push(stop);
         }

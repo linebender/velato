@@ -11,7 +11,7 @@ mod value;
 pub mod animated;
 pub mod fixed;
 
-pub use value::{Animated, Easing, EasingHandle, Time, Tweenable, Value, ValueRef};
+pub use value::{Animated, Easing, EasingHandle, Time, Tween, Value, ValueRef};
 
 pub(crate) use spline::SplineToPath;
 

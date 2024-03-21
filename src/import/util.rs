@@ -1,7 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::runtime::model::{Easing, Tweenable};
+use crate::runtime::model::{Easing, Tween};
 
 pub fn normalize_to_range(a: f64, b: f64, x: f64) -> f64 {
     if a == b {
@@ -34,7 +34,7 @@ pub fn calc_stops(value: &[f64], count: usize) -> Vec<[f64; 5]> {
                         let x = stop[0];
                         let t = normalize_to_range(a, b, x);
 
-                        let alpha_interp = alpha_a.ease(&alpha_b, t, &Easing::LERP);
+                        let alpha_interp = alpha_a.tween(&alpha_b, t, &Easing::LERP);
                         let alpha_interp = if (x >= a && x <= b) && (t <= 0.25) && (x <= 0.1) {
                             alpha_a
                         } else {

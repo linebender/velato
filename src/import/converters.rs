@@ -14,7 +14,7 @@ use crate::parser::schema::helpers::int_boolean::BoolInt;
 use crate::parser::{self};
 use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
-    self, Content, Draw, EasingHandle, GroupTransform, Layer, SplineToPath, Time, Tweenable, Value,
+    self, Content, Draw, EasingHandle, GroupTransform, Layer, SplineToPath, Time, Tween, Value,
 };
 use crate::runtime::{self};
 use parser::schema;
@@ -164,7 +164,7 @@ pub fn conv_shape_transform(
     }
 }
 
-pub fn conv_keyframes<'a, T: Tweenable>(
+pub fn conv_keyframes<'a, T: Tween>(
     keyframes: impl Iterator<Item = &'a schema::animated_properties::keyframe::Keyframe>,
     f: impl Fn(&schema::animated_properties::keyframe::Keyframe) -> T,
 ) -> Value<T> {
@@ -615,7 +615,7 @@ pub fn conv_scalar(
     }
 }
 
-pub fn conv_multi<T: Tweenable>(
+pub fn conv_multi<T: Tween>(
     multidimensional: &parser::schema::animated_properties::multi_dimensional::MultiDimensional,
     f: impl Fn(&Vec<f64>) -> T,
 ) -> Value<T> {
@@ -627,7 +627,7 @@ pub fn conv_multi<T: Tweenable>(
     }
 }
 
-pub fn conv_multi_color<T: Tweenable>(
+pub fn conv_multi_color<T: Tween>(
     color: &parser::schema::animated_properties::color_value::ColorValue,
     f: impl Fn(&Vec<f64>) -> T,
 ) -> Value<T> {
@@ -639,7 +639,7 @@ pub fn conv_multi_color<T: Tweenable>(
     }
 }
 
-pub fn conv_pos<T: Tweenable>(
+pub fn conv_pos<T: Tween>(
     position: &parser::schema::animated_properties::position::Position,
     f: impl Fn(&Vec<f64>) -> T,
 ) -> Value<T> {
