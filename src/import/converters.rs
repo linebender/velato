@@ -78,7 +78,7 @@ pub fn conv_layer(
 
 pub fn conv_transform(
     value: &parser::schema::helpers::transform::Transform,
-) -> (runtime::model::Transform, Value<f32>) {
+) -> (runtime::model::Transform, Value<f64>) {
     let rotation_in = match &value.rotation {
         Some(any_trans) => match any_trans {
             parser::schema::helpers::transform::AnyTransformR::Rotation(float_value) => float_value,
@@ -216,7 +216,7 @@ pub fn conv_keyframes<'a, T: Tweenable>(
         let tangents: Vec<_> = in_tangents.into_iter().zip(out_tangents).collect();
         if tangents.is_empty() {
             frames.push(Time {
-                frame: keyframe.base.time.unwrap_f32(),
+                frame: keyframe.base.time.unwrap_f64(),
                 in_tangent: None,
                 out_tangent: None,
                 hold,
@@ -225,7 +225,7 @@ pub fn conv_keyframes<'a, T: Tweenable>(
         } else {
             for (in_tangent, out_tangent) in tangents {
                 frames.push(Time {
-                    frame: keyframe.base.time.unwrap_f32(),
+                    frame: keyframe.base.time.unwrap_f64(),
                     in_tangent: Some(in_tangent),
                     out_tangent: Some(out_tangent),
                     hold,
@@ -287,7 +287,7 @@ fn conv_gradient_colors(
         }),
         AnimatedValue(animated) => {
             let mut frames = vec![];
-            let mut values: Vec<Vec<f32>> = vec![];
+            let mut values: Vec<Vec<f64>> = vec![];
             for value in animated {
                 let hold = value
                     .base
@@ -296,7 +296,7 @@ fn conv_gradient_colors(
                     .map(|b| b.eq(&BoolInt::True))
                     .unwrap_or(false);
                 frames.push(Time {
-                    frame: value.base.time.unwrap_f32(),
+                    frame: value.base.time.unwrap_f64(),
                     in_tangent: value.base.in_tangent.as_ref().map(conv_keyframe_handle),
                     out_tangent: value.base.out_tangent.as_ref().map(conv_keyframe_handle),
                     hold,
@@ -305,7 +305,6 @@ fn conv_gradient_colors(
                 let stops = calc_stops(&value.value, count)
                     .into_iter()
                     .flatten()
-                    .map(|x| x as f32)
                     .collect::<Vec<_>>();
 
                 values.push(stops);
@@ -343,7 +342,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
                     LineJoin::Round => Join::Round,
                     LineJoin::Miter => Join::Miter,
                 },
-                miter_limit: value.miter_limit.as_ref().map(|number| number.unwrap_f32()),
+                miter_limit: value.miter_limit.as_ref().map(|number| number.unwrap_f64()),
                 cap: match value.line_cap.as_ref().unwrap_or(&LineCap::Butt) {
                     LineCap::Butt => Cap::Butt,
                     LineCap::Round => Cap::Round,
@@ -393,7 +392,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
                     .base_stroke
                     .miter_limit
                     .as_ref()
-                    .map(|x| x.unwrap_f32()),
+                    .map(|x| x.unwrap_f64()),
                 cap: match value
                     .base_stroke
                     .line_cap
@@ -530,7 +529,7 @@ pub fn conv_shape_geometry(
                     .map(|b| b.eq(&BoolInt::True))
                     .unwrap_or(false);
                 frames.push(Time {
-                    frame: value.base.time.unwrap_f32(),
+                    frame: value.base.time.unwrap_f64(),
                     in_tangent: value.base.in_tangent.as_ref().map(conv_keyframe_handle),
                     out_tangent: value.base.out_tangent.as_ref().map(conv_keyframe_handle),
                     hold,
@@ -601,16 +600,16 @@ pub fn conv_blend_mode(
 
 pub fn conv_scalar(
     float_value: &parser::schema::animated_properties::value::FloatValue,
-) -> Value<f32> {
+) -> Value<f64> {
     use crate::parser::schema::animated_properties::animated_property::AnimatedPropertyK::*;
     match &float_value.animated_property.value {
-        Static(number) => Value::Fixed(number.unwrap_f32()),
+        Static(number) => Value::Fixed(number.unwrap_f64()),
         AnimatedValue(keyframes) => {
             let mut frames = vec![];
             let mut values = vec![];
             for keyframe in keyframes {
-                let start_time = keyframe.base.time.unwrap_f32();
-                let data = keyframe.value[0].unwrap_f32();
+                let start_time = keyframe.base.time.unwrap_f64();
+                let data = keyframe.value[0].unwrap_f64();
                 let hold = keyframe
                     .base
                     .hold

@@ -28,7 +28,7 @@ macro_rules! simple_value {
             pub fn is_fixed(&self) -> bool {
                 matches!(self, Self::Fixed(_))
             }
-            pub fn evaluate(&self, frame: f32) -> ValueRef<fixed::$name> {
+            pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::$name> {
                 match self {
                     Self::Fixed(value) => ValueRef::Borrowed(value),
                     Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
@@ -54,7 +54,7 @@ impl Brush {
         matches!(self, Self::Fixed(_))
     }
 
-    pub fn evaluate(&self, alpha: f32, frame: f32) -> ValueRef<fixed::Brush> {
+    pub fn evaluate(&self, alpha: f64, frame: f64) -> ValueRef<fixed::Brush> {
         match self {
             Self::Fixed(value) => {
                 if alpha == 1.0 {
@@ -83,7 +83,7 @@ pub enum Geometry {
 }
 
 impl Geometry {
-    pub fn evaluate(&self, frame: f32, path: &mut Vec<PathEl>) {
+    pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) {
         match self {
             Self::Fixed(value) => {
                 path.extend_from_slice(value);
@@ -108,7 +108,7 @@ pub struct Draw {
     /// Brush for the draw operation.
     pub brush: Brush,
     /// Opacity of the draw operation.
-    pub opacity: Value<f32>,
+    pub opacity: Value<f64>,
 }
 
 /// Elements of a shape layer.
@@ -128,7 +128,7 @@ pub enum Shape {
 #[derive(Clone, Debug)]
 pub struct GroupTransform {
     pub transform: Transform,
-    pub opacity: Value<f32>,
+    pub opacity: Value<f64>,
 }
 
 /// Layer in an animation.
@@ -141,7 +141,7 @@ pub struct Layer {
     /// Transform for the entire layer.
     pub transform: Transform,
     /// Opacity for the entire layer.
-    pub opacity: Value<f32>,
+    pub opacity: Value<f64>,
     /// Width of the layer.
     pub width: u32,
     /// Height of the layer.
@@ -149,11 +149,11 @@ pub struct Layer {
     /// Blend mode for the layer.
     pub blend_mode: Option<peniko::BlendMode>,
     /// Range of frames in which the layer is active.
-    pub frames: Range<f32>,
+    pub frames: Range<f64>,
     /// Frame time stretch factor.
-    pub stretch: f32,
+    pub stretch: f64,
     /// Starting frame for the layer (only applied to instances).
-    pub start_frame: f32,
+    pub start_frame: f64,
     /// List of masks applied to the content.
     pub masks: Vec<Mask>,
     /// True if the layer is used as a mask.
@@ -183,7 +183,7 @@ pub struct Mask {
     /// Geometry that defines the shape of the mask.
     pub geometry: Geometry,
     /// Opacity of the mask.
-    pub opacity: Value<f32>,
+    pub opacity: Value<f64>,
 }
 
 /// Content of a layer.
@@ -195,7 +195,7 @@ pub enum Content {
     /// Asset instance with the specified name and time remapping.
     Instance {
         name: String,
-        time_remap: Option<Value<f32>>,
+        time_remap: Option<Value<f64>>,
     },
     /// Collection of shapes.
     Shape(Vec<Shape>),

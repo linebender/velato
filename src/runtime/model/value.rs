@@ -20,7 +20,7 @@ impl<T: Tweenable> Value<T> {
     }
 
     /// Returns the value at a specified frame.
-    pub fn evaluate(&self, frame: f32) -> T {
+    pub fn evaluate(&self, frame: f64) -> T {
         match self {
             Self::Fixed(fixed) => fixed.clone(),
             Self::Animated(animated) => animated.evaluate(frame),
@@ -82,7 +82,7 @@ pub struct EasingHandle {
 #[derive(Copy, Clone, Debug)]
 pub struct Time {
     /// Frame number.
-    pub frame: f32,
+    pub frame: f64,
     /// Easing tangent going into the next keyframe
     pub in_tangent: Option<EasingHandle>,
     /// Easing tangent leaving the current keyframe
@@ -96,8 +96,8 @@ impl Time {
     /// and whether to hold the frame
     pub(crate) fn frames_and_weight(
         times: &[Time],
-        frame: f32,
-    ) -> Option<([usize; 2], f32, Easing, bool)> {
+        frame: f64,
+    ) -> Option<([usize; 2], f64, Easing, bool)> {
         if times.is_empty() {
             return None;
         }
@@ -139,13 +139,13 @@ pub struct Animated<T: Tweenable> {
 
 impl<T: Tweenable> Animated<T> {
     /// Returns the value at the specified frame.
-    pub fn evaluate(&self, frame: f32) -> T {
+    pub fn evaluate(&self, frame: f64) -> T {
         self.evaluate_inner(frame).unwrap_or_default()
     }
 
-    fn evaluate_inner(&self, frame: f32) -> Option<T> {
+    fn evaluate_inner(&self, frame: f64) -> Option<T> {
         let ([ix0, ix1], t, easing, hold) = Time::frames_and_weight(&self.times, frame)?;
-        let t = if hold { 0f32 } else { t };
+        let t = if hold { 0.0 } else { t };
 
         let v1 = self.values.get(ix0)?;
         let v2 = self.values.get(ix1)?;
@@ -156,11 +156,11 @@ impl<T: Tweenable> Animated<T> {
 
 /// Something that can be interpolated with an easing function.
 pub trait Tweenable: Clone + Default {
-    fn ease(&self, other: &Self, t: f32, easing: &Easing) -> Self;
+    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self;
 }
 
 impl Tweenable for f64 {
-    fn ease(&self, other: &Self, t: f32, _easing: &Easing) -> Self {
+    fn ease(&self, other: &Self, t: f64, _easing: &Easing) -> Self {
         // TODO: We are enforcing linear interpolation for now, but a decent amount of work is done for easings.
         keyframe::ease(keyframe::functions::Linear, *self, *other, t)
 
@@ -177,14 +177,8 @@ impl Tweenable for f64 {
     }
 }
 
-impl Tweenable for f32 {
-    fn ease(&self, other: &Self, t: f32, easing: &Easing) -> Self {
-        (*self as f64).ease(&(*other as f64), t, easing) as f32
-    }
-}
-
 impl Tweenable for kurbo::Point {
-    fn ease(&self, other: &Self, t: f32, easing: &Easing) -> Self {
+    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         Self::new(
             self.x.ease(&other.x, t, easing),
             self.y.ease(&other.y, t, easing),
@@ -193,7 +187,7 @@ impl Tweenable for kurbo::Point {
 }
 
 impl Tweenable for kurbo::Vec2 {
-    fn ease(&self, other: &Self, t: f32, easing: &Easing) -> Self {
+    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         Self::new(
             self.x.ease(&other.x, t, easing),
             self.y.ease(&other.y, t, easing),
@@ -202,7 +196,7 @@ impl Tweenable for kurbo::Vec2 {
 }
 
 impl Tweenable for kurbo::Size {
-    fn ease(&self, other: &Self, t: f32, easing: &Easing) -> Self {
+    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         Self::new(
             self.width.ease(&other.width, t, easing),
             self.height.ease(&other.height, t, easing),
@@ -211,7 +205,7 @@ impl Tweenable for kurbo::Size {
 }
 
 impl Tweenable for peniko::Color {
-    fn ease(&self, other: &Self, t: f32, easing: &Easing) -> Self {
+    fn ease(&self, other: &Self, t: f64, easing: &Easing) -> Self {
         let r = (self.r as f64 / 255.0).ease(&(other.r as f64 / 255.0), t, easing);
         let g = (self.g as f64 / 255.0).ease(&(other.g as f64 / 255.0), t, easing);
         let b = (self.b as f64 / 255.0).ease(&(other.b as f64 / 255.0), t, easing);

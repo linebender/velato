@@ -100,7 +100,7 @@ pub fn lottie_function_of<R: AsRef<str>>(
     eprintln!("Parsed lottie {name} in {:?}", start.elapsed());
     fn render_lottie_contents(lottie: &Composition, start: &Instant) -> (Scene, Vec2) {
         let mut new_scene = Scene::new();
-        let frame = ((start.elapsed().as_secs_f32() * lottie.frame_rate)
+        let frame = ((start.elapsed().as_secs_f64() * lottie.frame_rate)
             % (lottie.frames.end - lottie.frames.start))
             + lottie.frames.start;
         velato::Renderer::new().render(lottie, frame, Affine::IDENTITY, 1.0, &mut new_scene);

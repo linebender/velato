@@ -11,7 +11,7 @@ pub trait RenderSink {
     fn push_layer(
         &mut self,
         blend: impl Into<peniko::BlendMode>,
-        alpha: f32,
+        alpha: f64,
         transform: Affine,
         shape: &impl kurbo::Shape,
     );
@@ -31,11 +31,11 @@ impl RenderSink for vello::Scene {
     fn push_layer(
         &mut self,
         blend: impl Into<peniko::BlendMode>,
-        alpha: f32,
+        alpha: f64,
         transform: Affine,
         shape: &impl kurbo::Shape,
     ) {
-        self.push_layer(blend, alpha, transform, shape);
+        self.push_layer(blend, alpha as f32, transform, shape);
     }
 
     fn pop_layer(&mut self) {
@@ -74,9 +74,9 @@ impl Renderer {
     pub fn render(
         &mut self,
         animation: &Composition,
-        frame: f32,
+        frame: f64,
         transform: Affine,
-        alpha: f32,
+        alpha: f64,
         sink: &mut impl RenderSink,
     ) {
         self.render_frame(animation, frame, transform, alpha, sink);
@@ -86,9 +86,9 @@ impl Renderer {
     pub fn render_frame(
         &mut self,
         animation: &Composition,
-        frame: f32,
+        frame: f64,
         transform: Affine,
-        alpha: f32,
+        alpha: f64,
         sink: &mut impl RenderSink,
     ) {
         self.batch.clear();
@@ -115,8 +115,8 @@ impl Renderer {
         layer_set: &[Layer],
         layer: &Layer,
         transform: Affine,
-        alpha: f32,
-        frame: f32,
+        alpha: f64,
+        frame: f64,
         sink: &mut impl RenderSink,
     ) {
         if !layer.frames.contains(&frame) {
@@ -191,7 +191,7 @@ impl Renderer {
         }
     }
 
-    fn render_shapes(&mut self, shapes: &[Shape], transform: Affine, alpha: f32, frame: f32) {
+    fn render_shapes(&mut self, shapes: &[Shape], transform: Affine, alpha: f64, frame: f64) {
         // Keep track of our local top of the geometry stack. Any subsequent
         // draws are bounded by this.
         let geometry_start = self.batch.geometries.len();
@@ -240,7 +240,7 @@ impl Renderer {
         layer_set: &[Layer],
         layer: &Layer,
         global_transform: Affine,
-        frame: f32,
+        frame: f64,
     ) -> Affine {
         let mut transform = layer.transform.evaluate(frame).to_owned();
         let mut parent_index = layer.parent;
@@ -267,13 +267,13 @@ impl Renderer {
 struct DrawData {
     stroke: Option<fixed::Stroke>,
     brush: fixed::Brush,
-    alpha: f32,
+    alpha: f64,
     /// Range into ShapeBatch::geometries
     geometry: Range<usize>,
 }
 
 impl DrawData {
-    fn new(draw: &Draw, alpha: f32, geometry: Range<usize>, frame: f32) -> Self {
+    fn new(draw: &Draw, alpha: f64, geometry: Range<usize>, frame: f64) -> Self {
         Self {
             stroke: draw
                 .stroke
@@ -306,7 +306,7 @@ struct Batch {
 }
 
 impl Batch {
-    fn push_geometry(&mut self, geometry: &Geometry, transform: Affine, frame: f32) {
+    fn push_geometry(&mut self, geometry: &Geometry, transform: Affine, frame: f64) {
         // Merge with the previous geometry if possible. There are two
         // conditions:
         // 1. The previous geometry has not yet been referenced by a draw
@@ -327,7 +327,7 @@ impl Batch {
         }
     }
 
-    fn push_draw(&mut self, draw: &Draw, alpha: f32, geometry_start: usize, frame: f32) {
+    fn push_draw(&mut self, draw: &Draw, alpha: f64, geometry_start: usize, frame: f64) {
         self.draws.push(DrawData::new(
             draw,
             alpha,
@@ -358,12 +358,12 @@ impl Batch {
         let end_alpha = repeater.end_opacity / 100.0;
         let delta_alpha = if repeater.copies > 1 {
             // See note in Skottie: AE does not cover the full opacity range
-            (end_alpha - start_alpha) / repeater.copies as f32
+            (end_alpha - start_alpha) / repeater.copies as f64
         } else {
             0.0
         };
         for i in 0..repeater.copies {
-            let alpha = start_alpha + delta_alpha * i as f32;
+            let alpha = start_alpha + delta_alpha * i as f64;
             if alpha <= 0.0 {
                 continue;
             }

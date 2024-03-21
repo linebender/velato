@@ -57,10 +57,10 @@ pub fn setup_precomp_layer(
         .properties
         .time_stretch
         .as_ref()
-        .map_or(1.0, |sr| sr.unwrap_f32());
+        .map_or(1.0, |sr| sr.unwrap_f64());
     target.frames =
-        source.properties.in_point.unwrap_f32()..source.properties.out_point.unwrap_f32();
-    target.start_frame = source.properties.start_time.unwrap_f32();
+        source.properties.in_point.unwrap_f64()..source.properties.out_point.unwrap_f64();
+    target.start_frame = source.properties.start_time.unwrap_f64();
 
     for mask_source in source
         .properties
@@ -141,10 +141,10 @@ pub fn setup_shape_layer(
         .properties
         .time_stretch
         .as_ref()
-        .map_or(1.0, |sr| sr.unwrap_f32());
+        .map_or(1.0, |sr| sr.unwrap_f64());
     target.frames =
-        source.properties.in_point.unwrap_f32()..source.properties.out_point.unwrap_f32();
-    target.start_frame = source.properties.start_time.unwrap_f32();
+        source.properties.in_point.unwrap_f64()..source.properties.out_point.unwrap_f64();
+    target.start_frame = source.properties.start_time.unwrap_f64();
 
     for mask_source in source
         .properties
@@ -218,9 +218,9 @@ pub fn setup_layer_base(
     target.stretch = source
         .time_stretch
         .as_ref()
-        .map_or(1.0, |sr| sr.unwrap_f32());
-    target.frames = source.in_point.unwrap_f32()..source.out_point.unwrap_f32();
-    target.start_frame = source.start_time.unwrap_f32();
+        .map_or(1.0, |sr| sr.unwrap_f64());
+    target.frames = source.in_point.unwrap_f64()..source.out_point.unwrap_f64();
+    target.start_frame = source.start_time.unwrap_f64();
 
     for mask_source in source.masks_properties.as_ref().unwrap_or(&Vec::default()) {
         if let Some(shape) = &mask_source.shape {

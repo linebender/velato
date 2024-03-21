@@ -17,9 +17,9 @@ pub use render::{RenderSink, Renderer};
 #[derive(Clone, Default, Debug)]
 pub struct Composition {
     /// Frames in which the animation is active.
-    pub frames: Range<f32>,
+    pub frames: Range<f64>,
     /// Frames per second.
-    pub frame_rate: f32,
+    pub frame_rate: f64,
     /// Width of the animation.
     pub width: u32,
     /// Height of the animation.
