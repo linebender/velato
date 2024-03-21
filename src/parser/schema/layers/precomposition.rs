@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 use crate::parser::schema::animated_properties::value::FloatValue;
 
@@ -27,10 +26,10 @@ pub struct PrecompositionLayer {
     pub precomp_id: String,
     /// Width of the clipping rect
     #[serde(rename = "w")]
-    pub width: Number,
+    pub width: f64,
     /// Height of the clipping rect
     #[serde(rename = "h")]
-    pub height: Number,
+    pub height: f64,
     /// Time Remapping
     #[serde(rename = "tm")]
     #[serde(skip_serializing_if = "Option::is_none")]

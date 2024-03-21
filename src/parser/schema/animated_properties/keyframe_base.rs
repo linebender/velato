@@ -4,7 +4,6 @@
 use super::keyframe_bezier_handle::KeyframeBezierHandle;
 use crate::parser::schema::helpers::int_boolean::BoolInt;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// A Keyframes specifies the value at a specific time and the interpolation
 /// function to reach the next keyframe.
@@ -12,7 +11,7 @@ use serde_json::Number;
 pub struct KeyframeBase {
     /// Time
     #[serde(rename = "t")]
-    pub time: Number,
+    pub time: f64,
     /// Hold
     #[serde(rename = "h")]
     #[serde(skip_serializing_if = "Option::is_none")]

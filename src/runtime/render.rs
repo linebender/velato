@@ -124,7 +124,7 @@ impl Renderer {
         }
         let parent_transform = transform;
         let transform = self.compute_transform(layer_set, layer, parent_transform, frame);
-        let full_rect = Rect::new(0.0, 0.0, animation.width as _, animation.height as _);
+        let full_rect = Rect::new(0.0, 0.0, animation.width as f64, animation.height as f64);
         if let Some((mode, mask_index)) = layer.mask_layer {
             // todo: re-enable masking when it is more understood (and/or if
             // it's currently supported in vello?) Extra layer to
@@ -370,9 +370,9 @@ impl Batch {
             for mut draw in self.repeat_draws.iter().cloned() {
                 draw.alpha *= alpha;
                 let count = draw.geometry.end - draw.geometry.start;
-                draw.geometry.start = geometry_start
-                    + (draw.geometry.start - geometry_start) * repeater.copies as usize;
-                draw.geometry.end = draw.geometry.start + count * repeater.copies as usize;
+                draw.geometry.start =
+                    geometry_start + (draw.geometry.start - geometry_start) * repeater.copies;
+                draw.geometry.end = draw.geometry.start + count * repeater.copies;
                 self.draws.push(draw);
             }
         }

@@ -3,7 +3,6 @@
 
 use super::converters::{conv_blend_mode, conv_scalar, conv_shape_geometry, conv_transform};
 use super::defaults::FLOAT_VALUE_ONE_HUNDRED;
-use super::NumberExt;
 use crate::parser::schema::helpers::int_boolean::BoolInt;
 use crate::runtime::model::Layer;
 use crate::{parser, runtime};
@@ -15,16 +14,12 @@ pub fn setup_precomp_layer(
     target: &mut Layer,
 ) -> (usize, Option<BlendMode>) {
     target.name = source.properties.name.clone().unwrap_or_default();
-    target.parent = source
-        .properties
-        .parent_index
-        .as_ref()
-        .map(|i| i.unwrap_u32() as usize);
+    target.parent = source.properties.parent_index;
     let (transform, opacity) = conv_transform(&source.properties.transform);
     target.transform = transform;
     target.opacity = opacity;
-    target.width = source.width.unwrap_u32();
-    target.height = source.height.unwrap_u32();
+    target.width = source.width;
+    target.height = source.height;
     target.is_mask = source
         .properties
         .matte_target
@@ -53,14 +48,9 @@ pub fn setup_precomp_layer(
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
     }
-    target.stretch = source
-        .properties
-        .time_stretch
-        .as_ref()
-        .map_or(1.0, |sr| sr.unwrap_f64());
-    target.frames =
-        source.properties.in_point.unwrap_f64()..source.properties.out_point.unwrap_f64();
-    target.start_frame = source.properties.start_time.unwrap_f64();
+    target.stretch = source.properties.time_stretch.unwrap_or(1.0);
+    target.frames = source.properties.in_point..source.properties.out_point;
+    target.start_frame = source.properties.start_time;
 
     for mask_source in source
         .properties
@@ -86,14 +76,7 @@ pub fn setup_precomp_layer(
         }
     }
 
-    (
-        source
-            .properties
-            .index
-            .as_ref()
-            .map_or(0, |ind| ind.unwrap_u32()) as usize,
-        matte_mode,
-    )
+    (source.properties.index.unwrap_or(0), matte_mode)
 }
 
 pub fn setup_shape_layer(
@@ -101,11 +84,7 @@ pub fn setup_shape_layer(
     target: &mut Layer,
 ) -> (usize, Option<BlendMode>) {
     target.name = source.properties.name.clone().unwrap_or_default();
-    target.parent = source
-        .properties
-        .parent_index
-        .as_ref()
-        .map(|i| i.unwrap_u32() as usize);
+    target.parent = source.properties.parent_index;
     let (transform, opacity) = conv_transform(&source.properties.transform);
     target.transform = transform;
     target.opacity = opacity;
@@ -137,14 +116,9 @@ pub fn setup_shape_layer(
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
     }
-    target.stretch = source
-        .properties
-        .time_stretch
-        .as_ref()
-        .map_or(1.0, |sr| sr.unwrap_f64());
-    target.frames =
-        source.properties.in_point.unwrap_f64()..source.properties.out_point.unwrap_f64();
-    target.start_frame = source.properties.start_time.unwrap_f64();
+    target.stretch = source.properties.time_stretch.unwrap_or(1.0);
+    target.frames = source.properties.in_point..source.properties.out_point;
+    target.start_frame = source.properties.start_time;
 
     for mask_source in source
         .properties
@@ -170,14 +144,7 @@ pub fn setup_shape_layer(
         }
     }
 
-    (
-        source
-            .properties
-            .index
-            .as_ref()
-            .map_or(0, |ind| ind.unwrap_u32()) as usize,
-        matte_mode,
-    )
+    (source.properties.index.unwrap_or(0), matte_mode)
 }
 
 pub fn setup_layer_base(
@@ -185,10 +152,7 @@ pub fn setup_layer_base(
     target: &mut Layer,
 ) -> (usize, Option<BlendMode>) {
     target.name = source.name.clone().unwrap_or_default();
-    target.parent = source
-        .parent_index
-        .as_ref()
-        .map(|i| i.unwrap_u32() as usize);
+    target.parent = source.parent_index;
     let (transform, opacity) = conv_transform(&source.transform);
     target.transform = transform;
     target.opacity = opacity;
@@ -215,12 +179,9 @@ pub fn setup_layer_base(
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
     }
-    target.stretch = source
-        .time_stretch
-        .as_ref()
-        .map_or(1.0, |sr| sr.unwrap_f64());
-    target.frames = source.in_point.unwrap_f64()..source.out_point.unwrap_f64();
-    target.start_frame = source.start_time.unwrap_f64();
+    target.stretch = source.time_stretch.unwrap_or(1.0);
+    target.frames = source.in_point..source.out_point;
+    target.start_frame = source.start_time;
 
     for mask_source in source.masks_properties.as_ref().unwrap_or(&Vec::default()) {
         if let Some(shape) = &mask_source.shape {
@@ -241,8 +202,5 @@ pub fn setup_layer_base(
         }
     }
 
-    (
-        source.index.as_ref().map_or(0, |ind| ind.unwrap_u32()) as usize,
-        matte_mode,
-    )
+    (source.index.unwrap_or(0), matte_mode)
 }

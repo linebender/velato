@@ -243,7 +243,7 @@ impl Repeater {
 
     /// Evaluates the repeater at the specified frame.
     pub fn evaluate(&self, frame: f64) -> fixed::Repeater {
-        let copies = self.copies.evaluate(frame).round() as u32;
+        let copies = self.copies.evaluate(frame).round() as usize;
         let offset = self.offset.evaluate(frame);
         let anchor_point = self.anchor_point.evaluate(frame);
         let position = self.position.evaluate(frame);

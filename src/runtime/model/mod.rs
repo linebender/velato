@@ -143,9 +143,9 @@ pub struct Layer {
     /// Opacity for the entire layer.
     pub opacity: Value<f64>,
     /// Width of the layer.
-    pub width: u32,
+    pub width: f64,
     /// Height of the layer.
-    pub height: u32,
+    pub height: f64,
     /// Blend mode for the layer.
     pub blend_mode: Option<peniko::BlendMode>,
     /// Range of frames in which the layer is active.

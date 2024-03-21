@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// This represents a cubic bezier path.
 /// Note that for interpolation to work correctly all bezier values in a
@@ -16,13 +15,13 @@ pub struct Bezier {
 
     /// Points along the curve
     #[serde(rename = "v")]
-    pub vertices: Vec<[Number; 2]>,
+    pub vertices: Vec<[f64; 2]>,
 
     /// Cubic control points, incoming tangent
     #[serde(rename = "i")]
-    pub in_tangents: Vec<[Number; 2]>,
+    pub in_tangents: Vec<[f64; 2]>,
 
     /// Cubic control points, outgoing tangent
     #[serde(rename = "o")]
-    pub out_tangents: Vec<[Number; 2]>,
+    pub out_tangents: Vec<[f64; 2]>,
 }

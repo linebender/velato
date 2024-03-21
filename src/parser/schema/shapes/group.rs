@@ -4,7 +4,6 @@
 use super::shape_element::ShapeElement;
 use super::AnyShape;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct GroupShape {
@@ -13,12 +12,12 @@ pub struct GroupShape {
     /// Number of properties
     #[serde(rename = "np")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub num_properties: Option<Number>,
+    pub num_properties: Option<f64>,
     /// Array of shapes
     #[serde(rename = "it")]
     pub shapes: Vec<AnyShape>,
     /// Index used in expressions
     #[serde(rename = "cix")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_index: Option<Number>,
+    pub property_index: Option<f64>,
 }

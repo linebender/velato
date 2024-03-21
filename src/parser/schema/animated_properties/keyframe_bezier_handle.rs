@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// Represents a keyframe bezier handle.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -24,7 +23,7 @@ pub struct KeyframeBezierHandle {
 #[serde(untagged)]
 pub enum KeyframeComponent {
     /// Array of component values.
-    ArrayOfValues(Vec<Number>),
+    ArrayOfValues(Vec<f64>),
     /// Single component value.
-    SingleValue(Number),
+    SingleValue(f64),
 }

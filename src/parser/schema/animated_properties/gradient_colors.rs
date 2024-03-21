@@ -3,7 +3,6 @@
 
 use super::multi_dimensional::MultiDimensional;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// Represents colors and offsets in a gradient.
 ///
@@ -19,5 +18,5 @@ pub struct GradientColors {
     pub colors: MultiDimensional,
     /// Number of colors in k.
     #[serde(rename = "p")]
-    pub count: Number,
+    pub count: usize,
 }

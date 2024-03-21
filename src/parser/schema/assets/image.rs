@@ -4,7 +4,6 @@
 use super::file_asset::FileAsset;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize, Serializer};
-use serde_json::Number;
 
 /// External image
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -14,11 +13,11 @@ pub struct Image {
     /// Width of the image
     #[serde(rename = "w")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub width: Option<Number>,
+    pub width: Option<f64>,
     /// Height of the image
     #[serde(rename = "h")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub height: Option<Number>,
+    pub height: Option<f64>,
     /// Mark as part of an image sequence if present.
     #[serde(
         rename = "t",

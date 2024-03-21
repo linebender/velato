@@ -21,9 +21,9 @@ pub struct Composition {
     /// Frames per second.
     pub frame_rate: f64,
     /// Width of the animation.
-    pub width: u32,
+    pub width: usize,
     /// Height of the animation.
-    pub height: u32,
+    pub height: usize,
     /// Precomposed layers that may be instanced.
     pub assets: HashMap<String, Vec<model::Layer>>,
     /// Collection of layers.

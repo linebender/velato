@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use self::converters::conv_layer;
-use self::util::NumberExt;
 use crate::parser::{schema, Animation};
 use crate::Composition;
 use std::collections::HashMap;
@@ -18,10 +17,10 @@ pub fn import_composition(
     let source = Animation::from_slice(source.as_ref())?;
 
     let mut target = Composition {
-        frames: source.in_point.unwrap_f64()..source.out_point.unwrap_f64(),
-        frame_rate: source.frame_rate.unwrap_f64(),
-        width: source.width.unwrap_u32(),
-        height: source.height.unwrap_u32(),
+        frames: source.in_point..source.out_point,
+        frame_rate: source.frame_rate,
+        width: source.width,
+        height: source.height,
         assets: Default::default(),
         layers: Default::default(),
     };

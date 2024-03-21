@@ -4,7 +4,6 @@
 use crate::parser::schema::helpers::bezier::Bezier;
 use crate::parser::schema::helpers::int_boolean::BoolInt;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 use super::shape_keyframe::ShapeKeyframe;
 
@@ -14,7 +13,7 @@ pub struct ShapeProperty {
     /// The index of the property.
     #[serde(rename = "ix")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_index: Option<Number>,
+    pub property_index: Option<f64>,
     /// Whether the property is animated
     #[serde(rename = "a")]
     #[serde(skip_serializing_if = "Option::is_none")]

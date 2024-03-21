@@ -3,7 +3,6 @@
 
 use super::visual::VisualLayer;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 #[derive(serde_repr::Deserialize_repr, serde_repr::Serialize_repr, Debug, Clone, PartialEq)]
 #[repr(u8)]
@@ -27,8 +26,8 @@ pub struct SolidColorLayer {
     pub color: String,
 
     #[serde(rename = "sh")]
-    pub height: Number,
+    pub height: f64,
 
     #[serde(rename = "sw")]
-    pub width: Number,
+    pub width: f64,
 }

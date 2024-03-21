@@ -3,7 +3,6 @@
 
 use super::builders::{setup_layer_base, setup_precomp_layer, setup_shape_layer};
 use super::defaults::{FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE, POSITION_ZERO};
-use super::NumberExt;
 use crate::import::util::calc_stops;
 use crate::parser::schema::animated_properties::keyframe_bezier_handle::{
     KeyframeBezierHandle, KeyframeComponent,
@@ -177,28 +176,20 @@ pub fn conv_keyframes<'a, T: Tweenable>(
         let Some(handle) = handle else { return handles };
         match (&handle.x_coordinate, &handle.y_coordinate) {
             (KeyframeComponent::ArrayOfValues(xarr), KeyframeComponent::ArrayOfValues(yarr)) => {
-                handles.extend(xarr.iter().zip(yarr).map(|(x, y)| EasingHandle {
-                    x: x.unwrap_f64(),
-                    y: y.unwrap_f64(),
-                }));
+                handles.extend(
+                    xarr.iter()
+                        .zip(yarr)
+                        .map(|(x, y)| EasingHandle { x: *x, y: *y }),
+                );
             }
             (KeyframeComponent::ArrayOfValues(xarr), KeyframeComponent::SingleValue(y)) => {
-                handles.extend(xarr.iter().map(|x| EasingHandle {
-                    x: x.unwrap_f64(),
-                    y: y.unwrap_f64(),
-                }));
+                handles.extend(xarr.iter().map(|x| EasingHandle { x: *x, y: *y }));
             }
             (KeyframeComponent::SingleValue(x), KeyframeComponent::ArrayOfValues(yarr)) => {
-                handles.extend(yarr.iter().map(|y| EasingHandle {
-                    x: x.unwrap_f64(),
-                    y: y.unwrap_f64(),
-                }));
+                handles.extend(yarr.iter().map(|y| EasingHandle { x: *x, y: *y }));
             }
             (KeyframeComponent::SingleValue(x), KeyframeComponent::SingleValue(y)) => {
-                handles.push(EasingHandle {
-                    x: x.unwrap_f64(),
-                    y: y.unwrap_f64(),
-                });
+                handles.push(EasingHandle { x: *x, y: *y });
             }
         }
         handles
@@ -216,7 +207,7 @@ pub fn conv_keyframes<'a, T: Tweenable>(
         let tangents: Vec<_> = in_tangents.into_iter().zip(out_tangents).collect();
         if tangents.is_empty() {
             frames.push(Time {
-                frame: keyframe.base.time.unwrap_f64(),
+                frame: keyframe.base.time,
                 in_tangent: None,
                 out_tangent: None,
                 hold,
@@ -225,7 +216,7 @@ pub fn conv_keyframes<'a, T: Tweenable>(
         } else {
             for (in_tangent, out_tangent) in tangents {
                 frames.push(Time {
-                    frame: keyframe.base.time.unwrap_f64(),
+                    frame: keyframe.base.time,
                     in_tangent: Some(in_tangent),
                     out_tangent: Some(out_tangent),
                     hold,
@@ -248,16 +239,16 @@ fn conv_keyframe_handle(handle: &KeyframeBezierHandle) -> EasingHandle {
     let x = match x_coordinate {
         KeyframeComponent::ArrayOfValues(arr) => {
             assert!(arr.len() == 1, "{arr:?}");
-            arr[0].as_f64().unwrap()
+            arr[0]
         }
-        KeyframeComponent::SingleValue(v) => v.unwrap_f64(),
+        KeyframeComponent::SingleValue(v) => *v,
     };
     let y = match y_coordinate {
         KeyframeComponent::ArrayOfValues(arr) => {
             assert!(arr.len() == 1);
-            arr[0].as_f64().unwrap()
+            arr[0]
         }
-        KeyframeComponent::SingleValue(v) => v.unwrap_f64(),
+        KeyframeComponent::SingleValue(v) => *v,
     };
     EasingHandle { x, y }
 }
@@ -267,7 +258,7 @@ fn conv_gradient_colors(
 ) -> runtime::model::ColorStops {
     use schema::animated_properties::animated_property::AnimatedPropertyK::*;
 
-    let count = value.count.unwrap_u32() as usize;
+    let count = value.count;
     match &value.colors.animated_property.value {
         Static(value) => runtime::model::ColorStops::Fixed({
             let mut stops = runtime::model::fixed::ColorStops::new();
@@ -296,7 +287,7 @@ fn conv_gradient_colors(
                     .map(|b| b.eq(&BoolInt::True))
                     .unwrap_or(false);
                 frames.push(Time {
-                    frame: value.base.time.unwrap_f64(),
+                    frame: value.base.time,
                     in_tangent: value.base.in_tangent.as_ref().map(conv_keyframe_handle),
                     out_tangent: value.base.out_tangent.as_ref().map(conv_keyframe_handle),
                     hold,
@@ -342,7 +333,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
                     LineJoin::Round => Join::Round,
                     LineJoin::Miter => Join::Miter,
                 },
-                miter_limit: value.miter_limit.as_ref().map(|number| number.unwrap_f64()),
+                miter_limit: value.miter_limit,
                 cap: match value.line_cap.as_ref().unwrap_or(&LineCap::Butt) {
                     LineCap::Butt => Cap::Butt,
                     LineCap::Round => Cap::Round,
@@ -388,11 +379,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
                     LineJoin::Round => Join::Round,
                     LineJoin::Miter => Join::Miter,
                 },
-                miter_limit: value
-                    .base_stroke
-                    .miter_limit
-                    .as_ref()
-                    .map(|x| x.unwrap_f64()),
+                miter_limit: value.base_stroke.miter_limit,
                 cap: match value
                     .base_stroke
                     .line_cap
@@ -529,7 +516,7 @@ pub fn conv_shape_geometry(
                     .map(|b| b.eq(&BoolInt::True))
                     .unwrap_or(false);
                 frames.push(Time {
-                    frame: value.base.time.unwrap_f64(),
+                    frame: value.base.time,
                     in_tangent: value.base.in_tangent.as_ref().map(conv_keyframe_handle),
                     out_tangent: value.base.out_tangent.as_ref().map(conv_keyframe_handle),
                     hold,
@@ -555,18 +542,12 @@ pub fn conv_spline(value: &schema::helpers::bezier::Bezier) -> (Vec<Point>, bool
     for ((v, i), o) in value
         .vertices
         .iter()
-        .zip(value.in_tangents.iter().chain(repeat(&[
-            serde_json::Number::from(0),
-            serde_json::Number::from(0),
-        ])))
-        .zip(value.out_tangents.iter().chain(repeat(&[
-            serde_json::Number::from(0),
-            serde_json::Number::from(0),
-        ])))
+        .zip(value.in_tangents.iter().chain(repeat(&[0.0, 0.0])))
+        .zip(value.out_tangents.iter().chain(repeat(&[0.0, 0.0])))
     {
-        points.push((v[0].unwrap_f64(), v[1].unwrap_f64()).into());
-        points.push((i[0].unwrap_f64(), i[1].unwrap_f64()).into());
-        points.push((o[0].unwrap_f64(), o[1].unwrap_f64()).into());
+        points.push((v[0], v[1]).into());
+        points.push((i[0], i[1]).into());
+        points.push((o[0], o[1]).into());
     }
     (points, is_closed)
 }
@@ -603,13 +584,13 @@ pub fn conv_scalar(
 ) -> Value<f64> {
     use crate::parser::schema::animated_properties::animated_property::AnimatedPropertyK::*;
     match &float_value.animated_property.value {
-        Static(number) => Value::Fixed(number.unwrap_f64()),
+        Static(number) => Value::Fixed(*number),
         AnimatedValue(keyframes) => {
             let mut frames = vec![];
             let mut values = vec![];
             for keyframe in keyframes {
-                let start_time = keyframe.base.time.unwrap_f64();
-                let data = keyframe.value[0].unwrap_f64();
+                let start_time = keyframe.base.time;
+                let data = keyframe.value[0];
                 let hold = keyframe
                     .base
                     .hold
@@ -641,24 +622,8 @@ pub fn conv_multi<T: Tweenable>(
     use crate::parser::schema::animated_properties::animated_property::AnimatedPropertyK::*;
 
     match &multidimensional.animated_property.value {
-        Static(components) => {
-            let value: Vec<f64> = components
-                .iter()
-                .map(|number| number.as_f64().unwrap())
-                .collect();
-            Value::Fixed(f(&value))
-        }
-        AnimatedValue(keyframes) => {
-            let animated = conv_keyframes(keyframes.iter(), |k| {
-                let data = k
-                    .value
-                    .iter()
-                    .map(|number| number.as_f64().unwrap())
-                    .collect::<Vec<_>>();
-                f(&data)
-            });
-            animated
-        }
+        Static(components) => Value::Fixed(f(components)),
+        AnimatedValue(keyframes) => conv_keyframes(keyframes.iter(), |k| f(&k.value)),
     }
 }
 
@@ -669,24 +634,8 @@ pub fn conv_multi_color<T: Tweenable>(
     use crate::parser::schema::animated_properties::animated_property::AnimatedPropertyK::*;
 
     match &color.animated_property.value {
-        Static(components) => {
-            let value: Vec<f64> = components
-                .iter()
-                .map(|number| number.as_f64().unwrap())
-                .collect();
-            Value::Fixed(f(&value))
-        }
-        AnimatedValue(keyframes) => {
-            let animated = conv_keyframes(keyframes.iter(), |k| {
-                let data = k
-                    .value
-                    .iter()
-                    .map(|number| number.as_f64().unwrap())
-                    .collect::<Vec<_>>();
-                f(&data)
-            });
-            animated
-        }
+        Static(components) => Value::Fixed(f(components)),
+        AnimatedValue(keyframes) => conv_keyframes(keyframes.iter(), |k| f(&k.value)),
     }
 }
 
@@ -697,25 +646,11 @@ pub fn conv_pos<T: Tweenable>(
     use crate::parser::schema::animated_properties::position::PositionValueK::*;
 
     match &position.value {
-        Static(components) => {
-            let value: Vec<f64> = components
-                .iter()
-                .map(|number| number.as_f64().unwrap())
-                .collect();
-            Value::Fixed(f(&value))
-        }
+        Static(components) => Value::Fixed(f(components)),
         Animated(pos_keyframes) => {
             // TODO: Are we using PositionKeyframes here how we're supposed to?
             // there are in_tangents and out_tangents in addition to the keyframes.
-            let animated = conv_keyframes(pos_keyframes.iter().map(|pk| &pk.keyframe), |k| {
-                let data = k
-                    .value
-                    .iter()
-                    .map(|number| number.as_f64().unwrap())
-                    .collect::<Vec<_>>();
-                f(&data)
-            });
-            animated
+            conv_keyframes(pos_keyframes.iter().map(|pk| &pk.keyframe), |k| f(&k.value))
         }
     }
 }

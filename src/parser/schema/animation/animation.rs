@@ -3,7 +3,6 @@
 
 use crate::parser::schema::{assets::AnyAsset, helpers::int_boolean::BoolInt, layers::AnyLayer};
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 use std::fmt::Display;
 
 /// Top level object, describing the animation
@@ -19,20 +18,20 @@ pub struct Animation {
     pub name: Option<String>,
     /// Framerate in frames per second
     #[serde(rename = "fr")]
-    pub frame_rate: Number,
+    pub frame_rate: f64,
     /// "In Point", which frame the animation starts at (usually 0)
     #[serde(rename = "ip")]
-    pub in_point: Number,
+    pub in_point: f64,
     /// "Out Point", which frame the animation stops/loops at, which makes this
     /// the duration in frames when `ip` is 0
     #[serde(rename = "op")]
-    pub out_point: Number,
+    pub out_point: f64,
     /// Width of the animation
     #[serde(rename = "w")]
-    pub width: Number,
+    pub width: usize,
     /// Height of the animation
     #[serde(rename = "h")]
-    pub height: Number,
+    pub height: usize,
     /// Whether the animation has 3D layers
     #[serde(rename = "ddd", default)]
     #[serde(skip_serializing_if = "Option::is_none")]

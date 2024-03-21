@@ -4,7 +4,6 @@
 use super::position_keyframe::PositionKeyframe;
 use crate::parser::schema::helpers::int_boolean::BoolInt;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// An animatable property to represent a position in space
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -12,7 +11,7 @@ pub struct Position {
     /// The index of the property.
     #[serde(rename = "ix")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_index: Option<Number>,
+    pub property_index: Option<f64>,
     /// Whether the property is animated
     #[serde(rename = "a")]
     pub animated: Option<BoolInt>,
@@ -25,7 +24,7 @@ pub struct Position {
     /// when accessed from expressions.
     #[serde(rename = "l")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub length: Option<Number>,
+    pub length: Option<f64>,
     /// The value variant (Animated or Static).
     #[serde(rename = "k")]
     pub value: PositionValueK,
@@ -36,5 +35,5 @@ pub struct Position {
 #[serde(untagged)]
 pub enum PositionValueK {
     Animated(Vec<PositionKeyframe>),
-    Static(Vec<Number>),
+    Static(Vec<f64>),
 }

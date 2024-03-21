@@ -6,7 +6,6 @@ use crate::parser::schema::animated_properties::value::FloatValue;
 use crate::parser::schema::constants::line_cap::LineCap;
 use crate::parser::schema::constants::line_join::LineJoin;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct BaseStroke {
@@ -20,7 +19,7 @@ pub struct BaseStroke {
 
     /// Miter Limit
     #[serde(rename = "ml")]
-    pub miter_limit: Option<Number>,
+    pub miter_limit: Option<f64>,
 
     /// Animatable alternative to miter limit
     #[serde(rename = "ml2")]

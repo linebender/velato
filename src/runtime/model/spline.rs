@@ -61,6 +61,7 @@ impl SplineToPath for (&'_ [Point], &'_ [Point], f64) {
     }
 
     fn get(&self, index: usize) -> Point {
+        // TODO: This definitely shouldn't be a lerp
         self.0[index].lerp(self.1[index], self.2)
     }
 }

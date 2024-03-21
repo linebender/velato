@@ -7,7 +7,6 @@ use crate::parser::schema::helpers::int_boolean::BoolInt;
 use crate::parser::schema::helpers::mask::Mask;
 use crate::parser::schema::helpers::transform::Transform;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// Common properties between layers
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -32,24 +31,24 @@ pub struct VisualLayer {
     /// Layer index for parenting
     #[serde(rename = "ind")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index: Option<Number>,
+    pub index: Option<usize>,
     /// Parent index for parenting
     #[serde(rename = "parent")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub parent_index: Option<Number>,
+    pub parent_index: Option<usize>,
     /// Time Stretch
     #[serde(rename = "sr")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_stretch: Option<Number>,
+    pub time_stretch: Option<f64>,
     /// Frame when the layer becomes visible
     #[serde(rename = "ip")]
-    pub in_point: Number,
+    pub in_point: f64,
     /// Frame when the layer becomes invisible
     #[serde(rename = "op")]
-    pub out_point: Number,
+    pub out_point: f64,
     /// Start Time
     #[serde(rename = "st")]
-    pub start_time: Number,
+    pub start_time: f64,
     /// Matte mode
     #[serde(rename = "tt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -82,7 +81,7 @@ pub struct VisualLayer {
     /// current one
     #[serde(rename = "tp")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub matte_layer_index: Option<Number>,
+    pub matte_layer_index: Option<f64>,
     /// Whether the layer has masks applied
     #[serde(rename = "hasMask", default)]
     #[serde(skip_serializing_if = "Option::is_none")]

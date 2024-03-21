@@ -5,7 +5,6 @@ use super::keyframe::Keyframe;
 use crate::parser::schema::helpers::int_boolean::BoolInt;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// An animatable property that holds an array of numbers.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -13,7 +12,7 @@ pub struct AnimatedProperty<StaticType> {
     /// Property Index
     #[serde(rename = "ix")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_index: Option<Number>,
+    pub property_index: Option<f64>,
     /// Whether the property is animated.
     #[serde(rename = "a")]
     #[serde(skip_serializing_if = "Option::is_none")]

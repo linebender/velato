@@ -8,7 +8,6 @@ use crate::parser::schema::animated_properties::value::FloatValue;
 use crate::parser::schema::constants::line_cap::LineCap;
 use crate::parser::schema::constants::line_join::LineJoin;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// Defines a stroke.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -26,7 +25,7 @@ pub struct StrokeShape {
     /// Miter Limit
     #[serde(rename = "ml")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub miter_limit: Option<Number>,
+    pub miter_limit: Option<f64>,
     /// Animatable alternative to miter_limit
     #[serde(rename = "ml2")]
     #[serde(skip_serializing_if = "Option::is_none")]

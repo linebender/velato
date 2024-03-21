@@ -3,22 +3,6 @@
 
 use crate::runtime::model::{Easing, Tweenable};
 
-pub trait NumberExt {
-    fn unwrap_f64(&self) -> f64;
-    fn unwrap_u32(&self) -> u32;
-}
-
-impl NumberExt for serde_json::Number {
-    fn unwrap_f64(&self) -> f64 {
-        self.as_f64().expect("Could not get float from JSON Number")
-    }
-
-    fn unwrap_u32(&self) -> u32 {
-        self.as_u64()
-            .expect("Could not get unsigned integer from JSON Number") as u32
-    }
-}
-
 pub fn normalize_to_range(a: f64, b: f64, x: f64) -> f64 {
     if a == b {
         // Avoid division by zero if a and b are the same
@@ -29,23 +13,17 @@ pub fn normalize_to_range(a: f64, b: f64, x: f64) -> f64 {
     (x - a) / (b - a)
 }
 
-pub fn calc_stops(value: &[serde_json::Number], count: usize) -> Vec<[f64; 5]> {
+pub fn calc_stops(value: &[f64], count: usize) -> Vec<[f64; 5]> {
     let mut stops: Vec<[f64; 5]> = Vec::new();
     let mut alpha_stops: Vec<(f64, f64)> = Vec::new();
     for chunk in value.chunks_exact(4) {
-        stops.push([
-            chunk[0].unwrap_f64(),
-            chunk[1].unwrap_f64(),
-            chunk[2].unwrap_f64(),
-            chunk[3].unwrap_f64(),
-            1.0,
-        ]);
+        stops.push([chunk[0], chunk[1], chunk[2], chunk[3], 1.0]);
         if stops.len() >= count {
             // there is alpha data at the end of the list, which is a sequence
             // of (offset, alpha) pairs
             for chunk in value.chunks_exact(2).skip(count * 2) {
-                let offset = chunk[0].unwrap_f64();
-                let alpha = chunk[1].unwrap_f64();
+                let offset = chunk[0];
+                let alpha = chunk[1];
                 alpha_stops.push((offset, alpha));
             }
 

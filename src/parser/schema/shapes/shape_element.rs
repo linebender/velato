@@ -4,7 +4,6 @@
 use crate::parser::schema::constants::blend_mode::BlendMode;
 use crate::parser::schema::helpers::visual_object::VisualObject;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// Base class for all elements of ShapeLayer and Group
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -24,7 +23,7 @@ pub struct ShapeElement {
     /// Index used in expressions
     #[serde(rename = "ix")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_index: Option<Number>,
+    pub property_index: Option<f64>,
 
     /// CSS class used by the SVG renderer
     #[serde(rename = "cl")]
@@ -40,5 +39,5 @@ pub struct ShapeElement {
     /// files.
     #[serde(rename = "ind")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index: Option<Number>,
+    pub index: Option<f64>,
 }

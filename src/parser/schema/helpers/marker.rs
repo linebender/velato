@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 /// Defines named portions of the composition
 
@@ -16,10 +15,10 @@ pub struct Marker {
     /// Time
     #[serde(rename = "tm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub time: Option<Number>,
+    pub time: Option<f64>,
 
     /// Duration
     #[serde(rename = "dr")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration: Option<Number>,
+    pub duration: Option<f64>,
 }

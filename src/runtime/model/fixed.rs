@@ -27,7 +27,7 @@ pub type Stroke = kurbo::Stroke;
 #[derive(Clone, Debug)]
 pub struct Repeater {
     /// Number of times to repeat.
-    pub copies: u32,
+    pub copies: usize,
     /// Offset of each subsequent repeated element.
     pub offset: f64,
     /// Anchor point.
@@ -46,7 +46,7 @@ pub struct Repeater {
 
 impl Repeater {
     /// Returns the transform for the given copy index.
-    pub fn transform(&self, index: u32) -> Affine {
+    pub fn transform(&self, index: usize) -> Affine {
         let t = self.offset + index as f64;
         Affine::translate((
             t * self.position.x + self.anchor_point.x,

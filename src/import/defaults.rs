@@ -17,7 +17,7 @@ pub static FLOAT_VALUE_ZERO: Lazy<FloatValue> = Lazy::new(|| FloatValue {
         animated: Some(BoolInt::False),
         expression: None,
         slot_id: None,
-        value: AnimatedPropertyK::Static(serde_json::Number::from(0)),
+        value: AnimatedPropertyK::Static(0.0),
     },
 });
 
@@ -27,7 +27,7 @@ pub static FLOAT_VALUE_ONE_HUNDRED: Lazy<FloatValue> = Lazy::new(|| FloatValue {
         animated: Some(BoolInt::False),
         expression: None,
         slot_id: None,
-        value: AnimatedPropertyK::Static(serde_json::Number::from(100)),
+        value: AnimatedPropertyK::Static(100.0),
     },
 });
 
@@ -37,11 +37,7 @@ pub static MULTIDIM_ONE: Lazy<MultiDimensional> = Lazy::new(|| MultiDimensional 
         animated: Some(BoolInt::False),
         expression: None,
         slot_id: None,
-        value: AnimatedPropertyK::Static(vec![
-            serde_json::Number::from(1),
-            serde_json::Number::from(1),
-            serde_json::Number::from(1),
-        ]),
+        value: AnimatedPropertyK::Static(vec![1.0, 1.0, 1.0]),
     },
     length: None,
 });
@@ -51,8 +47,5 @@ pub static POSITION_ZERO: Lazy<Position> = Lazy::new(|| Position {
     animated: Some(BoolInt::False),
     expression: None,
     length: None,
-    value: schema::animated_properties::position::PositionValueK::Static(vec![
-        serde_json::Number::from(0),
-        serde_json::Number::from(0),
-    ]),
+    value: schema::animated_properties::position::PositionValueK::Static(vec![0.0, 0.0]),
 });
