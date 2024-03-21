@@ -18,7 +18,6 @@ pub struct Keyframe {
     /// Value at the end of the keyframe. Note that this is deprecated, and you
     /// should use "s" from the next keyframe to get this value.
     #[serde(rename = "e")]
-    #[deprecated(note = "you should use s from the next keyframe to get this value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_value_deprecated: Option<Vec<Number>>,
 }
