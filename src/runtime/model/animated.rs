@@ -67,10 +67,7 @@ impl Transform {
             let skew = -skew.min(SKEW_LIMIT).max(-SKEW_LIMIT);
             let skew = skew.to_radians();
             let angle = skew_angle.to_radians();
-            fn make_skew(x: f64) -> Affine {
-                Affine::new([1.0, 0.0, (x).tan(), 1.0, 0.0, 0.0])
-            }
-            Affine::rotate(-angle) * make_skew(skew) * Affine::rotate(angle)
+            Affine::rotate(-angle) * Affine::skew(skew.tan(), 0.0) * Affine::rotate(angle)
         } else {
             Affine::IDENTITY
         };
