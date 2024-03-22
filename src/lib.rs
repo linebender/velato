@@ -5,4 +5,4 @@ pub(crate) mod import;
 pub(crate) mod runtime;
 pub(crate) mod schema;
 
-pub use runtime::{Composition, Renderer};
+pub use runtime::{model, Composition, Renderer};
