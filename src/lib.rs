@@ -10,7 +10,7 @@
 //!
 //! ## Usage
 //!
-//! ```rust
+//! ```no_run
 //! // Parse your lottie file
 //! let lottie = inclide_str!("../lottie.json");
 //! let composition = velato::Composition::from_str(lottie).expect("valid file");
