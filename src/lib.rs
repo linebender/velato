@@ -12,8 +12,8 @@
 //!
 //! ```no_run
 //! # use std::str::FromStr;
-//! # use velato::vello::kurbo::Affine;
-//! #
+//! use velato::vello;
+//!
 //! // Parse your lottie file
 //! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
 //! let composition = velato::Composition::from_str(lottie).expect("valid file");
@@ -24,7 +24,7 @@
 //! // Render to a scene!
 //! let mut renderer = velato::Renderer::new();
 //! let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
-//! let transform = Affine::IDENTITY;
+//! let transform = vello::kurbo::Affine::IDENTITY;
 //! let alpha = 1.0;
 //! renderer.render(&composition, frame, transform, alpha, &mut new_scene);
 //! ```
