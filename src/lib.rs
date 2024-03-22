@@ -1,7 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Render a Lottie animation to a Vello [`Scene`](https://docs.rs/vello/*/vello/struct.Scene.html).
+//! Render a Lottie animation to a Vello [`Scene`](crate::vello::Scene).
 //!
 //! However, this is also intended to be the preferred integration between Vello and [Lottie](https://lottie.github.io/lottie-spec/), so [consider
 //! contributing](https://github.com/linebender/velato) if you need a feature which is missing.
