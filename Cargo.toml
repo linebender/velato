@@ -1,6 +1,11 @@
 [workspace]
 resolver = "2"
-members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
+members = [
+  "examples/with_winit",
+  "examples/run_wasm",
+  "examples/scenes",
+  "examples/simple",
+]
 
 [workspace.package]
 edition = "2021"
