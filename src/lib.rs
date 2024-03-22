@@ -3,7 +3,7 @@
 
 //! Render a Lottie animation to a Vello [`Scene`](https://docs.rs/vello/*/vello/struct.Scene.html).
 //!
-//! However, this is also intended to be the preferred integration between Vello and [Lottie], so [consider
+//! However, this is also intended to be the preferred integration between Vello and [Lottie](https://lottie.github.io/lottie-spec/), so [consider
 //! contributing](https://github.com/linebender/velato) if you need a feature which is missing.
 //!
 //! This crate also re-exports [`vello`], to make handling dependency versions easier
@@ -13,7 +13,7 @@
 //! ```no_run
 //! # use std::str::FromStr;
 //! # use velato::vello::kurbo::Affine;
-//!
+//! #
 //! // Parse your lottie file
 //! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
 //! let composition = velato::Composition::from_str(lottie).expect("valid file");
