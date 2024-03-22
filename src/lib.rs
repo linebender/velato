@@ -11,8 +11,11 @@
 //! ## Usage
 //!
 //! ```no_run
+//! # use std::str::FromStr;
+//! # use velato::vello::kurbo::Affine;
+//!
 //! // Parse your lottie file
-//! let lottie = inclide_str!("../lottie.json");
+//! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
 //! let composition = velato::Composition::from_str(lottie).expect("valid file");
 //!
 //! // Render to a scene
