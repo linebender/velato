@@ -6,7 +6,7 @@
 //! However, this is also intended to be the preferred integration between Vello and [Lottie](https://lottie.github.io/lottie-spec/), so [consider
 //! contributing](https://github.com/linebender/velato) if you need a feature which is missing.
 //!
-//! This crate also re-exports [`vello`], to make handling dependency versions easier
+//! This crate also re-exports [`vello`], to make handling dependency versions easier.
 //!
 //! ## Usage
 //!
