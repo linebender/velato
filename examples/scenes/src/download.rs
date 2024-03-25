@@ -73,9 +73,7 @@ impl Download {
                     }
 
                     // For rustfmt, split prompt into its own line
-                    let prompt =
-                        format!("Would you like to download a set of default lottie files, as explained above? ({})", byte_unit::Byte::from_bytes(total_bytes.into()).get_appropriate_unit(false));
-                    accepted = Confirm::new(&prompt).with_default(false).prompt()?;
+                    accepted = download_prompt(total_bytes)?;
                 } else {
                     println!("Nothing to download! All default downloads already created");
                 }
@@ -148,6 +146,15 @@ impl Download {
             }
         }
     }
+}
+
+fn download_prompt(total_bytes: u64) -> Result<bool> {
+    let prompt = format!(
+        "Would you like to download a set of default lottie files, as explained above? ({})",
+        byte_unit::Byte::from_bytes(total_bytes.into()).get_appropriate_unit(false)
+    );
+    let accepted = Confirm::new(&prompt).with_default(false).prompt()?;
+    Ok(accepted)
 }
 
 struct LottieDownload {
