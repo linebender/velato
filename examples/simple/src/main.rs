@@ -30,6 +30,12 @@ enum RenderState<'s> {
 }
 
 fn main() -> Result<()> {
+    #[cfg(target_arch = "wasm32")]
+    {
+        std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+        panic!("Wasm32 not yet supported for this example");
+    }
+
     // Setup a bunch of state:
 
     // The vello RenderContext which is a global context that lasts for the lifetime of the application
