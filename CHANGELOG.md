@@ -10,6 +10,6 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
-## 0.1 (2024-03-11)
+## 0.1.0 (2024-03-26)
 
 - Initial release
