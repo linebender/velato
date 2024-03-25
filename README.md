@@ -55,8 +55,6 @@ renderer.render(&composition, frame, transform, alpha, &mut new_scene);
 
 ## Examples
 
-There is a [simple example](examples/simple/) that works on most platforms.
-
 ### Cross platform (Winit)
 
 ```shell
