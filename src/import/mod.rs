@@ -4,6 +4,5 @@
 mod builders;
 mod converters;
 mod defaults;
-mod util;
 
 pub use converters::conv_animation;

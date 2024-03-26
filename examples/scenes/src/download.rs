@@ -58,6 +58,7 @@ impl Download {
                     println!(
                         "Would you like to download a set of default lottie files? These files are:"
                     );
+                    let mut total_bytes = 0;
                     for download in &downloads {
                         let builtin = download.builtin.as_ref().unwrap();
                         println!(
@@ -68,12 +69,11 @@ impl Download {
                             builtin.license,
                             builtin.info
                         );
+                        total_bytes += builtin.expected_size;
                     }
 
                     // For rustfmt, split prompt into its own line
-                    const PROMPT: &str =
-                "Would you like to download a set of default lottie files, as explained above?";
-                    accepted = Confirm::new(PROMPT).with_default(false).prompt()?;
+                    accepted = download_prompt(total_bytes)?;
                 } else {
                     println!("Nothing to download! All default downloads already created");
                 }
@@ -146,6 +146,15 @@ impl Download {
             }
         }
     }
+}
+
+fn download_prompt(total_bytes: u64) -> Result<bool> {
+    let prompt = format!(
+        "Would you like to download a set of default lottie files, as explained above? ({})",
+        byte_unit::Byte::from_bytes(total_bytes.into()).get_appropriate_unit(false)
+    );
+    let accepted = Confirm::new(&prompt).with_default(false).prompt()?;
+    Ok(accepted)
 }
 
 struct LottieDownload {
