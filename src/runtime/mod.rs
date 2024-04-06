@@ -44,11 +44,6 @@ impl Composition {
         let composition = import::conv_animation(source);
         Ok(composition)
     }
-    /// Returns a t value for the specified time in seconds.
-    pub fn frame_for_time(&self, secs: f64) -> f64 {
-        let frame = secs * self.frame_rate;
-        frame % self.frames.end
-    }
 }
 
 impl std::str::FromStr for Composition {
