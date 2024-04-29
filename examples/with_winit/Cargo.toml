@@ -17,7 +17,7 @@ name = "with_winit_bin"
 path = "src/main.rs"
 
 [dependencies]
-vello = { workspace = true, features = ["buffer_labels", "wgpu-profiler"] }
+vello = { workspace = true, features = ["buffer_labels", "wgpu", "wgpu-profiler"] }
 scenes = { path = "../scenes" }
 anyhow = "1"
 clap = { version = "4.5.1", features = ["derive"] }
@@ -30,7 +30,7 @@ env_logger = "0.11.2"
 log = "0.4.21"
 
 [target.'cfg(not(any(target_arch = "wasm32", target_os = "android")))'.dependencies]
-vello = { workspace = true, features = ["hot_reload", "wgpu-profiler"] }
+vello = { workspace = true, features = ["hot_reload", "wgpu", "wgpu-profiler"] }
 notify-debouncer-mini = "0.3"
 
 [target.'cfg(target_os = "android")'.dependencies]
