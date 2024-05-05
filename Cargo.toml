@@ -19,7 +19,7 @@ repository.workspace = true
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = "0.1.0"
+vello = { version = "0.1.0", default-features = false }
 
 [dependencies]
 vello = { workspace = true }
@@ -33,3 +33,7 @@ serde_repr = "0.1.18"
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
 wasm-bindgen-test = "0.3.42"
+
+[features]
+# Enables the wgpu feature on vello, which is disabled by default
+wgpu = ["vello/wgpu"]
