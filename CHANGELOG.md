@@ -10,7 +10,13 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
+### Changed
+
 - Disable `vello`'s default `wgpu` feature, and provide a `wgpu` passthrough feature to turn it back on. ([#17](https://github.com/linebender/velato/pull/17))
+
+### Fixed
+
+- ViewBox clipping is now applied to the animation
 
 ## 0.1.0 (2024-03-26)
 
