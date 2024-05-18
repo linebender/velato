@@ -50,4 +50,4 @@ pub(crate) mod schema;
 // Re-export vello
 pub use vello;
 
-pub use runtime::{model, Composition, Renderer};
+pub use runtime::{model, Composition, Renderer, VelatoError};
