@@ -3,15 +3,15 @@
 
 mod render;
 
+use crate::import;
+use crate::schema::Animation;
 use std::collections::HashMap;
 use std::ops::Range;
+use thiserror::Error;
 
 pub mod model;
 
 pub use render::Renderer;
-
-use crate::import;
-use crate::schema::Animation;
 
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]
@@ -30,16 +30,24 @@ pub struct Composition {
     pub layers: Vec<model::Layer>,
 }
 
+/// Triggered when is an issue parsing a lottie file.
+#[derive(Error, Debug)]
+#[non_exhaustive]
+pub enum VelatoError {
+    #[error("Error parsing lottie: {0}")]
+    Json(#[from] serde_json::Error),
+}
+
 impl Composition {
     /// Creates a new runtime composition from a buffer of Lottie file contents.
-    pub fn from_slice(source: impl AsRef<[u8]>) -> Result<Composition, serde_json::Error> {
+    pub fn from_slice(source: impl AsRef<[u8]>) -> Result<Composition, VelatoError> {
         let source = Animation::from_slice(source.as_ref())?;
         let composition = import::conv_animation(source);
         Ok(composition)
     }
 
     /// Creates a new runtime composition from a json object of Lottie file contents.
-    pub fn from_json(v: serde_json::Value) -> Result<Composition, serde_json::Error> {
+    pub fn from_json(v: serde_json::Value) -> Result<Composition, VelatoError> {
         let source = Animation::from_json(v)?;
         let composition = import::conv_animation(source);
         Ok(composition)
@@ -47,7 +55,7 @@ impl Composition {
 }
 
 impl std::str::FromStr for Composition {
-    type Err = serde_json::Error;
+    type Err = VelatoError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let source = Animation::from_str(s)?;

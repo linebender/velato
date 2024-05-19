@@ -12,6 +12,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 - Disable `vello`'s default `wgpu` feature, and provide a `wgpu` passthrough feature to turn it back on. ([#17](https://github.com/linebender/velato/pull/17))
 
+- Errors that may occur on parsing a lottie composition are now public as `VelatoError`. ([#19](https://github.com/linebender/velato/pull/19))
+
 ## 0.1.0 (2024-03-26)
 
 - Initial release
