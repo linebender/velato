@@ -36,5 +36,5 @@ serde_repr = "0.1.18"
 wasm-bindgen-test = "0.3.42"
 
 [features]
-# Enables the wgpu feature on vello, which is disabled by default
+default = []
 wgpu = ["vello/wgpu"]
