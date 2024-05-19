@@ -17,6 +17,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 ### Fixed
 
 - ViewBox clipping is now applied to the animation
+- Errors that may occur on parsing a lottie composition are now public as `VelatoError`. ([#19](https://github.com/linebender/velato/pull/19))
 
 ## 0.1.0 (2024-03-26)
 
