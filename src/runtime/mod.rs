@@ -11,6 +11,7 @@ use std::ops::Range;
 pub mod model;
 
 pub use render::Renderer;
+use thiserror::Error;
 
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]
@@ -30,7 +31,12 @@ pub struct Composition {
 }
 
 /// Triggered when is an issue parsing a lottie file.
-pub type VelatoError = serde_json::Error;
+#[derive(Error, Debug)]
+#[non_exhaustive]
+pub enum VelatoError {
+    #[error("Error parsing lottie: {0}")]
+    Json(#[from] serde_json::Error),
+}
 
 impl Composition {
     /// Creates a new runtime composition from a buffer of Lottie file contents.
