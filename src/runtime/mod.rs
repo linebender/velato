@@ -7,11 +7,11 @@ use crate::import;
 use crate::schema::Animation;
 use std::collections::HashMap;
 use std::ops::Range;
+use thiserror::Error;
 
 pub mod model;
 
 pub use render::Renderer;
-use thiserror::Error;
 
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]
