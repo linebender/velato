@@ -4,7 +4,7 @@ members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
 
 [workspace.package]
 edition = "2021"
-version = "0.1.0"
+version = "0.1.1"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/velato"
 [package]
@@ -36,5 +36,5 @@ serde_repr = "0.1.18"
 wasm-bindgen-test = "0.3.42"
 
 [features]
-# Enables the wgpu feature on vello, which is disabled by default
+default = []
 wgpu = ["vello/wgpu"]
