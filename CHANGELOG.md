@@ -10,7 +10,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
-## v0.1.1
+## v0.2.0
 
 ### Changed
 
