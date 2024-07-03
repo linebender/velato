@@ -98,21 +98,22 @@ pub fn lottie_function_of<R: AsRef<str>>(
             .unwrap_or_else(|e| panic!("failed to parse lottie file {name}: {e}")),
     );
     eprintln!("Parsed lottie {name} in {:?}", start.elapsed());
-    fn render_lottie_contents(lottie: &Composition, start: &Instant) -> (Scene, Vec2) {
-        let mut new_scene = Scene::new();
+    fn render_lottie_contents(
+        renderer: &mut velato::Renderer,
+        lottie: &Composition,
+        start: &Instant,
+    ) -> Scene {
         let frame = ((start.elapsed().as_secs_f64() * lottie.frame_rate)
             % (lottie.frames.end - lottie.frames.start))
             + lottie.frames.start;
-        velato::Renderer::new().render(lottie, frame, Affine::IDENTITY, 1.0, &mut new_scene);
-        let resolution = Vec2::new(lottie.width as f64, lottie.height as f64);
-        (new_scene, resolution)
+        renderer.render(lottie, frame, Affine::IDENTITY, 1.0)
     }
-
     let started = instant::Instant::now();
+    let mut renderer = velato::Renderer::new();
     let lottie = lottie.clone();
+    let resolution = Vec2::new(lottie.width as f64, lottie.height as f64);
     move |scene, params| {
-        let (scene_frag, resolution) = render_lottie_contents(&lottie, &started);
-        scene.append(&scene_frag, None);
         params.resolution = Some(resolution);
+        *scene = render_lottie_contents(&mut renderer, &lottie, &started);
     }
 }

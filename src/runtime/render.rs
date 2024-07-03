@@ -4,58 +4,8 @@
 use super::model::*;
 use super::Composition;
 use std::ops::Range;
-use vello::kurbo::{self, Affine, PathEl, Rect};
-use vello::peniko::{self, Fill, Mix};
-
-pub trait RenderSink {
-    fn push_layer(
-        &mut self,
-        blend: impl Into<peniko::BlendMode>,
-        alpha: f64,
-        transform: Affine,
-        shape: &impl kurbo::Shape,
-    );
-
-    fn pop_layer(&mut self);
-
-    fn draw(
-        &mut self,
-        stroke: Option<&fixed::Stroke>,
-        transform: Affine,
-        brush: &fixed::Brush,
-        shape: &impl kurbo::Shape,
-    );
-}
-
-impl RenderSink for vello::Scene {
-    fn push_layer(
-        &mut self,
-        blend: impl Into<peniko::BlendMode>,
-        alpha: f64,
-        transform: Affine,
-        shape: &impl kurbo::Shape,
-    ) {
-        self.push_layer(blend, alpha as f32, transform, shape);
-    }
-
-    fn pop_layer(&mut self) {
-        self.pop_layer()
-    }
-
-    fn draw<'b>(
-        &mut self,
-        stroke: Option<&fixed::Stroke>,
-        transform: Affine,
-        brush: &fixed::Brush,
-        shape: &impl kurbo::Shape,
-    ) {
-        if let Some(stroke) = stroke {
-            self.stroke(stroke, transform, brush, None, shape);
-        } else {
-            self.fill(Fill::NonZero, transform, brush, None, shape);
-        }
-    }
-}
+use vello::kurbo::{Affine, PathEl, Rect};
+use vello::peniko::{Fill, Mix};
 
 /// Renders a composition into a scene.
 #[derive(Default)]
@@ -70,17 +20,30 @@ impl Renderer {
         Self::default()
     }
 
-    /// Renders the animation at a given frame into the specified scene.
+    /// Renders the animation at a given frame to a new scene.
     pub fn render(
         &mut self,
         animation: &Composition,
         frame: f64,
         transform: Affine,
         alpha: f64,
-        sink: &mut impl RenderSink,
+    ) -> vello::Scene {
+        let mut scene = vello::Scene::new();
+        self.append(animation, frame, transform, alpha, &mut scene);
+        scene
+    }
+
+    /// Renders and appends the animation at a given frame to the provided scene.
+    pub fn append(
+        &mut self,
+        animation: &Composition,
+        frame: f64,
+        transform: Affine,
+        alpha: f64,
+        scene: &mut vello::Scene,
     ) {
         self.batch.clear();
-        sink.push_layer(
+        scene.push_layer(
             Mix::Clip,
             1.0,
             transform,
@@ -97,10 +60,10 @@ impl Renderer {
                 transform,
                 alpha,
                 frame,
-                sink,
+                scene,
             );
         }
-        sink.pop_layer();
+        scene.pop_layer();
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -112,7 +75,7 @@ impl Renderer {
         transform: Affine,
         alpha: f64,
         frame: f64,
-        sink: &mut impl RenderSink,
+        scene: &mut vello::Scene,
     ) {
         if !layer.frames.contains(&frame) {
             return;
@@ -124,7 +87,7 @@ impl Renderer {
             // todo: re-enable masking when it is more understood (and/or if
             // it's currently supported in vello?) Extra layer to
             // isolate blending for the mask
-            sink.push_layer(Mix::Normal, 1.0, parent_transform, &full_rect);
+            scene.push_layer(Mix::Normal, 1.0, parent_transform, &full_rect);
             if let Some(mask) = layer_set.get(mask_index) {
                 self.render_layer(
                     animation,
@@ -133,16 +96,21 @@ impl Renderer {
                     parent_transform,
                     alpha,
                     frame,
-                    sink,
+                    scene,
                 );
             }
-            sink.push_layer(mode, 1.0, parent_transform, &full_rect);
+            scene.push_layer(mode, 1.0, parent_transform, &full_rect);
         }
         let alpha = alpha * layer.opacity.evaluate(frame) / 100.0;
         for mask in &layer.masks {
             let alpha = mask.opacity.evaluate(frame) / 100.0;
             mask.geometry.evaluate(frame, &mut self.mask_elements);
-            sink.push_layer(Mix::Clip, alpha, transform, &self.mask_elements.as_slice());
+            scene.push_layer(
+                Mix::Clip,
+                alpha as f32,
+                transform,
+                &self.mask_elements.as_slice(),
+            );
             self.mask_elements.clear();
         }
         match &layer.content {
@@ -170,19 +138,19 @@ impl Renderer {
                             transform,
                             alpha,
                             frame + frame_delta,
-                            sink,
+                            scene,
                         );
                     }
                 }
             }
             Content::Shape(shapes) => {
                 self.render_shapes(shapes, transform, alpha, frame);
-                self.batch.render(sink);
+                self.batch.render(scene);
                 self.batch.clear();
             }
         }
         for _ in 0..layer.masks.len() + (layer.mask_layer.is_some() as usize * 2) {
-            sink.pop_layer();
+            scene.pop_layer();
         }
     }
 
@@ -378,7 +346,7 @@ impl Batch {
         self.drawn_geometry = self.geometries.len();
     }
 
-    fn render(&self, sink: &mut impl RenderSink) {
+    fn render(&self, scene: &mut vello::Scene) {
         // Process all draws in reverse
         for draw in self.draws.iter().rev() {
             // Some nastiness to avoid cloning the brush if unnecessary
@@ -391,7 +359,11 @@ impl Batch {
             for geometry in self.geometries[draw.geometry.clone()].iter() {
                 let path = &self.elements[geometry.elements.clone()];
                 let transform = geometry.transform;
-                sink.draw(draw.stroke.as_ref(), transform, brush, &path);
+                if let Some(stroke) = draw.stroke.as_ref() {
+                    scene.stroke(stroke, transform, brush, None, &path);
+                } else {
+                    scene.fill(Fill::NonZero, transform, brush, None, &path);
+                }
             }
         }
     }

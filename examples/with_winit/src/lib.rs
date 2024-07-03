@@ -1,7 +1,7 @@
 // Copyright 2022 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use instant::{Duration, Instant};
+use instant::Instant;
 use std::collections::HashSet;
 use std::num::NonZeroUsize;
 use std::sync::Arc;
@@ -12,7 +12,7 @@ use scenes::{RobotoText, SceneParams, SceneSet};
 use vello::kurbo::{Affine, Vec2};
 use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
-use vello::{AaConfig, BumpAllocators, Renderer, RendererOptions, Scene};
+use vello::{wgpu, AaConfig, BumpAllocators, Renderer, RendererOptions, Scene};
 
 use winit::event_loop::{EventLoop, EventLoopBuilder};
 use winit::window::Window;
@@ -83,7 +83,7 @@ fn run(
     let mut render_state = {
         renderers.resize_with(render_cx.devices.len(), || None);
         let id = render_state.surface.dev_id;
-        let mut renderer = Renderer::new(
+        let renderer = Renderer::new(
             &render_cx.devices[id].device,
             RendererOptions {
                 surface_format: Some(render_state.surface.format),
@@ -95,14 +95,6 @@ fn run(
             },
         )
         .expect("Could create renderer");
-        renderer
-            .profiler
-            .change_settings(wgpu_profiler::GpuProfilerSettings {
-                enable_timer_queries: false,
-                enable_debug_groups: false,
-                ..Default::default()
-            })
-            .expect("Not setting max_num_pending_frames");
         renderers[id] = Some(renderer);
         Some(render_state)
     };
@@ -145,9 +137,7 @@ fn run(
     if let Some(set_scene) = args.scene {
         scene_ix = set_scene;
     }
-    let mut profile_stored = None;
     let mut prev_scene_ix = scene_ix - 1;
-    let mut profile_taken = Instant::now();
     let mut modifiers = ModifiersState::default();
     event_loop
         .run(move |event, event_loop| match event {
@@ -210,32 +200,6 @@ fn run(
                                             } else {
                                                 aa_config_ix.saturating_add(1)
                                             };
-                                        }
-                                        "p" => {
-                                            if let Some(renderer) = &renderers[render_state.surface.dev_id]
-                                            {
-                                                if let Some(profile_result) = &renderer
-                                                  .profile_result
-                                                  .as_ref()
-                                                  .or(profile_stored.as_ref())
-                                                {
-                                                    // There can be empty results if the required features aren't supported
-                                                    if !profile_result.is_empty() {
-                                                        let path = std::path::Path::new("trace.json");
-                                                        match wgpu_profiler::chrometrace::write_chrometrace(
-                                                            path,
-                                                            profile_result,
-                                                        ) {
-                                                            Ok(()) => {
-                                                                println!("Wrote trace to path {path:?}");
-                                                            }
-                                                            Err(e) => {
-                                                                eprintln!("Failed to write trace {e}")
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
                                         }
                                         "v" => {
                                             vsync_on = !vsync_on;
@@ -408,26 +372,6 @@ fn run(
                                 vsync_on,
                                 antialiasing_method,
                             );
-                            if let Some(profiling_result) = renderers[render_state.surface.dev_id]
-                                .as_mut()
-                                .and_then(|it| it.profile_result.take())
-                            {
-                                if profile_stored.is_none()
-                                    || profile_taken.elapsed() > Duration::from_secs(1)
-                                {
-                                    profile_stored = Some(profiling_result);
-                                    profile_taken = Instant::now();
-                                }
-                            }
-                            if let Some(profiling_result) = profile_stored.as_ref() {
-                                stats::draw_gpu_profiling(
-                                    &mut scene,
-                                    scene_params.text,
-                                    width as f64,
-                                    height as f64,
-                                    profiling_result,
-                                );
-                            }
                         }
                         let surface_texture = render_state
                             .surface
@@ -533,7 +477,12 @@ fn run(
                         .take()
                         .unwrap_or_else(|| create_window(event_loop));
                     let size = window.inner_size();
-                    let surface_future = render_cx.create_surface(window.clone(), size.width, size.height, wgpu::PresentMode::AutoVsync);
+                    let surface_future = render_cx.create_surface(
+                        window.clone(),
+                        size.width,
+                        size.height,
+                        wgpu::PresentMode::AutoVsync,
+                    );
                     // We need to block here, in case a Suspended event appeared
                     let surface =
                         pollster::block_on(surface_future).expect("Error creating surface");
@@ -549,7 +498,7 @@ fn run(
                                     surface_format: Some(render_state.surface.format),
                                     use_cpu,
                                     antialiasing_support: vello::AaSupport::all(),
-                                    num_init_threads: NonZeroUsize::new(args.num_init_threads)
+                                    num_init_threads: NonZeroUsize::new(args.num_init_threads),
                                 },
                             )
                             .expect("Could create renderer");
@@ -616,7 +565,7 @@ pub fn main() -> Result<()> {
     if let Some(scenes) = scenes {
         let event_loop = EventLoopBuilder::<UserEvent>::with_user_event().build()?;
         #[allow(unused_mut)]
-        let mut render_cx = RenderContext::new().unwrap();
+        let mut render_cx = RenderContext::new();
         #[cfg(not(target_arch = "wasm32"))]
         {
             #[cfg(not(target_os = "android"))]
@@ -700,7 +649,7 @@ fn android_main(app: AndroidApp) {
         .select_scene_set(|| Args::command())
         .unwrap()
         .unwrap();
-    let render_cx = RenderContext::new().unwrap();
+    let render_cx = RenderContext::new();
 
     run(event_loop, args, scenes, render_cx);
 }
