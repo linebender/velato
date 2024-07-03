@@ -10,7 +10,23 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
-## v0.2.0
+## 0.3.0
+
+### Added
+
+- Added `velato::Renderer::render`, which now returns a new vello scene.
+
+### Changed
+
+- Updated to vello 0.2
+- Renamed `VelatoError` to `velato::Error`
+- Renamed the existing `velato::Renderer::render` to `velato::Renderer::append`
+
+### Removed
+
+- All code and related profiling (`wgpu_profiler`) used in examples.
+
+## 0.2.0
 
 ### Changed
 
