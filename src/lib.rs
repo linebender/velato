@@ -3,10 +3,12 @@
 
 //! Render a Lottie animation to a Vello [`Scene`](crate::vello::Scene).
 //!
-//! However, this is also intended to be the preferred integration between Vello and [Lottie](https://lottie.github.io/lottie-spec/), so [consider
-//! contributing](https://github.com/linebender/velato) if you need a feature which is missing.
+//! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //!
-//! This crate also re-exports [`vello`], to make handling dependency versions easier.
+//! This is also intended to be the preferred integration between Vello and [usvg], so [consider
+//! contributing](https://github.com/linebender/vello_svg) if you need a feature which is missing.
+//!
+//! This crate also re-exports [`vello`], so you can easily use the specific version that is compatible with Velato.
 //!
 //! ## Usage
 //!
@@ -26,7 +28,7 @@
 //! let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
 //! let transform = vello::kurbo::Affine::IDENTITY;
 //! let alpha = 1.0;
-//! renderer.render(&composition, frame, transform, alpha, &mut new_scene);
+//! let scene = renderer.render(&composition, frame, transform, alpha);
 //! ```
 //!
 //! # Unsupported features
@@ -47,7 +49,10 @@ pub(crate) mod import;
 pub(crate) mod runtime;
 pub(crate) mod schema;
 
+mod error;
+pub use error::Error;
+
 // Re-export vello
 pub use vello;
 
-pub use runtime::{model, Composition, Renderer, VelatoError};
+pub use runtime::{model, Composition, Renderer};
