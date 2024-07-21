@@ -26,7 +26,7 @@ pub struct StrokeShape {
     #[serde(rename = "ml")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub miter_limit: Option<f64>,
-    /// Animatable alternative to miter_limit
+    /// Animatable alternative to `miter_limit`
     #[serde(rename = "ml2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub miter_limit_alt: Option<FloatValue>,

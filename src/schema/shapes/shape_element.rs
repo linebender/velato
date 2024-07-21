@@ -5,7 +5,7 @@ use crate::schema::constants::blend_mode::BlendMode;
 use crate::schema::helpers::visual_object::VisualObject;
 use serde::{Deserialize, Serialize};
 
-/// Base class for all elements of ShapeLayer and Group
+/// Base class for all elements of `ShapeLayer` and `Group`
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct ShapeElement {
     #[serde(flatten)]
