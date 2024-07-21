@@ -190,7 +190,7 @@ pub struct Mask {
 /// Content of a layer.
 #[derive(Clone, Default, Debug)]
 pub enum Content {
-    /// Emtpy layer.
+    /// Empty layer.
     #[default]
     None,
     /// Asset instance with the specified name and time remapping.
