@@ -189,7 +189,7 @@ pub struct Spline {
 }
 
 impl Spline {
-    /// Evalutes the spline at the given frame and emits the elements
+    /// Evaluates the spline at the given frame and emits the elements
     /// to the specified path.
     pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) -> bool {
         let Some(([ix0, ix1], t, _easing, _hold)) = Time::frames_and_weight(&self.times, frame)
