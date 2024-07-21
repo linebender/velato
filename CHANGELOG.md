@@ -10,7 +10,11 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
+This release has an [MSRV][] of 1.75.
+
 ## 0.3.0
+
+This release has an [MSRV][] of 1.75.
 
 ### Added
 
@@ -28,6 +32,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## 0.2.0
 
+This release has an [MSRV][] of 1.75.
+
 ### Changed
 
 - Disable `vello`'s default `wgpu` feature, and provide a `wgpu` passthrough feature to turn it back on. ([#17](https://github.com/linebender/velato/pull/17))
@@ -39,4 +45,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## 0.1.0 (2024-03-26)
 
+This release has an [MSRV][] of 1.75.
+
 - Initial release
+
+[MSRV]: README.md#minimum-supported-rust-version-msrv

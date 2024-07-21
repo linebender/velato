@@ -86,6 +86,26 @@ There is also a web demo [available here](https://linebender.github.io/velato) o
 > [!WARNING]
 > The web is not currently a primary target for Vello, and WebGPU implementations are incomplete, so you might run into issues running this example.
 
+## Minimum supported Rust Version (MSRV)
+
+This version of Velato has been verified to compile with **Rust 1.75** and later.
+
+Future versions of Velato might increase the Rust version requirement.
+It will not be treated as a breaking change and as such can even happen with small patch releases.
+
+<details>
+<summary>Click here if compiling fails.</summary>
+
+As time has passed, some of Velato's dependencies could have released versions with a higher Rust requirement.
+If you encounter a compilation issue due to a dependency and don't want to upgrade your Rust toolchain, then you could downgrade the dependency.
+
+```sh
+# Use the problematic dependency's name and version
+cargo update -p package_name --precise 0.1.1
+```
+
+</details>
+
 ## Community
 
 Discussion of Velato development happens in the [Linebender Zulip](https://xi.zulipchat.com/), specifically the [#gpu stream](https://xi.zulipchat.com/#narrow/stream/197075-gpu). All public content can be read without logging in.
