@@ -106,7 +106,7 @@ pub struct VisualLayer {
     #[serde(rename = "tg")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_name: Option<String>,
-    /// This is deprecated in favour of transform_before_mask
+    /// This is deprecated in favour of `transform_before_mask`
     #[deprecated(note = "please use `transform_before_mask` instead")]
     #[serde(rename = "cp")]
     #[serde(skip_serializing_if = "Option::is_none")]

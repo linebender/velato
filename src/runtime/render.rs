@@ -231,7 +231,7 @@ struct DrawData {
     stroke: Option<fixed::Stroke>,
     brush: fixed::Brush,
     alpha: f64,
-    /// Range into ShapeBatch::geometries
+    /// Range into `ShapeBatch::geometries`
     geometry: Range<usize>,
 }
 
@@ -251,7 +251,7 @@ impl DrawData {
 
 #[derive(Clone, Debug)]
 struct GeometryData {
-    /// Range into ShapeBatch::elements
+    /// Range into `ShapeBatch::elements`
     elements: Range<usize>,
     transform: Affine,
 }
