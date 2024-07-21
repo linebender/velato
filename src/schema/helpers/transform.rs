@@ -1,7 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Transform - https://lottiefiles.github.io/lottie-docs/concepts/#transform
+//! Transform - <https://lottiefiles.github.io/lottie-docs/concepts/#transform>
 
 use crate::schema::animated_properties::multi_dimensional::MultiDimensional;
 use crate::schema::animated_properties::position::Position;

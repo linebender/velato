@@ -1,7 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Shapes - https://lottiefiles.github.io/lottie-docs/shapes/
+//! Shapes - <https://lottiefiles.github.io/lottie-docs/shapes/>
 
 use super::visual::VisualLayer;
 use crate::schema::shapes::AnyShape;
