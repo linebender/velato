@@ -3,7 +3,7 @@
 
 //! The schema for a Lottie `Animation`.
 //!
-//! Raw schema: https://lottiefiles.github.io/lottie-docs/schema/lottie.schema.json
+//! Raw schema: <https://lottiefiles.github.io/lottie-docs/schema/lottie.schema.json>
 
 pub mod animated_properties;
 pub mod animation;
