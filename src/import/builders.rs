@@ -70,7 +70,7 @@ pub fn setup_precomp_layer(
                     mode,
                     geometry,
                     opacity,
-                })
+                });
             }
         }
     }
@@ -138,7 +138,7 @@ pub fn setup_shape_layer(
                     mode,
                     geometry,
                     opacity,
-                })
+                });
             }
         }
     }
@@ -196,7 +196,7 @@ pub fn setup_layer_base(
                     mode,
                     geometry,
                     opacity,
-                })
+                });
             }
         }
     }
