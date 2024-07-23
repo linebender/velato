@@ -3,7 +3,7 @@
 
 use serde::{Deserialize, Serialize};
 
-/// How masks interact with each other. See https://helpx.adobe.com/after-effects/using/alpha-channels-masks-mattes.html
+/// How masks interact with each other. See <https://helpx.adobe.com/after-effects/using/alpha-channels-masks-mattes.html>.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default)]
 pub enum MaskMode {
     #[serde(rename = "n")]

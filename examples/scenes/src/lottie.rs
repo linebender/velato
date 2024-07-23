@@ -29,7 +29,7 @@ pub fn default_scene(command: impl FnOnce() -> clap::Command) -> Result<SceneSet
         .canonicalize()?;
     let mut has_empty_directory = false;
     let result = scene_from_files_inner(&[assets_dir.join("google_fonts/Tiger.json")], || {
-        has_empty_directory = true
+        has_empty_directory = true;
     })?;
     if has_empty_directory {
         let mut command = command();
