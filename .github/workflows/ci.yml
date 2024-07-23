@@ -55,12 +55,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # We use macos-14 as that is an arm runner. These have the virtgpu support we need
-        os: [windows-latest, macos-14, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         include:
           - os: ubuntu-latest
             gpu: 'yes'
-          - os: macos-14
+          - os: macos-latest
             gpu: 'yes'
           - os: windows-latest
             # TODO: The windows runners theoretically have CPU fallback for GPUs, but
