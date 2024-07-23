@@ -64,7 +64,7 @@ impl Transform {
         let skew_angle = self.skew_angle.evaluate(frame);
         let skew_matrix = if skew != 0.0 {
             const SKEW_LIMIT: f64 = 85.0;
-            let skew = -skew.min(SKEW_LIMIT).max(-SKEW_LIMIT);
+            let skew = -skew.clamp(-SKEW_LIMIT, SKEW_LIMIT);
             let skew = skew.to_radians();
             let angle = skew_angle.to_radians();
             Affine::rotate(-angle) * Affine::skew(skew.tan(), 0.0) * Affine::rotate(angle)
