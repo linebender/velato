@@ -16,6 +16,9 @@ crate-type = ["cdylib", "lib"]
 name = "with_winit_bin"
 path = "src/main.rs"
 
+[lints]
+workspace = true
+
 [dependencies]
 vello = { workspace = true, features = ["buffer_labels", "wgpu"] }
 scenes = { path = "../scenes" }
