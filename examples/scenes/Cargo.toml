@@ -23,3 +23,8 @@ instant = "0.1"
 byte-unit = "4.0.19"
 inquire = "0.7"
 ureq = "2.9.6"
+
+[target.wasm32-unknown-unknown.dependencies]
+# We have a transitive dependency on getrandom and it does not automatically
+# support wasm32-unknown-unknown. We need to enable the js feature.
+getrandom = { version = "0.2.15", features = ["js"] }
