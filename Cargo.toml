@@ -22,6 +22,12 @@ license.workspace = true
 edition.workspace = true
 repository.workspace = true
 
+[package.metadata.docs.rs]
+all-features = true
+# There are no platform specific docs.
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+
 [workspace.lints]
 clippy.doc_markdown = "warn"
 clippy.semicolon_if_nothing_returned = "warn"

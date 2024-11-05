@@ -5,8 +5,8 @@
 //!
 //! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //!
-//! This is also intended to be the preferred integration between Vello and [usvg], so [consider
-//! contributing](https://github.com/linebender/vello_svg) if you need a feature which is missing.
+//! This is also intended to be the preferred integration between Vello and [usvg](https://crates.io/crates/usvg),
+//! so [consider contributing](https://github.com/linebender/vello_svg) if you need a feature which is missing.
 //!
 //! This crate also re-exports [`vello`], so you can easily use the specific version that is compatible with Velato.
 //!
@@ -44,6 +44,8 @@
 //! - Correct color stop handling
 //! - Split rotations
 //! - Split positions
+
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 
 pub(crate) mod import;
 pub(crate) mod runtime;
