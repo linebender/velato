@@ -120,10 +120,10 @@ impl Time {
         let t0 = times[ix0];
         let t1 = times[ix1];
         let (t0_ox, t0_oy) = t0.out_tangent.map(|o| (o.x, o.y)).unwrap_or((0.0, 0.0));
-        let (t1_ix, t1_iy) = t1.in_tangent.map(|i| (i.x, i.y)).unwrap_or((1.0, 1.0));
+        let (t0_ix, t0_iy) = t0.in_tangent.map(|i| (i.x, i.y)).unwrap_or((1.0, 1.0));
         let easing = Easing {
             o: EasingHandle { x: t0_ox, y: t0_oy },
-            i: EasingHandle { x: t1_ix, y: t1_iy },
+            i: EasingHandle { x: t0_ix, y: t0_iy },
         };
         let hold = t0.hold;
         let t = (frame - t0.frame) / (t1.frame - t0.frame);
@@ -160,20 +160,16 @@ pub trait Tween: Clone + Default {
 }
 
 impl Tween for f64 {
-    fn tween(&self, other: &Self, t: f64, _easing: &Easing) -> Self {
-        // TODO: We are enforcing linear interpolation for now, but a decent amount of work is done for easings.
-        keyframe::ease(keyframe::functions::Linear, *self, *other, t)
-
-        // FIXME: Hopefully we can finish this up one day!
-        //keyframe::ease(
-        //    keyframe::functions::BezierCurve::from(
-        //        keyframe::mint::Vector2::from_slice(&[easing.o.x, easing.o.y]),
-        //        keyframe::mint::Vector2::from_slice(&[easing.i.x, easing.i.y]),
-        //    ),
-        //    *self,
-        //    *other,
-        //    t,
-        //)
+    fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
+        keyframe::ease(
+           keyframe::functions::BezierCurve::from(
+               keyframe::mint::Vector2::from_slice(&[easing.o.x, easing.o.y]),
+               keyframe::mint::Vector2::from_slice(&[easing.i.x, easing.i.y]),
+           ),
+           *self,
+           *other,
+           t,
+        )
     }
 }
 
