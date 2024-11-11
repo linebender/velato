@@ -10,7 +10,7 @@ use anyhow::Result;
 use clap::{CommandFactory, Parser};
 use scenes::{RobotoText, SceneParams, SceneSet};
 use vello::kurbo::{Affine, Vec2};
-use vello::low_level::{BumpAllocators, DebugLayers};
+use vello::low_level::BumpAllocators;
 use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
 use vello::{wgpu, AaConfig, Renderer, RendererOptions, Scene};
@@ -395,7 +395,7 @@ fn run(
                                         &scene,
                                         &surface_texture,
                                         &render_params,
-                                        DebugLayers::none(),
+                                        vello::low_level::DebugLayers::none(),
                                     ),
                             )
                             .expect("failed to render to surface");
