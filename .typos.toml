@@ -8,7 +8,7 @@
 
 # Match Identifier - Case Sensitive
 [default.extend-identifiers]
-t1_iy = "t1_iy"
+t0_iy = "t0_iy"
 tranform_before_mask_deprecated = "tranform_before_mask_deprecated"
 
 # Match Inside a Word - Case Insensitive

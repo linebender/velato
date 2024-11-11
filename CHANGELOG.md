@@ -12,6 +12,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.75.
 
+## [0.3.1]  - 2024-11-11
+
+This release has an [MSRV][] of 1.75.
+
+### Fixed
+
+- Non-linear easing is now correctly interpolated ([#42] by [@atoktoto])
+
 ## [0.3.0]  - 2024-07-04
 
 This release has an [MSRV][] of 1.75.
@@ -52,10 +60,12 @@ This release has an [MSRV][] of 1.75.
 [@luke1188]: https://github.com/luke1188
 [@MarijnS95]: https://github.com/MarijnS95
 [@simbleau]: https://github.com/simbleau
+[@atoktoto]: https://github.com/atoktoto
 
 [#16]: https://github.com/linebender/velato/pull/16
 [#17]: https://github.com/linebender/velato/pull/17
 [#19]: https://github.com/linebender/velato/pull/19
+[#42]: https://github.com/linebender/velato/pull/42
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.3.0...HEAD
 [0.3.0]: https://github.com/linebender/velato/compare/v0.2.0...v0.3.0
