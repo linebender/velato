@@ -4,8 +4,9 @@
 use scenes::RobotoText;
 use std::collections::VecDeque;
 use vello::kurbo::{Affine, PathEl, Rect, Stroke};
+use vello::low_level::BumpAllocators;
 use vello::peniko::{Brush, Color, Fill};
-use vello::{AaConfig, BumpAllocators, Scene};
+use vello::{AaConfig, Scene};
 
 const SLIDING_WINDOW_SIZE: usize = 100;
 

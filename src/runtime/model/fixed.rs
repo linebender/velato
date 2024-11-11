@@ -68,14 +68,14 @@ pub(crate) fn brush_with_alpha(brush: &Brush, alpha: f64) -> Brush {
         brush.clone()
     } else {
         match brush {
-            Brush::Solid(color) => color.with_alpha_factor(alpha as f32).into(),
+            Brush::Solid(color) => color.multiply_alpha(alpha as f32).into(),
             Brush::Gradient(gradient) => Brush::Gradient(peniko::Gradient {
                 kind: gradient.kind,
                 extend: gradient.extend,
                 stops: gradient
                     .stops
                     .iter()
-                    .map(|stop| stop.with_alpha_factor(alpha as f32))
+                    .map(|stop| stop.multiply_alpha(alpha as f32))
                     .collect(),
             }),
             _ => unreachable!(),

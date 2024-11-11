@@ -2,12 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use std::sync::Arc;
-use vello::glyph::Glyph;
 use vello::kurbo::Affine;
 use vello::peniko::{Blob, Brush, BrushRef, Font, StyleRef};
 use vello::skrifa::raw::FontRef;
 use vello::skrifa::MetadataProvider;
-use vello::Scene;
+use vello::{Glyph, Scene};
 
 // This is very much a hack to get things working.
 // On Windows, can set this to "c:\\Windows\\Fonts\\seguiemj.ttf" to get color
@@ -97,7 +96,7 @@ impl RobotoText {
                     let x = pen_x;
                     pen_x += advance;
                     Some(Glyph {
-                        id: gid.to_u16() as u32,
+                        id: gid.to_u32(),
                         x,
                         y: pen_y,
                     })

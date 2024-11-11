@@ -404,7 +404,7 @@ impl Brush {
     /// Evaluates the animation at the specified time.
     pub fn evaluate(&self, alpha: f64, frame: f64) -> fixed::Brush {
         match self {
-            Self::Solid(value) => value.evaluate(frame).with_alpha_factor(alpha as f32).into(),
+            Self::Solid(value) => value.evaluate(frame).multiply_alpha(alpha as f32).into(),
             Self::Gradient(value) => value.evaluate(frame),
         }
     }
