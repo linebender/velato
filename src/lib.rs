@@ -34,7 +34,6 @@
 //! # Unsupported features
 //!
 //! Missing features include:
-//! - Non-linear easings
 //! - Position keyframe (`ti`, `to`) easing
 //! - Time remapping (`tm`)
 //! - Text

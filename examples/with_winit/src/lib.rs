@@ -10,9 +10,10 @@ use anyhow::Result;
 use clap::{CommandFactory, Parser};
 use scenes::{RobotoText, SceneParams, SceneSet};
 use vello::kurbo::{Affine, Vec2};
+use vello::low_level::BumpAllocators;
 use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
-use vello::{wgpu, AaConfig, BumpAllocators, Renderer, RendererOptions, Scene};
+use vello::{wgpu, AaConfig, Renderer, RendererOptions, Scene};
 
 use winit::event_loop::{EventLoop, EventLoopBuilder};
 use winit::window::Window;
@@ -376,9 +377,14 @@ fn run(
                             .surface
                             .get_current_texture()
                             .expect("failed to get surface texture");
+                        // Note: we don't run the async/"robust" pipeline, as
+                        // it requires more async wiring for the readback. See
+                        // [#gpu > async on wasm](https://xi.zulipchat.com/#narrow/stream/197075-gpu/topic/async.20on.20wasm)
+                        #[allow(deprecated)]
+                        // #[expect(deprecated, reason = "This deprecation is not targeted at us.")] // Our MSRV is too low to use `expect`
                         #[cfg(not(target_arch = "wasm32"))]
                         {
-                            scene_complexity = vello::block_on_wgpu(
+                            scene_complexity = vello::util::block_on_wgpu(
                                 &device_handle.device,
                                 renderers[render_state.surface.dev_id]
                                     .as_mut()
@@ -389,6 +395,7 @@ fn run(
                                         &scene,
                                         &surface_texture,
                                         &render_params,
+                                        vello::low_level::DebugLayers::none(),
                                     ),
                             )
                             .expect("failed to render to surface");
