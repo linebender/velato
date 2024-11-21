@@ -12,7 +12,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.75.
 
-## [0.4.0]  - 2024-11-11
+## [0.4.0]  - 2024-11-21
 
 This release has an [MSRV][] of 1.75.
 
