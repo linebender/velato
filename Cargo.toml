@@ -29,8 +29,6 @@ default-target = "x86_64-unknown-linux-gnu"
 targets = []
 
 [workspace.lints]
-rust.unsafe_code = "forbid"
-
 # LINEBENDER LINT SET - Cargo.toml - v2
 # See https://linebender.org/wiki/canonical-lints/
 rust.keyword_idents_2024 = "forbid"
