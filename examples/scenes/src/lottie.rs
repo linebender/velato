@@ -91,29 +91,29 @@ fn example_scene_of(file: PathBuf) -> ExampleScene {
 pub fn lottie_function_of<R: AsRef<str>>(
     name: String,
     contents: impl FnOnce() -> R + Send + 'static,
-) -> impl FnMut(&mut Scene, &mut SceneParams) {
+) -> impl FnMut(&mut Scene, &mut SceneParams<'_>) {
     let start = Instant::now();
     let lottie = Arc::new(
-        velato::Composition::from_slice(contents().as_ref())
+        Composition::from_slice(contents().as_ref())
             .unwrap_or_else(|e| panic!("failed to parse lottie file {name}: {e}")),
     );
     eprintln!("Parsed lottie {name} in {:?}", start.elapsed());
     fn render_lottie_contents(
         renderer: &mut velato::Renderer,
         lottie: &Composition,
-        start: &Instant,
+        start: Instant,
     ) -> Scene {
         let frame = ((start.elapsed().as_secs_f64() * lottie.frame_rate)
             % (lottie.frames.end - lottie.frames.start))
             + lottie.frames.start;
         renderer.render(lottie, frame, Affine::IDENTITY, 1.0)
     }
-    let started = instant::Instant::now();
+    let started = Instant::now();
     let mut renderer = velato::Renderer::new();
     let lottie = lottie.clone();
     let resolution = Vec2::new(lottie.width as f64, lottie.height as f64);
     move |scene, params| {
         params.resolution = Some(resolution);
-        *scene = render_lottie_contents(&mut renderer, &lottie, &started);
+        *scene = render_lottie_contents(&mut renderer, &lottie, started);
     }
 }

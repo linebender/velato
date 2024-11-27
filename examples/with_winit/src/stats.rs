@@ -11,7 +11,7 @@ use vello::{AaConfig, Scene};
 const SLIDING_WINDOW_SIZE: usize = 100;
 
 #[derive(Debug)]
-pub struct Snapshot {
+pub(crate) struct Snapshot {
     pub fps: f64,
     pub frame_time_ms: f64,
     pub frame_time_min_ms: f64,
@@ -20,7 +20,7 @@ pub struct Snapshot {
 
 impl Snapshot {
     #[allow(clippy::too_many_arguments)]
-    pub fn draw_layer<'a, T>(
+    pub(crate) fn draw_layer<'a, T>(
         &self,
         scene: &mut Scene,
         text: &mut RobotoText,
@@ -178,11 +178,11 @@ impl Snapshot {
     }
 }
 
-pub struct Sample {
+pub(crate) struct Sample {
     pub frame_time_us: u64,
 }
 
-pub struct Stats {
+pub(crate) struct Stats {
     count: usize,
     sum: u64,
     min: u64,
@@ -191,7 +191,7 @@ pub struct Stats {
 }
 
 impl Stats {
-    pub fn new() -> Stats {
+    pub(crate) fn new() -> Stats {
         Stats {
             count: 0,
             sum: 0,
@@ -201,11 +201,11 @@ impl Stats {
         }
     }
 
-    pub fn samples(&self) -> impl Iterator<Item = &u64> {
+    pub(crate) fn samples(&self) -> impl Iterator<Item = &u64> {
         self.samples.iter()
     }
 
-    pub fn snapshot(&self) -> Snapshot {
+    pub(crate) fn snapshot(&self) -> Snapshot {
         let frame_time_ms = (self.sum as f64 / self.count as f64) * 0.001;
         let fps = 1000. / frame_time_ms;
         Snapshot {
@@ -216,12 +216,12 @@ impl Stats {
         }
     }
 
-    pub fn clear_min_and_max(&mut self) {
+    pub(crate) fn clear_min_and_max(&mut self) {
         self.min = u64::MAX;
         self.max = u64::MIN;
     }
 
-    pub fn add_sample(&mut self, sample: Sample) {
+    pub(crate) fn add_sample(&mut self, sample: Sample) {
         let oldest = if self.count < SLIDING_WINDOW_SIZE {
             self.count += 1;
             None

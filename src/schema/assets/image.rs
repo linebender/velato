@@ -41,6 +41,8 @@ where
     }
 }
 
+// Function signature must match Serde's Serialize trait, so need to suppress Clippy.
+#[allow(clippy::trivially_copy_pass_by_ref)]
 pub fn seq_to_str<S>(v: &Option<bool>, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
