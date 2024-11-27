@@ -11,6 +11,7 @@ use inquire::Confirm;
 use std::io::Read;
 mod default_downloads;
 
+#[allow(clippy::partial_pub_fields)]
 #[derive(Args, Debug)]
 pub(crate) struct Download {
     #[clap(long)]
@@ -64,7 +65,7 @@ impl Download {
                         println!(
                             "{} ({}) under license {} from {}",
                             download.name,
-                            byte_unit::Byte::from_bytes(builtin.expected_size.into())
+                            Byte::from_bytes(builtin.expected_size.into())
                                 .get_appropriate_unit(false),
                             builtin.license,
                             builtin.info
@@ -151,7 +152,7 @@ impl Download {
 fn download_prompt(total_bytes: u64) -> Result<bool> {
     let prompt = format!(
         "Would you like to download a set of default lottie files, as explained above? ({})",
-        byte_unit::Byte::from_bytes(total_bytes.into()).get_appropriate_unit(false)
+        Byte::from_bytes(total_bytes.into()).get_appropriate_unit(false)
     );
     let accepted = Confirm::new(&prompt).with_default(false).prompt()?;
     Ok(accepted)

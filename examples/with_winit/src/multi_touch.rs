@@ -9,7 +9,7 @@ use winit::event::{Touch, TouchPhase};
 
 /// All you probably need to know about a multi-touch gesture.
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct MultiTouchInfo {
+pub(crate) struct MultiTouchInfo {
     /// Number of touches (fingers) on the surface. Value is ≥ 2 since for a single touch no
     /// [`MultiTouchInfo`] is created.
     pub num_touches: usize,
@@ -93,7 +93,7 @@ struct ActiveTouch {
 }
 
 impl TouchState {
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {
             active_touches: Default::default(),
             gesture_state: None,
@@ -101,7 +101,7 @@ impl TouchState {
         }
     }
 
-    pub fn add_event(&mut self, event: &Touch) {
+    pub(crate) fn add_event(&mut self, event: &Touch) {
         let pos = Point::new(event.location.x, event.location.y);
         match event.phase {
             TouchPhase::Started => {
@@ -120,7 +120,7 @@ impl TouchState {
         }
     }
 
-    pub fn end_frame(&mut self) {
+    pub(crate) fn end_frame(&mut self) {
         // This needs to be called each frame, even if there are no new touch events.
         // Otherwise, we would send the same old delta information multiple times:
         self.update_gesture();
@@ -135,7 +135,7 @@ impl TouchState {
         self.added_or_removed_touches = false;
     }
 
-    pub fn info(&self) -> Option<MultiTouchInfo> {
+    pub(crate) fn info(&self) -> Option<MultiTouchInfo> {
         self.gesture_state.as_ref().map(|state| {
             // state.previous can be `None` when the number of simultaneous touches has just
             // changed. In this case, we take `current` as `previous`, pretending that there

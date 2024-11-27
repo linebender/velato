@@ -1,14 +1,14 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use super::model::*;
+use super::model::{fixed, Content, Draw, Geometry, GroupTransform, Layer, Shape};
 use super::Composition;
 use std::ops::Range;
 use vello::kurbo::{Affine, PathEl, Rect};
 use vello::peniko::{Fill, Mix};
 
 /// Renders a composition into a scene.
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Renderer {
     batch: Batch,
     mask_elements: Vec<PathEl>,
@@ -207,7 +207,7 @@ impl Renderer {
     ) -> Affine {
         let mut transform = layer.transform.evaluate(frame).into_owned();
         let mut parent_index = layer.parent;
-        let mut count = 0usize;
+        let mut count = 0_usize;
         while let Some(index) = parent_index {
             // We don't check for cycles at import time, so this heuristic
             // prevents infinite loops.
@@ -256,7 +256,7 @@ struct GeometryData {
     transform: Affine,
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 struct Batch {
     elements: Vec<PathEl>,
     geometries: Vec<GeometryData>,

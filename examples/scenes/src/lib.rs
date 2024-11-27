@@ -1,6 +1,26 @@
 // Copyright 2022 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+//! Scenes
+
+// The following lints are part of the Linebender standard set,
+// but resolving them has been deferred for now.
+// Feel free to send a PR that solves one or more of these.
+#![allow(
+    missing_debug_implementations,
+    unreachable_pub,
+    missing_docs,
+    unused_macro_rules,
+    clippy::shadow_unrelated,
+    clippy::use_self,
+    clippy::missing_assert_message,
+    clippy::missing_errors_doc,
+    clippy::missing_panics_doc,
+    clippy::allow_attributes,
+    clippy::allow_attributes_without_reason,
+    clippy::wildcard_imports
+)]
+
 #[cfg(not(target_arch = "wasm32"))]
 pub mod download;
 mod lottie;
@@ -29,7 +49,7 @@ pub struct SceneParams<'a> {
     pub interactive: bool,
     pub text: &'a mut RobotoText,
     pub resolution: Option<Vec2>,
-    pub base_color: Option<vello::peniko::Color>,
+    pub base_color: Option<Color>,
     pub complexity: usize,
 }
 
@@ -45,11 +65,11 @@ pub struct ExampleScene {
 }
 
 pub trait TestScene {
-    fn render(&mut self, scene: &mut Scene, params: &mut SceneParams);
+    fn render(&mut self, scene: &mut Scene, params: &mut SceneParams<'_>);
 }
 
-impl<F: FnMut(&mut Scene, &mut SceneParams)> TestScene for F {
-    fn render(&mut self, scene: &mut Scene, params: &mut SceneParams) {
+impl<F: FnMut(&mut Scene, &mut SceneParams<'_>)> TestScene for F {
+    fn render(&mut self, scene: &mut Scene, params: &mut SceneParams<'_>) {
         self(scene, params);
     }
 }
@@ -58,6 +78,7 @@ pub struct SceneSet {
     pub scenes: Vec<ExampleScene>,
 }
 
+#[allow(clippy::partial_pub_fields)]
 #[derive(Args, Debug)]
 /// Shared config for scene selection
 pub struct Arguments {
