@@ -2,7 +2,7 @@
 
 # Velato
 
-**An integration to parse and render [Lottie](https://airbnb.io/lottie) with [Vello](https://vello.dev).**
+**An integration to parse and render [Lottie](https://lottie.github.io/) with [Vello](https://vello.dev).**
 
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23gpu-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-gpu)
 [![dependency status](https://deps.rs/repo/github/linebender/velato/status.svg)](https://deps.rs/repo/github/linebender/velato)
