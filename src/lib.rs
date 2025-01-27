@@ -72,7 +72,6 @@
     clippy::todo,
     reason = "Deferred"
 )]
-#![cfg_attr(test, allow(unused_crate_dependencies, reason = "Deferred"))] // Some dev dependencies are only used in tests
 
 pub(crate) mod import;
 pub(crate) mod runtime;
