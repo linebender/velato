@@ -15,33 +15,75 @@ pub use value::{Animated, Easing, EasingHandle, Time, Tween, Value, ValueRef};
 
 pub(crate) use spline::SplineToPath;
 
-macro_rules! simple_value {
-    ($name:ident) => {
-        #[derive(Clone, Debug)]
-        #[expect(clippy::large_enum_variant, reason = "Deferred")]
-        pub enum $name {
-            Fixed(fixed::$name),
-            Animated(animated::$name),
+#[derive(Clone, Debug)]
+#[expect(clippy::large_enum_variant, reason = "Deferred")]
+pub enum Transform {
+    Fixed(fixed::Transform),
+    Animated(animated::Transform),
+}
+impl Transform {
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, Self::Fixed(_))
+    }
+    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::Transform> {
+        match self {
+            Self::Fixed(value) => ValueRef::Borrowed(value),
+            Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
         }
-
-        impl $name {
-            pub fn is_fixed(&self) -> bool {
-                matches!(self, Self::Fixed(_))
-            }
-            pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::$name> {
-                match self {
-                    Self::Fixed(value) => ValueRef::Borrowed(value),
-                    Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
-                }
-            }
-        }
-    };
+    }
 }
 
-simple_value!(Transform);
-simple_value!(Stroke);
-simple_value!(Repeater);
-simple_value!(ColorStops);
+#[derive(Clone, Debug)]
+pub enum Stroke {
+    Fixed(fixed::Stroke),
+    Animated(animated::Stroke),
+}
+impl Stroke {
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, Self::Fixed(_))
+    }
+    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::Stroke> {
+        match self {
+            Self::Fixed(value) => ValueRef::Borrowed(value),
+            Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+#[expect(clippy::large_enum_variant, reason = "Deferred")]
+pub enum Repeater {
+    Fixed(fixed::Repeater),
+    Animated(animated::Repeater),
+}
+impl Repeater {
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, Self::Fixed(_))
+    }
+    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::Repeater> {
+        match self {
+            Self::Fixed(value) => ValueRef::Borrowed(value),
+            Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub enum ColorStops {
+    Fixed(fixed::ColorStops),
+    Animated(animated::ColorStops),
+}
+impl ColorStops {
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, Self::Fixed(_))
+    }
+    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::ColorStops> {
+        match self {
+            Self::Fixed(value) => ValueRef::Borrowed(value),
+            Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
+        }
+    }
+}
 
 #[derive(Clone, Debug)]
 pub enum Brush {

@@ -29,8 +29,7 @@ pub enum AnyLayer {
     /// Renders an Image
     // todo Image
 
-    /// No contents, only used for parenting
-
+    /// No contents, only used for parenting.
     /// Has an array of shapes
     Shape(ShapeLayer),
     // Renders Text
