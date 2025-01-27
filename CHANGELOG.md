@@ -10,7 +10,11 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## [Unreleased]
 
-This release has an [MSRV][] of 1.75.
+This release has an [MSRV][] of 1.82.
+
+### Changed
+
+- Updated to `vello` 0.4 ([#49][] by [@simbleau][]).
 
 ## [0.4.0]  - 2024-11-21
 
