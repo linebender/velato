@@ -70,8 +70,6 @@ This release has an [MSRV][] of 1.75.
 
 - Initial release
 
-[#49][https://github.com/linebender/velato/pull/49]
-
 [@luke1188]: https://github.com/luke1188
 [@MarijnS95]: https://github.com/MarijnS95
 [@simbleau]: https://github.com/simbleau
@@ -81,6 +79,7 @@ This release has an [MSRV][] of 1.75.
 [#17]: https://github.com/linebender/velato/pull/17
 [#19]: https://github.com/linebender/velato/pull/19
 [#42]: https://github.com/linebender/velato/pull/42
+[#49]: https://github.com/linebender/velato/pull/49
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.3.0...HEAD
 [0.4.0]: https://github.com/linebender/velato/compare/v0.3.1...v0.4.0
