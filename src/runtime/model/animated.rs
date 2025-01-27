@@ -408,7 +408,7 @@ impl Brush {
     pub fn evaluate(&self, alpha: f64, frame: f64) -> fixed::Brush {
         match self {
             Self::Solid(value) => value
-                .evaluate_or(frame, peniko::Color::new([0.0, 0.0, 0.0, 0.0]))
+                .evaluate_or(frame, peniko::Color::TRANSPARENT)
                 .multiply_alpha(alpha as f32)
                 .into(),
             Self::Gradient(value) => value.evaluate(frame),
