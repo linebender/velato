@@ -60,7 +60,7 @@ impl Brush {
                 if alpha == 1.0 {
                     ValueRef::Borrowed(value)
                 } else {
-                    ValueRef::Owned(fixed::brush_with_alpha(value, alpha))
+                    ValueRef::Owned(value.to_owned().multiply_alpha(alpha as _))
                 }
             }
             Self::Animated(value) => ValueRef::Owned(value.evaluate(alpha, frame)),

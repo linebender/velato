@@ -337,9 +337,12 @@ fn conv_gradient_colors(
                 stops.push(
                     (
                         values[0] as f32,
-                        runtime::model::fixed::Color::rgba(
-                            values[1], values[2], values[3], values[4],
-                        ),
+                        runtime::model::fixed::Color::new([
+                            values[1] as f32,
+                            values[2] as f32,
+                            values[3] as f32,
+                            values[4] as f32,
+                        ]),
                     )
                         .into(),
                 );
@@ -748,11 +751,12 @@ pub fn conv_multi_point(
 #[allow(clippy::get_first)]
 pub fn conv_color(value: &schema::animated_properties::color_value::ColorValue) -> Value<Color> {
     conv_multi_color(value, |x| {
-        Color::rgb(
-            x.get(0).copied().unwrap_or(0.0),
-            x.get(1).copied().unwrap_or(0.0),
-            x.get(2).copied().unwrap_or(0.0),
-        )
+        Color::new([
+            x.get(0).copied().unwrap_or(0.0) as f32,
+            x.get(1).copied().unwrap_or(0.0) as f32,
+            x.get(2).copied().unwrap_or(0.0) as f32,
+            1.0,
+        ])
     })
 }
 

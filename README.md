@@ -7,7 +7,7 @@
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23gpu-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-gpu)
 [![dependency status](https://deps.rs/repo/github/linebender/velato/status.svg)](https://deps.rs/repo/github/linebender/velato)
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](#license)
-[![vello version](https://img.shields.io/badge/vello-v0.3.0-purple.svg)](https://crates.io/crates/vello)\
+[![vello version](https://img.shields.io/badge/vello-v0.4.0-purple.svg)](https://crates.io/crates/vello)\
 [![Crates.io](https://img.shields.io/crates/v/velato.svg)](https://crates.io/crates/velato)
 [![Docs](https://docs.rs/velato/badge.svg)](https://docs.rs/velato)
 [![Build status](https://github.com/linebender/velato/workflows/CI/badge.svg)](https://github.com/linebender/velato/actions)

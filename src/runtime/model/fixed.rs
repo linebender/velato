@@ -59,26 +59,3 @@ impl Repeater {
             * Affine::translate((-self.anchor_point.x, -self.anchor_point.y))
     }
 }
-
-// TODO: probably move this to peniko. The better option is to add an alpha
-// parameter to the draw methods in vello. This is already handled at the
-// encoding level.
-pub(crate) fn brush_with_alpha(brush: &Brush, alpha: f64) -> Brush {
-    if alpha == 1.0 {
-        brush.clone()
-    } else {
-        match brush {
-            Brush::Solid(color) => color.multiply_alpha(alpha as f32).into(),
-            Brush::Gradient(gradient) => Brush::Gradient(peniko::Gradient {
-                kind: gradient.kind,
-                extend: gradient.extend,
-                stops: gradient
-                    .stops
-                    .iter()
-                    .map(|stop| stop.multiply_alpha(alpha as f32))
-                    .collect(),
-            }),
-            _ => unreachable!(),
-        }
-    }
-}
