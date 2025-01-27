@@ -147,7 +147,7 @@ mod tests {
         )
     });
 
-    #[allow(deprecated)]
+    #[expect(deprecated, reason = "Uses deprecated attributes")]
     static LAYER: Lazy<AnyLayer> = Lazy::new(|| {
         AnyLayer::Shape(ShapeLayer {
             properties: VisualLayer {

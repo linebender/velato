@@ -726,57 +726,55 @@ pub fn conv_pos<T: Tween>(
     }
 }
 
-#[allow(clippy::get_first)]
 pub fn conv_pos_point(value: &schema::animated_properties::position::Position) -> Value<Point> {
     conv_pos(value, |x| {
-        Point::new(
-            x.get(0).copied().unwrap_or(0.0),
-            x.get(1).copied().unwrap_or(0.0),
-        )
+        let (x0, x1) = match x.get(0..=1) {
+            Some([x0, x1]) => (*x0, *x1),
+            _ => (0.0, 0.0),
+        };
+        Point::new(x0, x1)
     })
 }
 
-#[allow(clippy::get_first)]
 pub fn conv_multi_point(
     value: &schema::animated_properties::multi_dimensional::MultiDimensional,
 ) -> Value<Point> {
     conv_multi(value, |x| {
-        Point::new(
-            x.get(0).copied().unwrap_or(0.0),
-            x.get(1).copied().unwrap_or(0.0),
-        )
+        let (x0, x1) = match x.get(0..=1) {
+            Some([x0, x1]) => (*x0, *x1),
+            _ => (0.0, 0.0),
+        };
+        Point::new(x0, x1)
     })
 }
 
-#[allow(clippy::get_first)]
 pub fn conv_color(value: &schema::animated_properties::color_value::ColorValue) -> Value<Color> {
     conv_multi_color(value, |x| {
-        Color::new([
-            x.get(0).copied().unwrap_or(0.0) as f32,
-            x.get(1).copied().unwrap_or(0.0) as f32,
-            x.get(2).copied().unwrap_or(0.0) as f32,
-            1.0,
-        ])
+        let (x0, x1, x2) = match x.get(0..=2) {
+            Some([x0, x1, x2]) => (*x0, *x1, *x2),
+            _ => (0.0, 0.0, 0.0),
+        };
+        Color::new([x0 as f32, x1 as f32, x2 as f32, 1.0])
     })
 }
 
-#[allow(clippy::get_first)]
 pub fn conv_vec2(value: &MultiDimensional) -> Value<Vec2> {
     conv_multi(value, |x| {
-        Vec2::new(
-            x.get(0).copied().unwrap_or(0.0),
-            x.get(1).copied().unwrap_or(0.0),
-        )
+        let (x0, x1) = match x.get(0..=1) {
+            Some([x0, x1]) => (*x0, *x1),
+            _ => (0.0, 0.0),
+        };
+        Vec2::new(x0, x1)
     })
 }
 
-#[allow(clippy::get_first)]
 pub fn conv_size(value: &MultiDimensional) -> Value<Size> {
     conv_multi(value, |x| {
-        Size::new(
-            x.get(0).copied().unwrap_or(0.0),
-            x.get(1).copied().unwrap_or(0.0),
-        )
+        let (x0, x1) = match x.get(0..=1) {
+            Some([x0, x1]) => (*x0, *x1),
+            _ => (0.0, 0.0),
+        };
+        Size::new(x0, x1)
     })
 }
 

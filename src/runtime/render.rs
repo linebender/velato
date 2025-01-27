@@ -66,7 +66,7 @@ impl Renderer {
         scene.pop_layer();
     }
 
-    #[allow(clippy::too_many_arguments)]
+    #[expect(clippy::too_many_arguments, reason = "Deferred")]
     fn render_layer(
         &mut self,
         animation: &Composition,

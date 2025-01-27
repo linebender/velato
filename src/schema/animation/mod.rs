@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 // todo motion-blur
-#[allow(clippy::module_inception)]
+#[expect(clippy::module_inception, reason = "Schema uses this format")]
 pub mod animation;
 // todo user-metadata
 pub mod composition;

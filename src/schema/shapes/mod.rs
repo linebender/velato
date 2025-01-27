@@ -51,7 +51,7 @@ use serde::{Deserialize, Serialize};
 /// share the properties in `shapes::common::Properties`.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(tag = "ty")]
-#[allow(clippy::large_enum_variant)]
+#[expect(clippy::large_enum_variant, reason = "Deferred")]
 pub enum AnyShape {
     /// A group is a shape that can contain other shapes (including other
     /// groups)

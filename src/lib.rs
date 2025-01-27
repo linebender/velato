@@ -69,9 +69,10 @@
     clippy::missing_assert_message,
     clippy::missing_errors_doc,
     clippy::exhaustive_enums,
-    clippy::todo
+    clippy::todo,
+    reason = "Deferred"
 )]
-#![cfg_attr(test, allow(unused_crate_dependencies))] // Some dev dependencies are only used in tests
+#![cfg_attr(test, allow(unused_crate_dependencies, reason = "Deferred"))] // Some dev dependencies are only used in tests
 
 pub(crate) mod import;
 pub(crate) mod runtime;
