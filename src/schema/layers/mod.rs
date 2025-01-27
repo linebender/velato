@@ -26,15 +26,14 @@ pub enum AnyLayer {
     /// Static rectangle filling the canvas with a single color
     SolidColor(SolidColorLayer),
 
-    /// Renders an Image
-    // todo Image
-
     /// No contents, only used for parenting.
     /// Has an array of shapes
     Shape(ShapeLayer),
-    // Renders Text
-    // todo Text
+
+    /// Null
     Null(NullLayer),
+    // unimplemented - Text(TextLayer),
+    // unimplemented - Image(ImageLayer),
     // unimplemented - Audio(AudioLayer),
     // unimplemented - VideoPlaceholder(VideoPlaceholderLayer)
     // unimplemented - Video(VideoLayer)
