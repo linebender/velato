@@ -151,13 +151,13 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
         include:
           - os: ubuntu-latest
-            gpu: "yes"
+            gpu: 'yes'
           - os: macos-latest
-            gpu: "yes"
+            gpu: 'yes'
           - os: windows-latest
             # TODO: The windows runners theoretically have CPU fallback for GPUs, but
             # this failed in initial testing
-            gpu: "no"
+            gpu: 'no'
     steps:
       - uses: actions/checkout@v4
 
@@ -243,7 +243,7 @@ jobs:
         run: cargo apk check -p with_winit --lib
         env:
           # This is a bit of a hack, but cargo apk doesn't seem to allow customising this
-          RUSTFLAGS: "-D warnings"
+          RUSTFLAGS: '-D warnings'
 
   check-msrv:
     name: cargo check (msrv)
@@ -321,7 +321,7 @@ jobs:
       - name: cargo doc
         run: cargo doc --workspace --locked --all-features --no-deps --document-private-items
         env:
-          RUSTDOCFLAGS: "--cfg docsrs -D warnings"
+          RUSTDOCFLAGS: '--cfg docsrs -D warnings'
 
   # If this fails, consider changing your text or adding something to .typos.toml.
   typos:
