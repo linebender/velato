@@ -16,7 +16,13 @@ pub use value::{Animated, Easing, EasingHandle, Time, Tween, Value, ValueRef};
 pub(crate) use spline::SplineToPath;
 
 #[derive(Clone, Debug)]
-#[expect(clippy::large_enum_variant, reason = "Deferred")]
+#[cfg_attr(
+    not(target_arch = "wasm32"),
+    expect(
+        clippy::large_enum_variant,
+        reason = "Deferred. Furthermore, for some reason, only on wasm32, this isn't triggering clippy."
+    )
+)]
 pub enum Transform {
     Fixed(fixed::Transform),
     Animated(animated::Transform),
@@ -51,7 +57,13 @@ impl Stroke {
 }
 
 #[derive(Clone, Debug)]
-#[expect(clippy::large_enum_variant, reason = "Deferred")]
+#[cfg_attr(
+    not(target_arch = "wasm32"),
+    expect(
+        clippy::large_enum_variant,
+        reason = "Deferred. Furthermore, for some reason, only on wasm32, this isn't triggering clippy."
+    )
+)]
 pub enum Repeater {
     Fixed(fixed::Repeater),
     Animated(animated::Repeater),
