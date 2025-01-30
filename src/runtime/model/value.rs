@@ -13,17 +13,27 @@ pub enum Value<T: Tween> {
     Animated(Animated<T>),
 }
 
+impl<T: Tween + Default> Value<T> {
+    /// Returns the value at a specified frame.
+    pub fn evaluate(&self, frame: f64) -> T {
+        match self {
+            Self::Fixed(fixed) => fixed.clone(),
+            Self::Animated(animated) => animated.evaluate_or(frame, T::default()),
+        }
+    }
+}
+
 impl<T: Tween> Value<T> {
     /// Returns true if the value is fixed.
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
     }
 
-    /// Returns the value at a specified frame.
-    pub fn evaluate(&self, frame: f64) -> T {
+    /// Returns the value at a specified frame, with a fallback default.
+    pub fn evaluate_or(&self, frame: f64, default: T) -> T {
         match self {
             Self::Fixed(fixed) => fixed.clone(),
-            Self::Animated(animated) => animated.evaluate(frame),
+            Self::Animated(animated) => animated.evaluate_or(frame, default),
         }
     }
 }
@@ -41,7 +51,7 @@ pub enum ValueRef<'a, T> {
     Owned(T),
 }
 
-impl<'a, T> AsRef<T> for ValueRef<'a, T> {
+impl<T> AsRef<T> for ValueRef<'_, T> {
     fn as_ref(&self) -> &T {
         match self {
             Self::Borrowed(value) => value,
@@ -50,7 +60,7 @@ impl<'a, T> AsRef<T> for ValueRef<'a, T> {
     }
 }
 
-impl<'a, T: Clone> ValueRef<'a, T> {
+impl<T: Clone> ValueRef<'_, T> {
     pub fn into_owned(self) -> T {
         match self {
             Self::Borrowed(value) => value.clone(),
@@ -139,8 +149,8 @@ pub struct Animated<T: Tween> {
 
 impl<T: Tween> Animated<T> {
     /// Returns the value at the specified frame.
-    pub fn evaluate(&self, frame: f64) -> T {
-        self.evaluate_inner(frame).unwrap_or_default()
+    pub fn evaluate_or(&self, frame: f64, default: T) -> T {
+        self.evaluate_inner(frame).unwrap_or(default)
     }
 
     fn evaluate_inner(&self, frame: f64) -> Option<T> {
@@ -155,7 +165,7 @@ impl<T: Tween> Animated<T> {
 }
 
 /// Something that can be interpolated with an easing function.
-pub trait Tween: Clone + Default {
+pub trait Tween: Clone {
     fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self;
 }
 
@@ -202,10 +212,12 @@ impl Tween for kurbo::Size {
 
 impl Tween for peniko::Color {
     fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
-        let r = (self.r as f64 / 255.0).tween(&(other.r as f64 / 255.0), t, easing);
-        let g = (self.g as f64 / 255.0).tween(&(other.g as f64 / 255.0), t, easing);
-        let b = (self.b as f64 / 255.0).tween(&(other.b as f64 / 255.0), t, easing);
-        let a = (self.a as f64 / 255.0).tween(&(other.a as f64 / 255.0), t, easing);
-        peniko::Color::rgba(r, g, b, a)
+        let [r1, g1, b1, a1] = self.components;
+        let [r2, g2, b2, a2] = other.components;
+        let r = (r1 as f64).tween(&(r2 as f64), t, easing);
+        let g = (g1 as f64).tween(&(g2 as f64), t, easing);
+        let b = (b1 as f64).tween(&(b2 as f64), t, easing);
+        let a = (a1 as f64).tween(&(a2 as f64), t, easing);
+        peniko::Color::new([r as f32, g as f32, b as f32, a as f32])
     }
 }

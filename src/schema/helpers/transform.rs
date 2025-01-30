@@ -56,7 +56,7 @@ pub enum AnyTransformP {
 /// The possible values of "r" in a [`Transform`].
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
+#[expect(clippy::large_enum_variant, reason = "Deferred")]
 pub enum AnyTransformR {
     /// Rotation in degrees, clockwise
     Rotation(FloatValue),

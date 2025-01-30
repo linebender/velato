@@ -26,16 +26,14 @@ pub enum AnyLayer {
     /// Static rectangle filling the canvas with a single color
     SolidColor(SolidColorLayer),
 
-    /// Renders an Image
-    // todo Image
-
-    /// No contents, only used for parenting
-
+    /// No contents, only used for parenting.
     /// Has an array of shapes
     Shape(ShapeLayer),
-    // Renders Text
-    // todo Text
+
+    /// Null
     Null(NullLayer),
+    // unimplemented - Text(TextLayer),
+    // unimplemented - Image(ImageLayer),
     // unimplemented - Audio(AudioLayer),
     // unimplemented - VideoPlaceholder(VideoPlaceholderLayer)
     // unimplemented - Video(VideoLayer)
@@ -147,7 +145,7 @@ mod tests {
         )
     });
 
-    #[allow(deprecated)]
+    #[expect(deprecated, reason = "Uses deprecated attributes")]
     static LAYER: Lazy<AnyLayer> = Lazy::new(|| {
         AnyLayer::Shape(ShapeLayer {
             properties: VisualLayer {
