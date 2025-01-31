@@ -29,7 +29,10 @@ default-target = "x86_64-unknown-linux-gnu"
 targets = []
 
 [workspace.lints]
-# LINEBENDER LINT SET - Cargo.toml - v2
+# This one may vary depending on the project.
+rust.unsafe_code = "forbid"
+
+# LINEBENDER LINT SET - Cargo.toml - v4
 # See https://linebender.org/wiki/canonical-lints/
 rust.keyword_idents_2024 = "forbid"
 rust.non_ascii_idents = "forbid"
@@ -52,6 +55,8 @@ rust.unused_macro_rules = "warn"
 rust.unused_qualifications = "warn"
 rust.variant_size_differences = "warn"
 
+clippy.too_many_arguments = "allow"
+
 clippy.allow_attributes = "warn"
 clippy.allow_attributes_without_reason = "warn"
 clippy.cast_possible_truncation = "warn"
@@ -59,8 +64,7 @@ clippy.collection_is_never_read = "warn"
 clippy.dbg_macro = "warn"
 clippy.debug_assert_with_mut_call = "warn"
 clippy.doc_markdown = "warn"
-clippy.exhaustive_enums = "warn"
-clippy.fn_to_numeric_cast_any = "warn" # Can't be forbid due to 'scenes' requiring an exception.
+clippy.fn_to_numeric_cast_any = "warn"
 clippy.infinite_loop = "warn"
 clippy.large_include_file = "warn"
 clippy.large_stack_arrays = "warn"
@@ -77,7 +81,6 @@ clippy.semicolon_if_nothing_returned = "warn"
 clippy.shadow_unrelated = "warn"
 clippy.should_panic_without_expect = "warn"
 clippy.todo = "warn"
-clippy.trivially_copy_pass_by_ref = "warn"
 clippy.unseparated_literal_suffix = "warn"
 clippy.use_self = "warn"
 clippy.wildcard_imports = "warn"
