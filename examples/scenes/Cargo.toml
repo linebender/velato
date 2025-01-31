@@ -29,4 +29,4 @@ ureq = "3.0.3"
 [target.wasm32-unknown-unknown.dependencies]
 # We have a transitive dependency on getrandom and it does not automatically
 # support wasm32-unknown-unknown. We need to enable the js feature.
-getrandom = { version = "0.2.15", features = ["js"] }
+getrandom = { version = "0.3.1", features = ["wasm_js"] }
