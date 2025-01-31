@@ -65,8 +65,8 @@ impl Download {
                         println!(
                             "{} ({}) under license {} from {}",
                             download.name,
-                            Byte::from_bytes(builtin.expected_size.into())
-                                .get_appropriate_unit(false),
+                            Byte::from_u64(builtin.expected_size)
+                                .get_appropriate_unit(byte_unit::UnitType::Decimal),
                             builtin.license,
                             builtin.info
                         );
@@ -152,7 +152,7 @@ impl Download {
 fn download_prompt(total_bytes: u64) -> Result<bool> {
     let prompt = format!(
         "Would you like to download a set of default lottie files, as explained above? ({})",
-        Byte::from_bytes(total_bytes.into()).get_appropriate_unit(false)
+        Byte::from_u64(total_bytes).get_appropriate_unit(byte_unit::UnitType::Decimal)
     );
     let accepted = Confirm::new(&prompt).with_default(false).prompt()?;
     Ok(accepted)
@@ -170,34 +170,18 @@ impl LottieDownload {
     }
 
     fn fetch(&self, directory: &Path, size_limit: Byte) -> Result<()> {
-        let mut size_limit = size_limit.get_bytes().try_into()?;
+        let mut size_limit = size_limit.as_u64();
         let mut limit_exact = false;
         if let Some(builtin) = &self.builtin {
             size_limit = builtin.expected_size;
             limit_exact = true;
-        }
-        // If we're expecting an exact version of the file, it's worth not fetching
-        // the file if we know it will fail
-        if limit_exact {
-            let head_response = ureq::head(&self.url).call()?;
-            let content_length = head_response.header("content-length");
-            if let Some(Ok(content_length)) = content_length.map(|it| it.parse::<u64>()) {
-                if content_length != size_limit {
-                    bail!(
-                        "Size is not as expected for download. Expected {}, server reported {}",
-                        Byte::from_bytes(size_limit.into()).get_appropriate_unit(true),
-                        Byte::from_bytes(content_length.into()).get_appropriate_unit(true)
-                    )
-                }
-            }
         }
         let mut file = std::fs::OpenOptions::new()
             .create_new(true)
             .write(true)
             .open(self.file_path(directory))
             .context("Creating file")?;
-        let mut reader = ureq::get(&self.url).call()?.into_reader();
-
+        let mut reader = ureq::get(&self.url).call()?.into_body().into_reader();
         std::io::copy(
             // ureq::into_string() has a limit of 10MiB so we must use the reader
             &mut (&mut reader).take(size_limit),
