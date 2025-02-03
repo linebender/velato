@@ -12,6 +12,10 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.82.
 
+## [0.5.0]  - 2025-02-02
+
+This release has an [MSRV][] of 1.82.
+
 ### Changed
 
 - Updated to `vello` 0.4 ([#49][] by [@simbleau][]).
@@ -81,7 +85,8 @@ This release has an [MSRV][] of 1.75.
 [#42]: https://github.com/linebender/velato/pull/42
 [#49]: https://github.com/linebender/velato/pull/49
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/linebender/velato/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/linebender/velato/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/linebender/velato/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/linebender/velato/compare/v0.2.0...v0.3.0
