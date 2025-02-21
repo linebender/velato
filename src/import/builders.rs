@@ -23,7 +23,7 @@ pub fn setup_precomp_layer(
         .properties
         .matte_target
         .as_ref()
-        .map_or(false, |td| *td == BoolInt::True);
+        .is_some_and(|td| *td == BoolInt::True);
 
     let matte_mode = source
         .properties
@@ -91,7 +91,7 @@ pub fn setup_shape_layer(
         .properties
         .matte_target
         .as_ref()
-        .map_or(false, |td| *td == BoolInt::True);
+        .is_some_and(|td| *td == BoolInt::True);
 
     let matte_mode = source
         .properties
@@ -158,7 +158,7 @@ pub fn setup_layer_base(
     target.is_mask = source
         .matte_target
         .as_ref()
-        .map_or(false, |td| *td == BoolInt::True);
+        .is_some_and(|td| *td == BoolInt::True);
 
     let matte_mode = source.matte_mode.as_ref().map(|mode| match mode {
         schema::constants::matte_mode::MatteMode::Normal => Mix::Normal.into(),
