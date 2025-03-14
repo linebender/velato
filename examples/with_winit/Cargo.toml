@@ -20,7 +20,7 @@ path = "src/main.rs"
 workspace = true
 
 [dependencies]
-vello = { workspace = true, features = [ "wgpu"] }
+vello = { workspace = true, features = ["wgpu"] }
 scenes = { path = "../scenes" }
 anyhow = "1"
 clap = { version = "4.5.1", features = ["derive"] }
