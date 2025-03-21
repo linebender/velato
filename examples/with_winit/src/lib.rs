@@ -395,7 +395,7 @@ fn run(
                             .expect("failed to get surface texture");
                         // Note: we don't run the async/"robust" pipeline, as
                         // it requires more async wiring for the readback. See
-                        // [#gpu > async on wasm](https://xi.zulipchat.com/#narrow/stream/197075-gpu/topic/async.20on.20wasm)
+                        // [#vello > async on wasm](https://xi.zulipchat.com/#narrow/channel/197075-vello/topic/async.20on.20wasm/with/396685264)
                         #[allow(deprecated)]
                         // #[expect(deprecated, reason = "This deprecation is not targeted at us.")] // Our MSRV is too low to use `expect`
                         #[cfg(not(target_arch = "wasm32"))]
