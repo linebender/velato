@@ -45,23 +45,32 @@ where
 {
     // Deserialize the keyframes & handle empty case
     let keyframes = Vec::<ShapeKeyframe>::deserialize(deserializer)?;
-    if keyframes.is_empty() { return Ok(keyframes); }
+    if keyframes.is_empty() {
+        return Ok(keyframes);
+    }
 
     // Validate that all keyframes until the last have a start property
-    if !keyframes[0..(keyframes.len() - 1)].iter().all(|keyframe| keyframe.start.is_some()) {
+    if !keyframes[0..(keyframes.len() - 1)]
+        .iter()
+        .all(|keyframe| keyframe.start.is_some())
+    {
         return Err(de::Error::custom(
             "Animated Shape Keyframe found with missing 's' start property. Only the last keyframe may omit this."
         ));
     }
-    
+
     // Early return if last keyframe has a start value.
     if let Some(last_keyframe) = keyframes.last() {
-        if last_keyframe.start.is_some() { return Ok(keyframes); }
+        if last_keyframe.start.is_some() {
+            return Ok(keyframes);
+        }
     }
 
     // The last keyframe has no start value - so there must be at least one other keyframe present.
     if keyframes.len() < 2 {
-        Err(de::Error::custom("Last Animated Shape Keyframe 's' was ommitted where only one keyframe is present."))
+        Err(de::Error::custom(
+            "Last Animated Shape Keyframe 's' was omitted where only one keyframe is present.",
+        ))
     } else {
         Ok(keyframes)
     }

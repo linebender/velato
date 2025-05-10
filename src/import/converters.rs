@@ -602,12 +602,16 @@ pub fn conv_shape_geometry(
                 let start_bezier = {
                     if let Some(start) = &value.start {
                         start.first()?.clone()
-                    } else { // No keyframe was present - we look for the previous end/start
+                    } else {
+                        // No keyframe was present - we look for the previous end/start
                         let prev = animated.get(idx - 1)?;
                         // Take the previous end if present, otherwise the previous start.
                         if let Some(prev_end) = prev.end.as_ref() {
-                            if let Some(prev_end_bezier) = prev_end.first() { prev_end_bezier.clone() }
-                            else { prev.start.as_ref()?.first()?.clone() }
+                            if let Some(prev_end_bezier) = prev_end.first() {
+                                prev_end_bezier.clone()
+                            } else {
+                                prev.start.as_ref()?.first()?.clone()
+                            }
                         } else {
                             prev.start.as_ref()?.first()?.clone()
                         }
@@ -615,12 +619,12 @@ pub fn conv_shape_geometry(
                 };
                 let (points, is_frame_closed) = conv_spline(&start_bezier);
                 // Get converted spline points for keyframe bezier at the end
-                let end_points = value.end.as_ref().map(|end_beziers| {
+                let end_points = value.end.as_ref().and_then(|end_beziers| {
                     let end_bezier = end_beziers.first()?;
                     let (end_points, is_end_frame_closed) = conv_spline(end_bezier);
                     is_closed |= is_end_frame_closed;
                     Some(end_points)
-                }).flatten();
+                });
                 // Add the keyframe values
                 values.push(animated::SplineKeyframeValues {
                     start: points,

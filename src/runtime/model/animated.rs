@@ -209,8 +209,11 @@ impl Spline {
             return false;
         };
         let to_slice = {
-            if let Some(end) = &from.end { end.as_slice() }
-            else { to.start.as_slice() }
+            if let Some(end) = &from.end {
+                end.as_slice()
+            } else {
+                to.start.as_slice()
+            }
         };
         (from.start.as_slice(), to_slice, t).to_path(self.is_closed, path);
         true
