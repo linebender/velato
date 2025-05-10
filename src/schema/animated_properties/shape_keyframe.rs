@@ -10,6 +10,16 @@ use serde::{Deserialize, Serialize};
 pub struct ShapeKeyframe {
     #[serde(flatten)]
     pub base: KeyframeBase,
+    /// Starting point of this keyframe. This is required for all keyframes, except the last keyframe.
+    /// The last keyframe may omit this value, in which case the previous keyframe's "e" is used (or "s")
+    /// if not present.
     #[serde(rename = "s")]
-    pub start: Vec<Bezier>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start: Option<Vec<Bezier>>,
+    /// Ending point of this keyframe. Each keyframe may store it's own end, to allow for non-continuous animations.
+    /// This means the ending point of one frame is not guaranteed to match the starting point of the next.
+    /// This is always optional, and never required.
+    #[serde(rename = "e")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end: Option<Vec<Bezier>>,
 }
