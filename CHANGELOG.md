@@ -12,6 +12,11 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.82.
 
+### Added
+
+- Keyframes in an animated Spline may now specify an `"e"` key, dictating an end value. When specified, this value is used instead of the next keyframe's start value, allowing for discontinuous animations. ([#60] by [@RishiChalla])
+- The last keyframe in an animated Spline may now specify only the timestamp, omitting all other fields. In this scenario, the previous keyframe's end/start values will be used. ([#60] by [@RishiChalla])
+
 ## [0.5.0]  - 2025-02-02
 
 This release has an [MSRV][] of 1.82.
