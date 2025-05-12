@@ -184,8 +184,16 @@ pub struct Spline {
     pub is_closed: bool,
     /// Collection of times.
     pub times: Vec<Time>,
-    /// Collection of splines.
-    pub values: Vec<Vec<Point>>,
+    /// Collection of splines for each time. The splines at each point must have a start, but may also have an
+    /// end defined. When the end is not defined, then the next keyframe's start is used.
+    pub values: Vec<SplineKeyframeValues>,
+}
+
+/// The values of an animated Spline at a single keyframe. When end is None, the next frame's start is used.
+#[derive(Clone, Debug)]
+pub struct SplineKeyframeValues {
+    pub start: Vec<Point>,
+    pub end: Option<Vec<Point>>,
 }
 
 impl Spline {
@@ -200,7 +208,14 @@ impl Spline {
         let (Some(from), Some(to)) = (self.values.get(ix0), self.values.get(ix1)) else {
             return false;
         };
-        (from.as_slice(), to.as_slice(), t).to_path(self.is_closed, path);
+        let to_slice = {
+            if let Some(end) = &from.end {
+                end.as_slice()
+            } else {
+                to.start.as_slice()
+            }
+        };
+        (from.start.as_slice(), to_slice, t).to_path(self.is_closed, path);
         true
     }
 }

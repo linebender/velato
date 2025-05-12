@@ -579,23 +579,57 @@ pub fn conv_shape_geometry(
             Some(runtime::model::Geometry::Fixed(path))
         }
         Animated(animated) => {
+            // Build frames & values for the animated spline
             let mut frames = vec![];
             let mut values = vec![];
-            for value in animated {
+
+            for (idx, value) in animated.iter().enumerate() {
+                // Extract hold from base key properties
                 let hold = value
                     .base
                     .hold
                     .as_ref()
                     .map(|b| b.eq(&BoolInt::True))
                     .unwrap_or(false);
+                // Add frame time and easing
                 frames.push(Time {
                     frame: value.base.time,
                     in_tangent: value.base.in_tangent.as_ref().map(conv_keyframe_handle),
                     out_tangent: value.base.out_tangent.as_ref().map(conv_keyframe_handle),
                     hold,
                 });
-                let (points, is_frame_closed) = conv_spline(value.start.first()?);
-                values.push(points);
+                // Get converted spline points for keyframe bezier at the start
+                let start_bezier = {
+                    if let Some(start) = &value.start {
+                        start.first()?.clone()
+                    } else {
+                        // No keyframe was present - we look for the previous end/start
+                        let prev = animated.get(idx - 1)?;
+                        // Take the previous end if present, otherwise the previous start.
+                        if let Some(prev_end) = prev.end.as_ref() {
+                            if let Some(prev_end_bezier) = prev_end.first() {
+                                prev_end_bezier.clone()
+                            } else {
+                                prev.start.as_ref()?.first()?.clone()
+                            }
+                        } else {
+                            prev.start.as_ref()?.first()?.clone()
+                        }
+                    }
+                };
+                let (points, is_frame_closed) = conv_spline(&start_bezier);
+                // Get converted spline points for keyframe bezier at the end
+                let end_points = value.end.as_ref().and_then(|end_beziers| {
+                    let end_bezier = end_beziers.first()?;
+                    let (end_points, is_end_frame_closed) = conv_spline(end_bezier);
+                    is_closed |= is_end_frame_closed;
+                    Some(end_points)
+                });
+                // Add the keyframe values
+                values.push(animated::SplineKeyframeValues {
+                    start: points,
+                    end: end_points,
+                });
                 is_closed |= is_frame_closed;
             }
             Some(runtime::model::Geometry::Spline(animated::Spline {
