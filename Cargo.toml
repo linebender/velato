@@ -90,7 +90,7 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { version = "0.4.0", default-features = false }
+vello = { version = "0.4.1", default-features = false }
 
 [lints]
 workspace = true
@@ -98,16 +98,16 @@ workspace = true
 [dependencies]
 vello = { workspace = true }
 keyframe = "1.1.1"
-once_cell = "1.19.0"
-thiserror = "2.0.3"
+once_cell = "1.21.3"
+thiserror = "2.0.12"
 
 # For the parser
-serde = { version = "1.0.203", features = ["derive"] }
-serde_json = "1.0.120"
-serde_repr = "0.1.19"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+serde_repr = "0.1.20"
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.42"
+wasm-bindgen-test = "0.3.50"
 
 [features]
 default = []
