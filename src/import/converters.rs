@@ -492,11 +492,11 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
 }
 
 fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model::Shape> {
-    if let Some(draw) = conv_draw(value) {
+    match conv_draw(value) { Some(draw) => {
         return Some(crate::runtime::model::Shape::Draw(draw));
-    } else if let Some(geometry) = conv_geometry(value) {
+    } _ => if let Some(geometry) = conv_geometry(value) {
         return Some(crate::runtime::model::Shape::Geometry(geometry));
-    }
+    }}
 
     match value {
         schema::shapes::AnyShape::Group(value) => {

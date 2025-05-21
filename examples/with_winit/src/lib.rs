@@ -388,11 +388,7 @@ fn run(
                                 antialiasing_method,
                             );
                         }
-                        let surface_texture = render_state
-                            .surface
-                            .surface
-                            .get_current_texture()
-                            .expect("failed to get surface texture");
+                        let surface = &render_state.surface;
                         // Note: we don't run the async/"robust" pipeline, as
                         // it requires more async wiring for the readback. See
                         // [#vello > async on wasm](https://xi.zulipchat.com/#narrow/channel/197075-vello/topic/async.20on.20wasm/with/396685264)
@@ -405,11 +401,11 @@ fn run(
                                 renderers[render_state.surface.dev_id]
                                     .as_mut()
                                     .unwrap()
-                                    .render_to_surface_async(
+                                    .render_to_texture_async(
                                         &device_handle.device,
                                         &device_handle.queue,
                                         &scene,
-                                        &surface_texture,
+                                        &surface.target_view,
                                         &render_params,
                                         vello::low_level::DebugLayers::none(),
                                     ),
@@ -422,14 +418,36 @@ fn run(
                         renderers[render_state.surface.dev_id]
                             .as_mut()
                             .unwrap()
-                            .render_to_surface(
+                            .render_to_texture(
                                 &device_handle.device,
                                 &device_handle.queue,
                                 &scene,
-                                &surface_texture,
+                                &surface.target_view,
                                 &render_params,
                             )
                             .expect("failed to render to surface");
+
+                        let surface_texture = surface
+                            .surface
+                            .get_current_texture()
+                            .expect("failed to get surface texture");
+
+                        let mut encoder = device_handle.device.create_command_encoder(
+                            &wgpu::CommandEncoderDescriptor {
+                                label: Some("Surface Blit"),
+                            },
+                        );
+
+                        surface.blitter.copy(
+                            &device_handle.device,
+                            &mut encoder,
+                            &surface.target_view,
+                            &surface_texture
+                                .texture
+                                .create_view(&wgpu::TextureViewDescriptor::default()),
+                        );
+
+                        device_handle.queue.submit([encoder.finish()]);
                         surface_texture.present();
                         device_handle.device.poll(wgpu::Maintain::Poll);
 
@@ -516,10 +534,10 @@ fn run(
                             let renderer = Renderer::new(
                                 &render_cx.devices[id].device,
                                 RendererOptions {
-                                    surface_format: Some(render_state.surface.format),
                                     use_cpu,
                                     antialiasing_support: vello::AaSupport::all(),
                                     num_init_threads: NonZeroUsize::new(args.num_init_threads),
+                                    pipeline_cache: None,
                                 },
                             )
                             .expect("Could create renderer");
