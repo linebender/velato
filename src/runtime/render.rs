@@ -1,8 +1,8 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use super::model::{fixed, Content, Draw, Geometry, GroupTransform, Layer, Shape};
 use super::Composition;
+use super::model::{Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed};
 use std::ops::Range;
 use vello::kurbo::{Affine, PathEl, Rect};
 use vello::peniko::{Fill, Mix};

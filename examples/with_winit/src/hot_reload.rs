@@ -6,7 +6,7 @@ use std::time::Duration;
 
 use anyhow::Result;
 use notify_debouncer_mini::notify::*;
-use notify_debouncer_mini::{new_debouncer, DebounceEventResult};
+use notify_debouncer_mini::{DebounceEventResult, new_debouncer};
 
 pub(crate) fn hot_reload(mut f: impl FnMut() -> Option<()> + Send + 'static) -> Result<impl Sized> {
     let mut debouncer = new_debouncer(
