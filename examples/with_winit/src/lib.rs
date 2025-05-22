@@ -101,12 +101,12 @@ fn run(
         let renderer = Renderer::new(
             &render_cx.devices[id].device,
             RendererOptions {
-                surface_format: Some(render_state.surface.format),
                 use_cpu,
                 antialiasing_support: vello::AaSupport::all(),
                 // We currently initialise on one thread on WASM, but mark this here
                 // anyway
                 num_init_threads: NonZeroUsize::new(1),
+                pipeline_cache: None,
             },
         )
         .expect("Could create renderer");
