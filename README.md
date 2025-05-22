@@ -87,7 +87,7 @@ There is also a web demo [available here](https://linebender.github.io/velato) o
 
 ## Minimum supported Rust Version (MSRV)
 
-This version of Velato has been verified to compile with **Rust 1.82** and later.
+This version of Velato has been verified to compile with **Rust 1.85** and later.
 
 Future versions of Velato might increase the Rust version requirement.
 It will not be treated as a breaking change and as such can even happen with small patch releases.
@@ -116,9 +116,9 @@ Contributions are welcome by pull request. The [Rust code of conduct](https://ww
 Licensed under either of
 
 - Apache License, Version 2.0
-   ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
+  ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
 - MIT license
-   ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
+  ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
 at your option.
 
