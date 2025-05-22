@@ -19,7 +19,7 @@ This release has an [MSRV][] of 1.85.
 
 ### Changed
 
-- Updated vello ([#63][] by [@RobertBrewitz][])
+- Updated to `vello` 0.5 ([#63][] by [@RobertBrewitz][])
 
 ## [0.5.0] - 2025-02-02
 
