@@ -21,7 +21,7 @@ This release has an [MSRV][] of 1.85.
 
 - Updated to `vello` 0.5 ([#63][] by [@RobertBrewitz][])
 
-## [0.5.0] - 2025-02-02
+## [0.5.0]  - 2025-02-02
 
 This release has an [MSRV][] of 1.82.
 
@@ -29,7 +29,7 @@ This release has an [MSRV][] of 1.82.
 
 - Updated to `vello` 0.4 ([#49][] by [@simbleau][]).
 
-## [0.4.0] - 2024-11-21
+## [0.4.0]  - 2024-11-21
 
 This release has an [MSRV][] of 1.75.
 
@@ -38,7 +38,7 @@ This release has an [MSRV][] of 1.75.
 - Updated to `vello` 0.3
 - Updated `thiserror` to 2.0
 
-## [0.3.1] - 2024-11-11
+## [0.3.1]  - 2024-11-11
 
 This release has an [MSRV][] of 1.75.
 
@@ -46,7 +46,7 @@ This release has an [MSRV][] of 1.75.
 
 - Non-linear easing is now correctly interpolated ([#42] by [@atoktoto])
 
-## [0.3.0] - 2024-07-04
+## [0.3.0]  - 2024-07-04
 
 This release has an [MSRV][] of 1.75.
 
@@ -87,11 +87,13 @@ This release has an [MSRV][] of 1.75.
 [@MarijnS95]: https://github.com/MarijnS95
 [@simbleau]: https://github.com/simbleau
 [@atoktoto]: https://github.com/atoktoto
+
 [#16]: https://github.com/linebender/velato/pull/16
 [#17]: https://github.com/linebender/velato/pull/17
 [#19]: https://github.com/linebender/velato/pull/19
 [#42]: https://github.com/linebender/velato/pull/42
 [#49]: https://github.com/linebender/velato/pull/49
+
 [Unreleased]: https://github.com/linebender/velato/compare/v0.5.0...HEAD
 [0.5.0]: https://github.com/linebender/velato/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/linebender/velato/compare/v0.3.1...v0.4.0
@@ -99,4 +101,5 @@ This release has an [MSRV][] of 1.75.
 [0.3.0]: https://github.com/linebender/velato/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/linebender/velato/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/linebender/velato/releases/tag/v0.1.0
+
 [MSRV]: README.md#minimum-supported-rust-version-msrv
