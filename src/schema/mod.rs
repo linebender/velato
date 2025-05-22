@@ -21,7 +21,7 @@ pub use animation::animation::Animation;
 
 #[cfg(test)]
 mod tests {
-    use super::{helpers::int_boolean::BoolInt, Animation};
+    use super::{Animation, helpers::int_boolean::BoolInt};
     use once_cell::sync::Lazy;
     use serde_json::json;
 

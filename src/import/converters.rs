@@ -3,8 +3,8 @@
 
 use super::builders::{setup_layer_base, setup_precomp_layer, setup_shape_layer};
 use super::defaults::{FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE, POSITION_ZERO};
-use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::Easing;
+use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
     self, Content, Draw, EasingHandle, GroupTransform, Layer, SplineToPath, Time, Tween, Value,
 };
@@ -16,7 +16,7 @@ use crate::schema::animated_properties::multi_dimensional::MultiDimensional;
 use crate::schema::animated_properties::split_vector::SplitVector;
 use crate::schema::constants::gradient_type::GradientType;
 use crate::schema::helpers::int_boolean::BoolInt;
-use crate::{schema, Composition};
+use crate::{Composition, schema};
 use std::collections::HashMap;
 use vello::kurbo::{Cap, Join, Point, Size, Vec2};
 use vello::peniko::{BlendMode, Color, Mix};
@@ -492,10 +492,15 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
 }
 
 fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model::Shape> {
-    if let Some(draw) = conv_draw(value) {
-        return Some(crate::runtime::model::Shape::Draw(draw));
-    } else if let Some(geometry) = conv_geometry(value) {
-        return Some(crate::runtime::model::Shape::Geometry(geometry));
+    match conv_draw(value) {
+        Some(draw) => {
+            return Some(crate::runtime::model::Shape::Draw(draw));
+        }
+        _ => {
+            if let Some(geometry) = conv_geometry(value) {
+                return Some(crate::runtime::model::Shape::Geometry(geometry));
+            }
+        }
     }
 
     match value {
@@ -839,14 +844,14 @@ pub fn conv_stops(value: &[f64], count: usize) -> Vec<[f64; 5]> {
                         } else {
                             alpha_interp
                         }; // todo: this is a hack to get alpha rendering with a
-                           // falloff similar to lottiefiles'
+                        // falloff similar to lottiefiles'
 
                         let alpha_interp = if (x >= a && x <= b) && (t >= 0.75) && (x >= 0.9) {
                             alpha_b
                         } else {
                             alpha_interp
                         }; // todo: this is a hack to get alpha rendering with a
-                           // falloff similar to lottiefiles'
+                        // falloff similar to lottiefiles'
 
                         stop[4] = stop[4].min(alpha_interp);
                     }

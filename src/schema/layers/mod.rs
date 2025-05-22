@@ -60,13 +60,13 @@ mod tests {
             transform::{AnyTransformP, AnyTransformR, Transform},
             visual_object::VisualObject,
         },
-        shapes::{ellipse::EllipseShape, group::GroupShape, shape_element::ShapeElement, AnyShape},
+        shapes::{AnyShape, ellipse::EllipseShape, group::GroupShape, shape_element::ShapeElement},
     };
 
     use super::{
+        AnyLayer,
         shape::{LayerId, ShapeLayer},
         visual::VisualLayer,
-        AnyLayer,
     };
     use once_cell::sync::Lazy;
     use serde_json::json;

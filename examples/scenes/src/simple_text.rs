@@ -1,8 +1,8 @@
 // Copyright 2022 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use skrifa::raw::FontRef;
 use skrifa::MetadataProvider;
+use skrifa::raw::FontRef;
 use std::sync::Arc;
 use vello::kurbo::Affine;
 use vello::peniko::{Blob, Brush, BrushRef, Font, StyleRef};

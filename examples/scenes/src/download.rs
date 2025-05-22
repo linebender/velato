@@ -4,7 +4,7 @@
 use std::io::Seek;
 use std::path::{Path, PathBuf};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use byte_unit::Byte;
 use clap::Args;
 use inquire::Confirm;

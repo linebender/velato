@@ -55,7 +55,7 @@ where
         .all(|keyframe| keyframe.start.is_some())
     {
         return Err(de::Error::custom(
-            "Animated Shape Keyframe found with missing 's' start property. Only the last keyframe may omit this."
+            "Animated Shape Keyframe found with missing 's' start property. Only the last keyframe may omit this.",
         ));
     }
 

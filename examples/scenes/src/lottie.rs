@@ -14,8 +14,8 @@ use std::{
     path::{Path, PathBuf},
 };
 use velato::Composition;
-use vello::kurbo::{Affine, Vec2};
 use vello::Scene;
+use vello::kurbo::{Affine, Vec2};
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn scene_from_files(files: &[PathBuf]) -> Result<SceneSet> {

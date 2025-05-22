@@ -142,7 +142,7 @@ pub enum ShapeType {
 
 #[cfg(test)]
 mod tests {
-    use super::{ellipse::EllipseShape, group::GroupShape, shape_element::ShapeElement, AnyShape};
+    use super::{AnyShape, ellipse::EllipseShape, group::GroupShape, shape_element::ShapeElement};
     use crate::schema::{
         animated_properties::{
             animated_property::{AnimatedProperty, AnimatedPropertyK},

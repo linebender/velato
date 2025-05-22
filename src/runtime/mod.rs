@@ -3,9 +3,9 @@
 
 mod render;
 
+use crate::Error;
 use crate::import;
 use crate::schema::Animation;
-use crate::Error;
 use std::collections::HashMap;
 use std::ops::Range;
 
