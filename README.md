@@ -7,7 +7,7 @@
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23vello-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-vello)
 [![dependency status](https://deps.rs/repo/github/linebender/velato/status.svg)](https://deps.rs/repo/github/linebender/velato)
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](#license)
-[![vello version](https://img.shields.io/badge/vello-v0.4.0-purple.svg)](https://crates.io/crates/vello)\
+[![vello version](https://img.shields.io/badge/vello-v0.5.0-purple.svg)](https://crates.io/crates/vello)\
 [![Crates.io](https://img.shields.io/crates/v/velato.svg)](https://crates.io/crates/velato)
 [![Docs](https://docs.rs/velato/badge.svg)](https://docs.rs/velato)
 [![Build status](https://github.com/linebender/velato/workflows/CI/badge.svg)](https://github.com/linebender/velato/actions)
@@ -16,6 +16,16 @@
 
 > [!WARNING]
 > The goal of this crate is to provide coverage of the large Lottie spec, up to what vello can render, for use in interactive graphics. We are working towards correctness, but there are missing features listed below.
+
+## Version compatibility
+
+| velato | vello |
+| ------ | ----- |
+| 0.6    | 0.5   |
+| 0.5    | 0.4   |
+| 0.4    | 0.3   |
+| 0.3    | 0.2   |
+| 0.1, 0.2 | 0.1   |
 
 ## Missing features
 

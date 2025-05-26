@@ -12,10 +12,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.85.
 
+## [0.6.0]  - 2025-05-26
+
+This release has an [MSRV][] of 1.85.
+
 ### Added
 
-- Keyframes in an animated Spline may now specify an `"e"` key, dictating an end value. When specified, this value is used instead of the next keyframe's start value, allowing for discontinuous animations. ([#60] by [@RishiChalla])
-- The last keyframe in an animated Spline may now specify only the timestamp, omitting all other fields. In this scenario, the previous keyframe's end/start values will be used. ([#60] by [@RishiChalla])
+- Keyframes in an animated Spline may now specify an `"e"` key, dictating an end value. When specified, this value is used instead of the next keyframe's start value, allowing for discontinuous animations. ([#60][] by [@RishiChalla][])
+- The last keyframe in an animated Spline may now specify only the timestamp, omitting all other fields. In this scenario, the previous keyframe's end/start values will be used. ([#60][] by [@RishiChalla][])
 
 ### Changed
 
@@ -87,14 +91,19 @@ This release has an [MSRV][] of 1.75.
 [@MarijnS95]: https://github.com/MarijnS95
 [@simbleau]: https://github.com/simbleau
 [@atoktoto]: https://github.com/atoktoto
+[@RishiChalla]: https://github.com/RishiChalla
+[@RobertBrewitz]: https://github.com/RobertBrewitz
 
 [#16]: https://github.com/linebender/velato/pull/16
 [#17]: https://github.com/linebender/velato/pull/17
 [#19]: https://github.com/linebender/velato/pull/19
 [#42]: https://github.com/linebender/velato/pull/42
 [#49]: https://github.com/linebender/velato/pull/49
+[#60]: https://github.com/linebender/velato/pull/60
+[#63]: https://github.com/linebender/velato/pull/63
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/linebender/velato/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/linebender/velato/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/linebender/velato/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/linebender/velato/compare/v0.3.0...v0.3.1
