@@ -31,7 +31,7 @@ impl Transform {
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
     }
-    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::Transform> {
+    pub fn evaluate(&self, frame: f64) -> ValueRef<'_, fixed::Transform> {
         match self {
             Self::Fixed(value) => ValueRef::Borrowed(value),
             Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
@@ -48,7 +48,7 @@ impl Stroke {
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
     }
-    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::Stroke> {
+    pub fn evaluate(&self, frame: f64) -> ValueRef<'_, fixed::Stroke> {
         match self {
             Self::Fixed(value) => ValueRef::Borrowed(value),
             Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
@@ -72,7 +72,7 @@ impl Repeater {
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
     }
-    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::Repeater> {
+    pub fn evaluate(&self, frame: f64) -> ValueRef<'_, fixed::Repeater> {
         match self {
             Self::Fixed(value) => ValueRef::Borrowed(value),
             Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
@@ -89,7 +89,7 @@ impl ColorStops {
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))
     }
-    pub fn evaluate(&self, frame: f64) -> ValueRef<fixed::ColorStops> {
+    pub fn evaluate(&self, frame: f64) -> ValueRef<'_, fixed::ColorStops> {
         match self {
             Self::Fixed(value) => ValueRef::Borrowed(value),
             Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
@@ -108,7 +108,7 @@ impl Brush {
         matches!(self, Self::Fixed(_))
     }
 
-    pub fn evaluate(&self, alpha: f64, frame: f64) -> ValueRef<fixed::Brush> {
+    pub fn evaluate(&self, alpha: f64, frame: f64) -> ValueRef<'_, fixed::Brush> {
         match self {
             Self::Fixed(value) => {
                 if alpha == 1.0 {
