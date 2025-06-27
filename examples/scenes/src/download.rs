@@ -103,22 +103,22 @@ impl Download {
                             .prompt()?
                     };
                     if !cont {
-                        println!("{} downloads complete", completed_count);
+                        println!("{completed_count} downloads complete");
                         if failed_count > 0 {
-                            println!("{} downloads failed", failed_count);
+                            println!("{failed_count} downloads failed");
                         }
                         let remaining = to_download.len() - (completed_count + failed_count);
                         if remaining > 0 {
-                            println!("{} downloads skipped", remaining);
+                            println!("{remaining} downloads skipped");
                         }
                         return Err(e);
                     }
                 }
             }
         }
-        println!("{} downloads complete", completed_count);
+        println!("{completed_count} downloads complete");
         if failed_count > 0 {
-            println!("{} downloads failed", failed_count);
+            println!("{failed_count} downloads failed");
         }
         debug_assert!(completed_count + failed_count == to_download.len());
         Ok(())
