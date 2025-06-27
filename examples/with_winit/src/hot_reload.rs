@@ -14,7 +14,7 @@ pub(crate) fn hot_reload(mut f: impl FnMut() -> Option<()> + Send + 'static) -> 
         None,
         move |res: DebounceEventResult| match res {
             Ok(_) => f().unwrap(),
-            Err(errors) => errors.iter().for_each(|e| println!("Error {:?}", e)),
+            Err(errors) => errors.iter().for_each(|e| println!("Error {e:?}")),
         },
     )?;
 
