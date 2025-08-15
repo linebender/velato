@@ -6,7 +6,7 @@ use super::defaults::FLOAT_VALUE_ONE_HUNDRED;
 use crate::runtime::model::Layer;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{runtime, schema};
-use vello::peniko::{self, BlendMode, Compose, Mix};
+use peniko::{self, BlendMode, Compose, Mix};
 
 pub fn setup_precomp_layer(
     source: &schema::layers::precomposition::PrecompositionLayer,

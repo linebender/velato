@@ -90,6 +90,9 @@ mod error;
 pub use error::Error;
 
 // Re-export vello
-pub use vello;
+#[cfg(feature = "vello")]
+pub use {vello, runtime::Renderer};
 
-pub use runtime::{Composition, Renderer, model};
+pub use {kurbo, peniko};
+
+pub use runtime::{Composition, model};

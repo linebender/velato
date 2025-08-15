@@ -18,8 +18,10 @@ use crate::schema::constants::gradient_type::GradientType;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{Composition, schema};
 use std::collections::HashMap;
-use vello::kurbo::{Cap, Join, Point, Size, Vec2};
-use vello::peniko::{BlendMode, Color, Mix};
+use {
+    kurbo::{Cap, Join, Point, Size, Vec2},
+    peniko::{BlendMode, Color, Mix}
+};
 
 pub fn conv_animation(source: schema::Animation) -> Composition {
     let mut target = Composition {
