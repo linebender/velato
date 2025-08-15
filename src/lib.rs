@@ -92,7 +92,7 @@ pub use error::Error;
 // Re-export vello
 #[cfg(feature = "vello")]
 pub use {vello, runtime::Renderer};
-
+#[cfg(not(feature = "vello"))]
 pub use {kurbo, peniko};
 
 pub use runtime::{Composition, model};

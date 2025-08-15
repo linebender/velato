@@ -5,6 +5,12 @@
 Representations of fixed (non-animated) values.
 */
 
+#[cfg(feature = "vello")]
+use vello::{ 
+    kurbo::{self, Affine, Point, Vec2},
+    peniko
+};
+#[cfg(not(feature = "vello"))]
 use { 
     kurbo::{self, Affine, Point, Vec2},
     peniko

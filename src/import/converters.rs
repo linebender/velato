@@ -18,6 +18,12 @@ use crate::schema::constants::gradient_type::GradientType;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{Composition, schema};
 use std::collections::HashMap;
+#[cfg(feature = "vello")]
+use vello::{
+    kurbo::{Cap, Join, Point, Size, Vec2},
+    peniko::{BlendMode, Color, Mix}
+};
+#[cfg(not(feature = "vello"))]
 use {
     kurbo::{Cap, Join, Point, Size, Vec2},
     peniko::{BlendMode, Color, Mix}

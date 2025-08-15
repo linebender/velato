@@ -110,11 +110,13 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true, optional = true }
-kurbo = { workspace = true }
-peniko = { workspace = true }
 keyframe = "1.1.1"
 once_cell = "1.21.3"
 thiserror = "2.0.12"
+
+[target.'cfg(not(feature = "vello"))'.dependencies]
+kurbo = { workspace = true }
+peniko = { workspace = true }
 
 # For the parser
 serde = { version = "1.0.219", features = ["derive"] }

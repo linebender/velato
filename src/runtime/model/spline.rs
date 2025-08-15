@@ -1,6 +1,9 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+#[cfg(feature = "vello")]
+use vello::kurbo::{PathEl, Point};
+#[cfg(not(feature = "vello"))]
 use kurbo::{PathEl, Point};
 
 /// Helper trait for converting cubic splines to paths.

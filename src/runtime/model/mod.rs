@@ -2,6 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use std::ops::Range;
+#[cfg(feature = "vello")]
+use vello::{
+    kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2},
+    peniko::{self, BlendMode, Color}
+};
+#[cfg(not(feature = "vello"))]
 use {
     kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2},
     peniko::{self, BlendMode, Color}
