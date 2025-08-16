@@ -2780,7 +2780,9 @@ name = "velato"
 version = "0.6.0"
 dependencies = [
  "keyframe",
+ "kurbo",
  "once_cell",
+ "peniko",
  "serde",
  "serde_json",
  "serde_repr",
