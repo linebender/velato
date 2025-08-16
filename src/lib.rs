@@ -13,22 +13,25 @@
 //! ## Usage
 //!
 //! ```no_run
-//! # use std::str::FromStr;
-//! use velato::vello;
+//! #[cfg(feature = "vello")]
+//! {
+//!     # use std::str::FromStr;
+//!     use velato::vello;
 //!
-//! // Parse your lottie file
-//! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
-//! let composition = velato::Composition::from_str(lottie).expect("valid file");
+//!     // Parse your lottie file
+//!     let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
+//!     let composition = velato::Composition::from_str(lottie).expect("valid file");
 //!
-//! // Render to a scene
-//! let mut new_scene = vello::Scene::new();
+//!     // Render to a scene
+//!     let mut new_scene = vello::Scene::new();
 //!
-//! // Render to a scene!
-//! let mut renderer = velato::Renderer::new();
-//! let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
-//! let transform = vello::kurbo::Affine::IDENTITY;
-//! let alpha = 1.0;
-//! let scene = renderer.render(&composition, frame, transform, alpha);
+//!     // Render to a scene!
+//!     let mut renderer = velato::Renderer::new();
+//!     let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
+//!     let transform = vello::kurbo::Affine::IDENTITY;
+//!     let alpha = 1.0;
+//!     let scene = renderer.render(&composition, frame, transform, alpha);
+//! }
 //! ```
 //!
 //! # Unsupported features
@@ -63,6 +66,8 @@
     elided_lifetimes_in_paths,
     single_use_lifetimes,
     unused_qualifications,
+    unused_crate_dependencies,
+    dead_code,
     clippy::empty_docs,
     clippy::use_self,
     clippy::return_self_not_must_use,
