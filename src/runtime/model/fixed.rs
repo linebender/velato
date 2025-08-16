@@ -5,8 +5,16 @@
 Representations of fixed (non-animated) values.
 */
 
-use vello::kurbo::{self, Affine, Point, Vec2};
-use vello::peniko;
+#[cfg(feature = "vello")]
+use vello::{ 
+    kurbo::{self, Affine, Point, Vec2},
+    peniko
+};
+#[cfg(not(feature = "vello"))]
+use { 
+    kurbo::{self, Affine, Point, Vec2},
+    peniko
+};
 
 /// Fixed affine transformation.
 pub type Transform = kurbo::Affine;

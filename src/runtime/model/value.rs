@@ -1,8 +1,10 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use vello::kurbo::{self};
-use vello::peniko;
+#[cfg(feature = "vello")]
+use vello::{kurbo::{self}, peniko};
+#[cfg(not(feature = "vello"))]
+use {kurbo::{self}, peniko};
 
 /// Fixed or animated value.
 #[derive(Clone, Debug)]
