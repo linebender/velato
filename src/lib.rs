@@ -66,7 +66,6 @@
     elided_lifetimes_in_paths,
     single_use_lifetimes,
     unused_qualifications,
-    unused_crate_dependencies,
     dead_code,
     clippy::empty_docs,
     clippy::use_self,
