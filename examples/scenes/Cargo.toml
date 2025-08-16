@@ -11,7 +11,7 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true }
-velato = { path = "../..", features = ["vello"] }
+velato = { path = "../.." }
 anyhow = "1"
 clap = { version = "4.5.38", features = ["derive"] }
 image = "0.24.9"

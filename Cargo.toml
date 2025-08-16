@@ -127,6 +127,6 @@ serde_repr = "0.1.20"
 wasm-bindgen-test = "0.3.50"
 
 [features]
-default = []
+default = ["vello"]
 wgpu = ["vello/wgpu"]
 vello = ["dep:vello"]
