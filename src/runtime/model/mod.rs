@@ -5,12 +5,12 @@ use std::ops::Range;
 #[cfg(feature = "vello")]
 use vello::{
     kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2},
-    peniko::{self, BlendMode, Color}
+    peniko::{self, BlendMode, Color},
 };
 #[cfg(not(feature = "vello"))]
 use {
     kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2},
-    peniko::{self, BlendMode, Color}
+    peniko::{self, BlendMode, Color},
 };
 
 mod spline;
