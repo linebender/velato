@@ -66,8 +66,6 @@
     elided_lifetimes_in_paths,
     single_use_lifetimes,
     unused_qualifications,
-    unused_crate_dependencies,
-    dead_code,
     clippy::empty_docs,
     clippy::use_self,
     clippy::return_self_not_must_use,
@@ -78,6 +76,13 @@
     clippy::exhaustive_enums,
     clippy::todo,
     reason = "Deferred"
+)]
+#![cfg_attr(
+    test,
+    allow(
+        unused_crate_dependencies,
+        reason = "Some dev dependencies are only used in tests"
+    )
 )]
 
 pub(crate) mod import;
