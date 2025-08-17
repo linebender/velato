@@ -21,12 +21,12 @@ use std::collections::HashMap;
 #[cfg(feature = "vello")]
 use vello::{
     kurbo::{Cap, Join, Point, Size, Vec2},
-    peniko::{BlendMode, Color, Mix}
+    peniko::{BlendMode, Color, Mix},
 };
 #[cfg(not(feature = "vello"))]
 use {
     kurbo::{Cap, Join, Point, Size, Vec2},
-    peniko::{BlendMode, Color, Mix}
+    peniko::{BlendMode, Color, Mix},
 };
 
 pub fn conv_animation(source: schema::Animation) -> Composition {

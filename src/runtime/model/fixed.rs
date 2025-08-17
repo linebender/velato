@@ -6,14 +6,14 @@ Representations of fixed (non-animated) values.
 */
 
 #[cfg(feature = "vello")]
-use vello::{ 
+use vello::{
     kurbo::{self, Affine, Point, Vec2},
-    peniko
+    peniko,
 };
 #[cfg(not(feature = "vello"))]
-use { 
+use {
     kurbo::{self, Affine, Point, Vec2},
-    peniko
+    peniko,
 };
 
 /// Fixed affine transformation.
