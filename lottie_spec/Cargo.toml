@@ -1,0 +1,33 @@
+[package]
+name = "lottie_spec"
+version = "0.1.0"
+description = "Lottie animations parser."
+keywords = ["lottie"]
+categories = ["graphics"]
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+exclude = ["/tests"]
+
+[package.metadata.docs.rs]
+all-features = true
+
+[lints]
+workspace = true
+
+[features]
+default = []
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_repr = { workspace = true }
+
+[build-dependencies]
+prettyplease = { workspace = true }
+schemars = { workspace = true }
+serde_json = { workspace = true }
+syn = { workspace = true }
+typify = { workspace = true }
+reqwest = { workspace = true, features = ["blocking", "json"] }
