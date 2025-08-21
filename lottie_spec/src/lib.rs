@@ -1,7 +1,8 @@
 //! Auto-generated lottie parser
 //! Raw schema: <https://lottie.github.io/lottie-spec/1.0/lottie.schema.json>
 
-#![allow(clippy::derivable_impls)]
+#![allow(clippy::use_self, reason = "Auto-generated code")]
+#![allow(clippy::derivable_impls, reason = "Auto-generated code")]
 
 // Include the generated code.
 include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
