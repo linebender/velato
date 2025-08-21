@@ -5,19 +5,10 @@
 Representations of fixed (non-animated) values.
 */
 
-#[cfg(feature = "vello")]
-use vello::{
-    kurbo::{self, Affine, Point, Vec2},
-    peniko,
-};
-#[cfg(not(feature = "vello"))]
-use {
-    kurbo::{self, Affine, Point, Vec2},
-    peniko,
-};
+use kurbo::{Affine, Point, Vec2};
 
 /// Fixed affine transformation.
-pub type Transform = kurbo::Affine;
+pub type Transform = Affine;
 
 /// Fixed RGBA color.
 pub type Color = peniko::Color;

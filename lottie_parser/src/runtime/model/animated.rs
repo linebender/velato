@@ -53,7 +53,7 @@ impl Transform {
         let anchor = self.anchor.evaluate(frame);
         let position = match &self.position {
             Position::Value(value) => value.evaluate(frame),
-            Position::SplitValues((x_value, y_value)) => kurbo::Point {
+            Position::SplitValues((x_value, y_value)) => Point {
                 x: x_value.evaluate(frame),
                 y: y_value.evaluate(frame),
             },
@@ -393,7 +393,7 @@ impl ColorStops {
             let a = v0.get(j + 4)?.tween(v1.get(j + 4)?, t, &easing);
             let stop = peniko::ColorStop::from((
                 offset as f32,
-                peniko::Color::new([r as f32, g as f32, b as f32, a as f32]),
+                Color::new([r as f32, g as f32, b as f32, a as f32]),
             ));
             stops.push(stop);
         }
@@ -423,7 +423,7 @@ impl Brush {
     pub fn evaluate(&self, alpha: f64, frame: f64) -> fixed::Brush {
         match self {
             Self::Solid(value) => value
-                .evaluate_or(frame, peniko::Color::TRANSPARENT)
+                .evaluate_or(frame, Color::TRANSPARENT)
                 .multiply_alpha(alpha as f32)
                 .into(),
             Self::Gradient(value) => value.evaluate(frame),

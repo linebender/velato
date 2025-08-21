@@ -8,7 +8,6 @@ use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
     self, Content, Draw, EasingHandle, GroupTransform, Layer, SplineToPath, Time, Tween, Value,
 };
-use crate::runtime::{self};
 use crate::schema::animated_properties::keyframe_bezier_handle::{
     KeyframeBezierHandle, KeyframeComponent,
 };
@@ -16,18 +15,10 @@ use crate::schema::animated_properties::multi_dimensional::MultiDimensional;
 use crate::schema::animated_properties::split_vector::SplitVector;
 use crate::schema::constants::gradient_type::GradientType;
 use crate::schema::helpers::int_boolean::BoolInt;
-use crate::{Composition, schema};
+use crate::{runtime::Composition, schema};
 use std::collections::HashMap;
-#[cfg(feature = "vello")]
-use vello::{
-    kurbo::{Cap, Join, Point, Size, Vec2},
-    peniko::{BlendMode, Color, Mix},
-};
-#[cfg(not(feature = "vello"))]
-use {
-    kurbo::{Cap, Join, Point, Size, Vec2},
-    peniko::{BlendMode, Color, Mix},
-};
+use kurbo::{Cap, Join, Point, Size, Vec2};
+use peniko::{BlendMode, Color, Mix};
 
 pub fn conv_animation(source: schema::Animation) -> Composition {
     let mut target = Composition {
@@ -157,7 +148,7 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
 
 pub fn conv_transform(
     value: &schema::helpers::transform::Transform,
-) -> (runtime::model::Transform, Value<f64>) {
+) -> (model::Transform, Value<f64>) {
     let rotation_in = match &value.rotation {
         Some(any_trans) => match any_trans {
             schema::helpers::transform::AnyTransformR::Rotation(float_value) => float_value,
@@ -303,7 +294,7 @@ pub fn conv_keyframes<'a, T: Tween>(
             }
         }
     }
-    Value::Animated(runtime::model::Animated {
+    Value::Animated(model::Animated {
         times: frames,
         values,
     })
@@ -333,19 +324,19 @@ fn conv_keyframe_handle(handle: &KeyframeBezierHandle) -> EasingHandle {
 
 fn conv_gradient_colors(
     value: &schema::animated_properties::gradient_colors::GradientColors,
-) -> runtime::model::ColorStops {
+) -> model::ColorStops {
     use schema::animated_properties::animated_property::AnimatedPropertyK::*;
 
     let count = value.count;
     match &value.colors.animated_property.value {
-        Static(value) => runtime::model::ColorStops::Fixed({
-            let mut stops = runtime::model::fixed::ColorStops::new();
+        Static(value) => model::ColorStops::Fixed({
+            let mut stops = model::fixed::ColorStops::new();
             let raw = conv_stops(value, count);
             for values in raw {
                 stops.push(
                     (
                         values[0] as f32,
-                        runtime::model::fixed::Color::new([
+                        model::fixed::Color::new([
                             values[1] as f32,
                             values[2] as f32,
                             values[3] as f32,
@@ -381,7 +372,7 @@ fn conv_gradient_colors(
 
                 values.push(stops);
             }
-            runtime::model::ColorStops::Animated(animated::ColorStops {
+            model::ColorStops::Animated(animated::ColorStops {
                 frames,
                 values,
                 count,
@@ -390,7 +381,7 @@ fn conv_gradient_colors(
     }
 }
 
-fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
+fn conv_draw(value: &schema::shapes::AnyShape) -> Option<Draw> {
     use schema::constants::line_cap::LineCap;
     use schema::constants::line_join::LineJoin;
     use schema::shapes::AnyShape;
@@ -400,7 +391,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
             let color = conv_color(&value.color);
             let brush = animated::Brush::Solid(color).into_model();
             let opacity = conv_scalar(value.opacity.as_ref().unwrap_or(&FLOAT_VALUE_ONE_HUNDRED));
-            Some(runtime::model::Draw {
+            Some(Draw {
                 stroke: None,
                 brush,
                 opacity,
@@ -424,7 +415,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
             let color = conv_color(&value.stroke_color);
             let brush = animated::Brush::Solid(color).into_model();
             let opacity = conv_scalar(&value.opacity);
-            Some(runtime::model::Draw {
+            Some(Draw {
                 stroke: Some(stroke.into_model()),
                 brush,
                 opacity,
@@ -499,14 +490,14 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
     }
 }
 
-fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model::Shape> {
+fn conv_shape(value: &schema::shapes::AnyShape) -> Option<model::Shape> {
     match conv_draw(value) {
         Some(draw) => {
-            return Some(crate::runtime::model::Shape::Draw(draw));
+            return Some(model::Shape::Draw(draw));
         }
         _ => {
             if let Some(geometry) = conv_geometry(value) {
-                return Some(crate::runtime::model::Shape::Geometry(geometry));
+                return Some(model::Shape::Geometry(geometry));
             }
         }
     }
@@ -528,7 +519,7 @@ fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model:
                 }
             }
             if !shapes.is_empty() {
-                Some(crate::runtime::model::Shape::Group(shapes, group_transform))
+                Some(model::Shape::Group(shapes, group_transform))
             } else {
                 None
             }
@@ -551,7 +542,7 @@ fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model:
     }
 }
 
-fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model::Geometry> {
+fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<model::Geometry> {
     use schema::shapes::AnyShape;
     match value {
         AnyShape::Ellipse(value) => {
@@ -561,7 +552,7 @@ fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::mod
                 position: conv_pos_point(&value.position),
                 size: conv_size(&value.size),
             };
-            Some(crate::runtime::model::Geometry::Ellipse(ellipse))
+            Some(model::Geometry::Ellipse(ellipse))
         }
         AnyShape::Rectangle(value) => {
             let rect = animated::Rect {
@@ -571,7 +562,7 @@ fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::mod
                 size: conv_size(&value.size),
                 corner_radius: conv_scalar(&value.rounded_corner_radius),
             };
-            Some(crate::runtime::model::Geometry::Rect(rect))
+            Some(model::Geometry::Rect(rect))
         }
         AnyShape::Path(value) => conv_shape_geometry(&value.shape_property),
         // todo: generic shape
@@ -581,7 +572,7 @@ fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::mod
 
 pub fn conv_shape_geometry(
     value: &schema::animated_properties::shape_property::ShapeProperty,
-) -> Option<runtime::model::Geometry> {
+) -> Option<model::Geometry> {
     use schema::animated_properties::shape_property::ShapePropertyK::*;
     let mut is_closed = false;
     match &value.value {
@@ -589,7 +580,7 @@ pub fn conv_shape_geometry(
             let (points, is_closed) = conv_spline(value);
             let mut path = vec![];
             points.as_slice().to_path(is_closed, &mut path);
-            Some(runtime::model::Geometry::Fixed(path))
+            Some(model::Geometry::Fixed(path))
         }
         Animated(animated) => {
             // Build frames & values for the animated spline
@@ -645,7 +636,7 @@ pub fn conv_shape_geometry(
                 });
                 is_closed |= is_frame_closed;
             }
-            Some(runtime::model::Geometry::Spline(animated::Spline {
+            Some(model::Geometry::Spline(animated::Spline {
                 is_closed,
                 times: frames,
                 values,
@@ -673,7 +664,7 @@ pub fn conv_spline(value: &schema::helpers::bezier::Bezier) -> (Vec<Point>, bool
 }
 
 pub fn conv_blend_mode(
-    value: &crate::schema::constants::blend_mode::BlendMode,
+    value: &schema::constants::blend_mode::BlendMode,
 ) -> Option<BlendMode> {
     use crate::schema::constants::blend_mode::BlendMode::*;
 
@@ -715,7 +706,7 @@ pub fn conv_scalar(float_value: &schema::animated_properties::value::FloatValue)
                     .as_ref()
                     .map(|b| b.eq(&BoolInt::True))
                     .unwrap_or(false);
-                frames.push(crate::runtime::model::Time {
+                frames.push(Time {
                     frame: start_time,
                     in_tangent: keyframe.base.in_tangent.as_ref().map(conv_keyframe_handle),
                     out_tangent: keyframe.base.out_tangent.as_ref().map(conv_keyframe_handle),
@@ -734,7 +725,7 @@ pub fn conv_scalar(float_value: &schema::animated_properties::value::FloatValue)
 }
 
 pub fn conv_multi<T: Tween>(
-    multidimensional: &schema::animated_properties::multi_dimensional::MultiDimensional,
+    multidimensional: &MultiDimensional,
     f: impl Fn(&Vec<f64>) -> T,
 ) -> Value<T> {
     use crate::schema::animated_properties::animated_property::AnimatedPropertyK::*;
@@ -784,7 +775,7 @@ pub fn conv_pos_point(value: &schema::animated_properties::position::Position) -
 }
 
 pub fn conv_multi_point(
-    value: &schema::animated_properties::multi_dimensional::MultiDimensional,
+    value: &MultiDimensional,
 ) -> Value<Point> {
     conv_multi(value, |x| {
         let (x0, x1) = match x.get(0..=1) {

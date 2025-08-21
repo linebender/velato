@@ -6,10 +6,7 @@ use super::defaults::FLOAT_VALUE_ONE_HUNDRED;
 use crate::runtime::model::Layer;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{runtime, schema};
-#[cfg(not(feature = "vello"))]
 use peniko::{self, BlendMode, Compose, Mix};
-#[cfg(feature = "vello")]
-use vello::peniko::{self, BlendMode, Compose, Mix};
 
 pub fn setup_precomp_layer(
     source: &schema::layers::precomposition::PrecompositionLayer,
@@ -45,9 +42,9 @@ pub fn setup_precomp_layer(
             .properties
             .blend_mode
             .as_ref()
-            .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
+            .unwrap_or(&schema::constants::blend_mode::BlendMode::Normal),
     );
-    if target.blend_mode == Some(peniko::Mix::Normal.into()) {
+    if target.blend_mode == Some(Mix::Normal.into()) {
         target.blend_mode = None;
     }
     target.stretch = source.properties.time_stretch.unwrap_or(1.0);
@@ -62,7 +59,7 @@ pub fn setup_precomp_layer(
     {
         if let Some(shape) = &mask_source.shape {
             if let Some(geometry) = conv_shape_geometry(shape) {
-                let mode = peniko::BlendMode::default();
+                let mode = BlendMode::default();
                 let opacity = conv_scalar(
                     mask_source
                         .opacity
@@ -113,9 +110,9 @@ pub fn setup_shape_layer(
             .properties
             .blend_mode
             .as_ref()
-            .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
+            .unwrap_or(&schema::constants::blend_mode::BlendMode::Normal),
     );
-    if target.blend_mode == Some(peniko::Mix::Normal.into()) {
+    if target.blend_mode == Some(Mix::Normal.into()) {
         target.blend_mode = None;
     }
     target.stretch = source.properties.time_stretch.unwrap_or(1.0);
@@ -130,7 +127,7 @@ pub fn setup_shape_layer(
     {
         if let Some(shape) = &mask_source.shape {
             if let Some(geometry) = conv_shape_geometry(shape) {
-                let mode = peniko::BlendMode::default();
+                let mode = BlendMode::default();
                 let opacity = conv_scalar(
                     mask_source
                         .opacity
@@ -175,10 +172,10 @@ pub fn setup_layer_base(
         source
             .blend_mode
             .as_ref()
-            .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
+            .unwrap_or(&schema::constants::blend_mode::BlendMode::Normal),
     );
     // TODO: Why do we do this next part?
-    if target.blend_mode == Some(peniko::Mix::Normal.into()) {
+    if target.blend_mode == Some(Mix::Normal.into()) {
         target.blend_mode = None;
     }
     target.stretch = source.time_stretch.unwrap_or(1.0);
@@ -188,7 +185,7 @@ pub fn setup_layer_base(
     for mask_source in source.masks_properties.as_ref().unwrap_or(&Vec::default()) {
         if let Some(shape) = &mask_source.shape {
             if let Some(geometry) = conv_shape_geometry(shape) {
-                let mode = peniko::BlendMode::default();
+                let mode = BlendMode::default();
                 let opacity = conv_scalar(
                     mask_source
                         .opacity

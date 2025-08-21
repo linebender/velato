@@ -13,25 +13,22 @@
 //! ## Usage
 //!
 //! ```no_run
-//! #[cfg(feature = "vello")]
-//! {
-//!     # use std::str::FromStr;
-//!     use velato::vello;
+//! # use std::str::FromStr;
+//! use velato::vello;
 //!
-//!     // Parse your lottie file
-//!     let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
-//!     let composition = velato::Composition::from_str(lottie).expect("valid file");
+//! // Parse your lottie file
+//! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
+//! let composition = velato::Composition::from_str(lottie).expect("valid file");
 //!
-//!     // Render to a scene
-//!     let mut new_scene = vello::Scene::new();
+//! // Render to a scene
+//! let mut new_scene = vello::Scene::new();
 //!
-//!     // Render to a scene!
-//!     let mut renderer = velato::Renderer::new();
-//!     let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
-//!     let transform = vello::kurbo::Affine::IDENTITY;
-//!     let alpha = 1.0;
-//!     let scene = renderer.render(&composition, frame, transform, alpha);
-//! }
+//! // Render to a scene!
+//! let mut renderer = velato::Renderer::new();
+//! let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
+//! let transform = vello::kurbo::Affine::IDENTITY;
+//! let alpha = 1.0;
+//! let scene = renderer.render(&composition, frame, transform, alpha);
 //! ```
 //!
 //! # Unsupported features
@@ -85,17 +82,13 @@
     )
 )]
 
-pub(crate) mod import;
 pub(crate) mod runtime;
-pub(crate) mod schema;
 
 mod error;
 pub use error::Error;
 
 // Re-export vello
-#[cfg(not(feature = "vello"))]
-pub use {kurbo, peniko};
-#[cfg(feature = "vello")]
-pub use {runtime::Renderer, vello};
+pub use vello;
 
-pub use runtime::{Composition, model};
+pub use lottie_parser::runtime::{Composition, model};
+pub use runtime::Renderer;
