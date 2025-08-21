@@ -16,9 +16,9 @@ use crate::schema::animated_properties::split_vector::SplitVector;
 use crate::schema::constants::gradient_type::GradientType;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{runtime::Composition, schema};
-use std::collections::HashMap;
 use kurbo::{Cap, Join, Point, Size, Vec2};
 use peniko::{BlendMode, Color, Mix};
+use std::collections::HashMap;
 
 pub fn conv_animation(source: schema::Animation) -> Composition {
     let mut target = Composition {
@@ -663,9 +663,7 @@ pub fn conv_spline(value: &schema::helpers::bezier::Bezier) -> (Vec<Point>, bool
     (points, is_closed)
 }
 
-pub fn conv_blend_mode(
-    value: &schema::constants::blend_mode::BlendMode,
-) -> Option<BlendMode> {
+pub fn conv_blend_mode(value: &schema::constants::blend_mode::BlendMode) -> Option<BlendMode> {
     use crate::schema::constants::blend_mode::BlendMode::*;
 
     Some(match value {
@@ -774,9 +772,7 @@ pub fn conv_pos_point(value: &schema::animated_properties::position::Position) -
     })
 }
 
-pub fn conv_multi_point(
-    value: &MultiDimensional,
-) -> Value<Point> {
+pub fn conv_multi_point(value: &MultiDimensional) -> Value<Point> {
     conv_multi(value, |x| {
         let (x0, x1) = match x.get(0..=1) {
             Some([x0, x1]) => (*x0, *x1),

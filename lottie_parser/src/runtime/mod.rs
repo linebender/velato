@@ -1,9 +1,9 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use serde_json::Error;
 use crate::import;
 use crate::schema::Animation;
+use serde_json::Error;
 use std::collections::HashMap;
 use std::ops::Range;
 
