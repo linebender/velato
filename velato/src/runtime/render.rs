@@ -1,7 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use lottie_parser::{
+use lottie_parser::runtime::{
     Composition,
     model::{
         Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed

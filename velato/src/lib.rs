@@ -90,5 +90,5 @@ pub use error::Error;
 // Re-export vello
 pub use vello;
 
-pub use lottie_parser::{Composition, model};
+pub use lottie_parser::runtime::{Composition, model};
 pub use runtime::Renderer;

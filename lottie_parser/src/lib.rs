@@ -29,8 +29,6 @@
     )
 )]
 
-pub(crate) mod import;
-pub(crate) mod runtime;
-pub(crate) mod schema;
-
-pub use runtime::{Composition, model};
+pub mod import;
+pub mod runtime;
+pub mod schema;

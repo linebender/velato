@@ -8,7 +8,6 @@ use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
     self, Content, Draw, EasingHandle, GroupTransform, Layer, SplineToPath, Time, Tween, Value,
 };
-use crate::runtime::{self};
 use crate::schema::animated_properties::keyframe_bezier_handle::{
     KeyframeBezierHandle, KeyframeComponent,
 };
