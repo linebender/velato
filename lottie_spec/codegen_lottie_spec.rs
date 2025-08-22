@@ -1840,7 +1840,7 @@ impl ::std::convert::From<::serde_json::Value> for Layers {
 ///    "type": "object"
 ///  },
 ///  "split-position": {
-///    "description": "An animatable position where x and y are definied and animated separately.",
+///    "description": "An animatable position where x and y are defined and animated separately.",
 ///    "properties": {
 ///      "s": {
 ///        "const": true,

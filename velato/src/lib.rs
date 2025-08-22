@@ -17,7 +17,7 @@
 //! use velato::vello;
 //!
 //! // Parse your lottie file
-//! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
+//! let lottie = include_str!("../../examples/assets/google_fonts/Tiger.json");
 //! let composition = velato::Composition::from_str(lottie).expect("valid file");
 //!
 //! // Render to a scene

@@ -3,9 +3,7 @@
 
 use lottie_parser::runtime::{
     Composition,
-    model::{
-        Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed
-    }
+    model::{Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed},
 };
 use std::ops::Range;
 use vello::kurbo::{Affine, PathEl, Rect};

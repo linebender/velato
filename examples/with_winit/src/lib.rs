@@ -314,10 +314,8 @@ fn run(
                     }
                     WindowEvent::CursorMoved { position, .. } => {
                         let position = Vec2::new(position.x, position.y);
-                        if mouse_down {
-                            if let Some(prior) = prior_position {
-                                transform = Affine::translate(position - prior) * transform;
-                            }
+                        if mouse_down && let Some(prior) = prior_position {
+                            transform = Affine::translate(position - prior) * transform;
                         }
                         prior_position = Some(position);
                     }

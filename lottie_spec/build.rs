@@ -1,14 +1,15 @@
 //! Auto-generated lottie parser build script
 //! Raw schema: <https://lottie.github.io/lottie-spec/1.0/lottie.schema.json>
 
-use std::fs;
 use std::env;
+use std::fs;
 use std::path::Path;
 use typify::{TypeSpace, TypeSpaceSettings};
 
 fn main() {
-    let response = reqwest::blocking::get("https://lottie.github.io/lottie-spec/1.0/lottie.schema.json")
-    .expect("request failed");
+    let response =
+        reqwest::blocking::get("https://lottie.github.io/lottie-spec/1.0/lottie.schema.json")
+            .expect("request failed");
     let content = response.text().expect("body invalid");
     let schema = serde_json::from_str::<schemars::schema::RootSchema>(&content).unwrap();
 
