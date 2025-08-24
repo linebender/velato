@@ -4,9 +4,9 @@ members = [
     "lottie_spec",
     #"lottie_parser",
     "velato",
-    "examples/with_winit", 
-    "examples/run_wasm", 
-    "examples/scenes"
+    "examples/with_winit",
+    "examples/run_wasm",
+    "examples/scenes",
 ]
 
 [workspace.package]
