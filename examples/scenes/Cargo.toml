@@ -11,22 +11,22 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true }
-velato = { path = "../.." }
-anyhow = "1"
-clap = { version = "4.5.38", features = ["derive"] }
-image = "0.24.9"
-rand = "0.8.5"
-skrifa = "0.26.6"
-instant = "0.1"
-bytemuck = { version = "1.23.0", features = ["derive"] }
+velato = { path = "../../velato" }
+anyhow = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+image = { workspace = true }
+rand = { workspace = true }
+skrifa = { workspace = true }
+instant = { workspace = true }
+bytemuck = { workspace = true, features = ["derive"] }
 
 # Used for the `download` command
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-byte-unit = "4.0.19"
-inquire = "0.7"
-ureq = "2.12.1"
+byte-unit = { workspace = true }
+inquire = { workspace = true }
+ureq = { workspace = true }
 
 [target.wasm32-unknown-unknown.dependencies]
 # We have a transitive dependency on getrandom and it does not automatically
 # support wasm32-unknown-unknown. We need to enable the js feature.
-getrandom = { version = "0.2.16", features = ["js"] }
+getrandom = { workspace = true, features = ["js"] }

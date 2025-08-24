@@ -17,7 +17,7 @@
 //! use velato::vello;
 //!
 //! // Parse your lottie file
-//! let lottie = include_str!("../examples/assets/google_fonts/Tiger.json");
+//! let lottie = include_str!("../../examples/assets/google_fonts/Tiger.json");
 //! let composition = velato::Composition::from_str(lottie).expect("valid file");
 //!
 //! // Render to a scene
@@ -82,9 +82,7 @@
     )
 )]
 
-pub(crate) mod import;
 pub(crate) mod runtime;
-pub(crate) mod schema;
 
 mod error;
 pub use error::Error;
@@ -92,4 +90,5 @@ pub use error::Error;
 // Re-export vello
 pub use vello;
 
-pub use runtime::{Composition, Renderer, model};
+pub use lottie_parser::runtime::{Composition, model};
+pub use runtime::Renderer;

@@ -1,0 +1,33 @@
+[package]
+name = "velato"
+description = "A Lottie integration for vello."
+categories = ["rendering", "graphics"]
+keywords = ["2d", "vector-graphics", "vello", "animation", "lottie"]
+version.workspace = true
+rust-version.workspace = true
+license.workspace = true
+edition.workspace = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+# There are no platform specific docs.
+default-target = "x86_64-unknown-linux-gnu"
+targets = []
+
+[lints]
+workspace = true
+
+[dependencies]
+lottie_parser = { path = "../lottie_parser" }
+vello = { workspace = true }
+thiserror = { workspace = true }
+
+serde_json = { workspace = true }
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test = { workspace = true }
+
+[features]
+default = []
+wgpu = ["vello/wgpu"]

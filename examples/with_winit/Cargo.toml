@@ -23,24 +23,24 @@ workspace = true
 vello = { workspace = true, features = ["wgpu"] }
 scenes = { path = "../scenes" }
 anyhow = "1"
-clap = { version = "4.5.38", features = ["derive"] }
-instant = { version = "0.1.13", features = ["wasm-bindgen"] }
-pollster = "0.3"
-winit = "0.29.15"
-env_logger = "0.11.8"
-log = "0.4.27"
+clap = { workspace = true, features = ["derive"] }
+instant = { workspace = true, features = ["wasm-bindgen"] }
+pollster = { workspace = true }
+winit = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
 
 [target.'cfg(not(any(target_arch = "wasm32", target_os = "android")))'.dependencies]
 vello = { workspace = true, features = ["hot_reload", "wgpu"] }
-notify-debouncer-mini = "0.3"
+notify-debouncer-mini = { workspace = true }
 
 [target.'cfg(target_os = "android")'.dependencies]
-winit = { version = "0.29.15", features = ["android-native-activity"] }
-android_logger = "0.13.3"
+winit = { workspace = true, features = ["android-native-activity"] }
+android_logger = { workspace = true }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-console_error_panic_hook = "0.1.7"
-console_log = "1.0.0"
-wasm-bindgen-futures = "0.4.50"
-web-sys = { version = "0.3.77", features = ["HtmlCollection", "Text"] }
-getrandom = { version = "0.2.16", features = ["js"] }
+console_error_panic_hook = { workspace = true }
+console_log = { workspace = true }
+wasm-bindgen-futures = { workspace = true }
+web-sys = { workspace = true, features = ["HtmlCollection", "Text"] }
+getrandom = { workspace = true, features = ["js"] }

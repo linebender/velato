@@ -1,9 +1,9 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2};
+use peniko::{self, BlendMode, Color};
 use std::ops::Range;
-use vello::kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2};
-use vello::peniko::{self, BlendMode, Color};
 
 mod spline;
 mod value;
@@ -201,7 +201,7 @@ pub struct Layer {
     /// Height of the layer.
     pub height: f64,
     /// Blend mode for the layer.
-    pub blend_mode: Option<peniko::BlendMode>,
+    pub blend_mode: Option<BlendMode>,
     /// Range of frames in which the layer is active.
     pub frames: Range<f64>,
     /// Frame time stretch factor.
@@ -234,7 +234,7 @@ pub enum Matte {
 #[derive(Clone, Debug)]
 pub struct Mask {
     /// Blend mode for the mask.
-    pub mode: peniko::BlendMode,
+    pub mode: BlendMode,
     /// Geometry that defines the shape of the mask.
     pub geometry: Geometry,
     /// Opacity of the mask.
