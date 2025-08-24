@@ -51,8 +51,9 @@ fn scene_from_files_inner(
             let start_index = scenes.len();
             for file in read_dir(path)? {
                 let entry = file?;
-                if let Some(extension) = Path::new(&entry.file_name()).extension() 
-                && extension == "json" {
+                if let Some(extension) = Path::new(&entry.file_name()).extension()
+                    && extension == "json"
+                {
                     count += 1;
                     scenes.push(example_scene_of(entry.path()));
                 }
