@@ -1,3 +1,6 @@
+// Copyright 2025 the Velato Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 //! Auto-generated lottie parser build script
 //! Raw schema: <https://lottie.github.io/lottie-spec/1.0/lottie.schema.json>
 
