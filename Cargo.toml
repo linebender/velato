@@ -101,7 +101,7 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { version = "0.5.0", default-features = false }
+vello = { version = "0.6.0", default-features = false }
 
 [lints]
 workspace = true
