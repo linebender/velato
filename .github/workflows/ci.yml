@@ -116,10 +116,10 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: cargo clippy
-        run: cargo hack clippy --workspace --locked --optional-deps --each-feature -- -D warnings
+        run: cargo hack clippy --workspace --optional-deps --each-feature -- -D warnings
 
       - name: cargo clippy (auxiliary)
-        run: cargo hack clippy --workspace --locked --optional-deps --each-feature --tests --benches --examples -- -D warnings
+        run: cargo hack clippy --workspace --optional-deps --each-feature --tests --benches --examples -- -D warnings
 
   clippy-stable-wasm:
     name: cargo clippy (wasm32)
@@ -145,10 +145,10 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: cargo clippy
-        run: cargo hack clippy --workspace --locked --target wasm32-unknown-unknown --optional-deps --each-feature -- -D warnings
+        run: cargo hack clippy --workspace --target wasm32-unknown-unknown --optional-deps --each-feature -- -D warnings
 
       - name: cargo clippy (auxiliary)
-        run: cargo hack clippy --workspace --locked --target wasm32-unknown-unknown --optional-deps --each-feature --tests --benches --examples -- -D warnings
+        run: cargo hack clippy --workspace --target wasm32-unknown-unknown --optional-deps --each-feature --tests --benches --examples -- -D warnings
 
   test-stable:
     name: cargo test
@@ -199,12 +199,12 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: cargo nextest
-        run: cargo nextest run --workspace --locked --all-features --no-fail-fast
+        run: cargo nextest run --workspace --all-features --no-fail-fast
         env:
           VELLO_CI_GPU_SUPPORT: ${{ matrix.gpu }}
 
       - name: cargo test --doc
-        run: cargo test --doc --workspace --locked --all-features --no-fail-fast
+        run: cargo test --doc --workspace --all-features --no-fail-fast
 
   test-stable-wasm:
     name: cargo test (wasm32)
@@ -225,7 +225,7 @@ jobs:
 
       # TODO: Find a way to make tests work. Until then the tests are merely compiled.
       - name: cargo test compile
-        run: cargo test --workspace --locked --target wasm32-unknown-unknown --all-features --no-run
+        run: cargo test --workspace --target wasm32-unknown-unknown --all-features --no-run
 
   check-stable-android:
     name: cargo check (aarch64-android)
@@ -282,7 +282,7 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: cargo check
-        run: cargo hack check ${{ env.RUST_MIN_VER_PKGS }} --locked --optional-deps --each-feature
+        run: cargo hack check ${{ env.RUST_MIN_VER_PKGS }} --optional-deps --each-feature
 
   check-msrv-wasm:
     name: cargo check (msrv) (wasm32)
@@ -307,7 +307,7 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: cargo check
-        run: cargo hack check ${{ env.RUST_MIN_VER_PKGS }} --locked --target wasm32-unknown-unknown --optional-deps --each-feature
+        run: cargo hack check ${{ env.RUST_MIN_VER_PKGS }} --target wasm32-unknown-unknown --optional-deps --each-feature
 
   doc:
     name: cargo doc
@@ -327,7 +327,7 @@ jobs:
 
       # We test documentation using nightly to match docs.rs.
       - name: cargo doc
-        run: cargo doc --workspace --locked --all-features --no-deps --document-private-items
+        run: cargo doc --workspace --all-features --no-deps --document-private-items
         env:
           RUSTDOCFLAGS: '--cfg docsrs -D warnings'
 
