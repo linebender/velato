@@ -34,6 +34,7 @@ impl Renderer {
     }
 
     /// Renders and appends the animation at a given frame to the provided scene.
+    #[allow(deprecated)]
     pub fn append(
         &mut self,
         animation: &Composition,
@@ -67,6 +68,7 @@ impl Renderer {
     }
 
     #[expect(clippy::too_many_arguments, reason = "Deferred")]
+    #[allow(deprecated)] // the clip layer has some non 1 alpha #L:107
     fn render_layer(
         &mut self,
         animation: &Composition,
