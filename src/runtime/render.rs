@@ -34,6 +34,7 @@ impl Renderer {
     }
 
     /// Renders and appends the animation at a given frame to the provided scene.
+    #[allow(deprecated)]
     pub fn append(
         &mut self,
         animation: &Composition,
@@ -43,7 +44,7 @@ impl Renderer {
         scene: &mut vello::Scene,
     ) {
         self.batch.clear();
-        scene.push_clip_layer(
+        scene.push_layer(
             Mix::Clip,
             1.0,
             transform,
