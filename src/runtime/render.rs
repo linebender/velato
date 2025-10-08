@@ -43,7 +43,7 @@ impl Renderer {
         scene: &mut vello::Scene,
     ) {
         self.batch.clear();
-        scene.push_layer(
+        scene.push_clip_layer(
             Mix::Clip,
             1.0,
             transform,
@@ -67,6 +67,7 @@ impl Renderer {
     }
 
     #[expect(clippy::too_many_arguments, reason = "Deferred")]
+    #[allow(deprecated)] // the clip layer has some non 1 alpha #L:107
     fn render_layer(
         &mut self,
         animation: &Composition,
