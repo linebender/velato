@@ -57,6 +57,7 @@
 // The following lints are part of the Linebender standard set,
 // but resolving them has been deferred for now.
 // Feel free to send a PR that solves one or more of these.
+#![allow(unused, reason = "Many lottie types we don't yet support.")]
 #![allow(
     unreachable_pub,
     missing_docs,
