@@ -21,6 +21,7 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true, features = ["wgpu"] }
+wgpu = { version = "26.0", features = ["vulkan", "metal", "dx12"] }
 scenes = { path = "../scenes" }
 anyhow = "1"
 clap = { version = "4.5.38", features = ["derive"] }

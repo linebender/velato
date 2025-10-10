@@ -43,9 +43,7 @@ impl Renderer {
         scene: &mut vello::Scene,
     ) {
         self.batch.clear();
-        scene.push_layer(
-            Mix::Clip,
-            1.0,
+        scene.push_clip_layer(
             transform,
             &Rect::new(0.0, 0.0, animation.width as _, animation.height as _),
         );
@@ -103,14 +101,8 @@ impl Renderer {
         }
         let alpha = alpha * layer.opacity.evaluate(frame) / 100.0;
         for mask in &layer.masks {
-            let alpha = mask.opacity.evaluate(frame) / 100.0;
             mask.geometry.evaluate(frame, &mut self.mask_elements);
-            scene.push_layer(
-                Mix::Clip,
-                alpha as f32,
-                transform,
-                &self.mask_elements.as_slice(),
-            );
+            scene.push_clip_layer(transform, &self.mask_elements.as_slice());
             self.mask_elements.clear();
         }
         match &layer.content {
