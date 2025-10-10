@@ -181,14 +181,14 @@ impl LottieDownload {
         if limit_exact {
             let head_response = ureq::head(&self.url).call()?;
             let content_length = head_response.header("content-length");
-            if let Some(Ok(content_length)) = content_length.map(|it| it.parse::<u64>()) {
-                if content_length != size_limit {
-                    bail!(
-                        "Size is not as expected for download. Expected {}, server reported {}",
-                        Byte::from_bytes(size_limit.into()).get_appropriate_unit(true),
-                        Byte::from_bytes(content_length.into()).get_appropriate_unit(true)
-                    )
-                }
+            if let Some(Ok(content_length)) = content_length.map(|it| it.parse::<u64>())
+                && content_length != size_limit
+            {
+                bail!(
+                    "Size is not as expected for download. Expected {}, server reported {}",
+                    Byte::from_bytes(size_limit.into()).get_appropriate_unit(true),
+                    Byte::from_bytes(content_length.into()).get_appropriate_unit(true)
+                )
             }
         }
         let mut file = std::fs::OpenOptions::new()

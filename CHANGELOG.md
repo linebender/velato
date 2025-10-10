@@ -10,7 +10,11 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## [Unreleased]
 
-This release has an [MSRV][] of 1.85.
+This release has an [MSRV][] of 1.86.
+
+### Changed
+
+- Updated to vello 0.6
 
 ## [0.6.0]  - 2025-05-26
 
