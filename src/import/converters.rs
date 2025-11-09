@@ -112,7 +112,7 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
             }
 
             let params = setup_precomp_layer(precomp_layer, &mut layer);
-            let name = precomp_layer.precomp_id.clone();
+            let name = precomp_layer.ref_id.clone();
             let time_remap = precomp_layer.time_remap.as_ref().map(conv_scalar);
             layer.content = Content::Instance { name, time_remap };
 
@@ -134,12 +134,19 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
 
             params
         }
-        schema::layers::AnyLayer::SolidColor(solid_color_layer) => {
+        schema::layers::AnyLayer::Solid(solid_color_layer) => {
             if let Some(true) = solid_color_layer.visual_layer.layer.hidden {
                 return None;
             }
 
             setup_layer_base(&solid_color_layer.visual_layer, &mut layer)
+        }
+        schema::layers::AnyLayer::Image(image_layer) => {
+            if let Some(true) = image_layer.visual_layer.layer.hidden {
+                return None;
+            }
+
+            setup_layer_base(&image_layer.visual_layer, &mut layer)
         }
     };
 

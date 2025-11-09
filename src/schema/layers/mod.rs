@@ -1,6 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+pub mod image;
 pub mod layer;
 pub mod null;
 pub mod precomposition;
@@ -10,6 +11,7 @@ pub mod visual;
 
 use self::solid::SolidLayer;
 use self::visual::VisualLayer;
+use image::ImageLayer;
 use null::NullLayer;
 use precomposition::PrecompositionLayer;
 use serde::{Deserialize, Serialize};
@@ -24,7 +26,7 @@ pub enum AnyLayer {
     Precomposition(PrecompositionLayer),
 
     /// Static rectangle filling the canvas with a single color
-    SolidColor(SolidLayer),
+    Solid(SolidLayer),
 
     /// No contents, only used for parenting.
     /// Has an array of shapes
@@ -33,7 +35,7 @@ pub enum AnyLayer {
     /// Null
     Null(NullLayer),
     // unimplemented - Text(TextLayer),
-    // unimplemented - Image(ImageLayer),
+    Image(ImageLayer),
     // unimplemented - Audio(AudioLayer),
     // unimplemented - VideoPlaceholder(VideoPlaceholderLayer)
     // unimplemented - Video(VideoLayer)

@@ -15,7 +15,7 @@ pub struct PrecompositionLayer {
     pub visual_layer: crate::schema::layers::visual::VisualLayer,
     /// ID of the precomp as specified in the assets
     #[serde(rename = "refId")]
-    pub precomp_id: String,
+    pub ref_id: String,
     /// Width of the clipping rect
     #[serde(rename = "w")]
     pub width: f64,

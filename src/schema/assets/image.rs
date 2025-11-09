@@ -1,6 +1,8 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use crate::schema::helpers::slottable_object::SlottableObject;
+
 use super::file_asset::FileAsset;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize, Serializer};
@@ -8,8 +10,12 @@ use serde::{Deserialize, Serialize, Serializer};
 /// External image
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Image {
+    /// File asset properties
     #[serde(flatten)]
     pub file_asset: FileAsset,
+    /// Slottable object properties
+    #[serde(flatten)]
+    pub slottable_object: SlottableObject,
     /// Width of the image
     #[serde(rename = "w")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -59,7 +65,9 @@ mod tests {
     use super::Image;
     use crate::schema::{
         assets::{asset::Asset, file_asset::FileAsset},
-        helpers::{int_boolean::BoolInt, visual_object::VisualObject},
+        helpers::{
+            int_boolean::BoolInt, slottable_object::SlottableObject, visual_object::VisualObject,
+        },
     };
     use once_cell::sync::Lazy;
     use serde_json::json;
@@ -76,6 +84,7 @@ mod tests {
         )
     });
     static IMAGE: Lazy<Image> = Lazy::new(|| Image {
+        slottable_object: SlottableObject::default(),
         file_asset: FileAsset {
             asset: Asset {
                 id: "my image".to_string(),

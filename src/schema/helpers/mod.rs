@@ -6,5 +6,6 @@ pub mod color;
 pub mod int_boolean;
 pub mod marker;
 pub mod mask;
+pub mod slottable_object;
 pub mod transform;
 pub mod visual_object;
