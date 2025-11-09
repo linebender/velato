@@ -42,15 +42,19 @@ mod tests {
     });
 
     static LOTTIE: Lazy<Animation> = Lazy::new(|| Animation {
+        ver: None,
+        visual_object: crate::schema::helpers::visual_object::VisualObject {
+            name: Some("Example".to_string()),
+            ..Default::default()
+        },
+        composition: crate::schema::animation::composition::Composition { layers: vec![] },
         version: Some("5.5.2".to_string()),
-        name: Some("Example".to_string()),
         frame_rate: 60.0,
         in_point: 0.0,
         out_point: 60.0,
         width: 512,
         height: 512,
         three_dimensional: Some(BoolInt::False),
-        layers: vec![],
         assets: None,
     });
 

@@ -59,7 +59,7 @@ mod tests {
     use super::Image;
     use crate::schema::{
         assets::{asset::Asset, file_asset::FileAsset},
-        helpers::int_boolean::BoolInt,
+        helpers::{int_boolean::BoolInt, visual_object::VisualObject},
     };
     use once_cell::sync::Lazy;
     use serde_json::json;
@@ -79,7 +79,10 @@ mod tests {
         file_asset: FileAsset {
             asset: Asset {
                 id: "my image".to_string(),
-                name: None,
+                visual_object: VisualObject {
+                    name: None,
+                    match_name: None,
+                },
             },
             dir: None,
             file_name: "data:image/png;base64,...".to_string(),

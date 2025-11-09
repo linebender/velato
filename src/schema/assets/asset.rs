@@ -9,8 +9,6 @@ pub struct Asset {
     /// Unique identifier used by layers when referencing this asset
     #[serde(rename = "id")]
     pub id: String,
-    /// Human readable name
-    #[serde(rename = "nm")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    #[serde(flatten)]
+    pub visual_object: crate::schema::helpers::visual_object::VisualObject,
 }

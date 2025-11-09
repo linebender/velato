@@ -72,7 +72,7 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
     idmap.clear();
     let mut layers = vec![];
     let mut mask_layer = None;
-    for layer in &source.layers {
+    for layer in &source.composition.layers {
         let index = layers.len();
         if let Some((mut layer, id, mask_blend)) = conv_layer(layer) {
             if let (Some(mask_blend), Some(mask_layer)) = (mask_blend, mask_layer.take()) {
@@ -100,14 +100,14 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
 
     let params = match source {
         schema::layers::AnyLayer::Null(null_layer) => {
-            if let Some(true) = null_layer.properties.hidden {
+            if let Some(true) = null_layer.visual_layer.layer.hidden {
                 return None;
             }
 
-            setup_layer_base(&null_layer.properties, &mut layer)
+            setup_layer_base(&null_layer.visual_layer, &mut layer)
         }
         schema::layers::AnyLayer::Precomposition(precomp_layer) => {
-            if let Some(true) = precomp_layer.properties.hidden {
+            if let Some(true) = precomp_layer.visual_layer.layer.hidden {
                 return None;
             }
 
@@ -119,7 +119,7 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
             params
         }
         schema::layers::AnyLayer::Shape(shape_layer) => {
-            if let Some(true) = shape_layer.properties.hidden {
+            if let Some(true) = shape_layer.visual_layer.layer.hidden {
                 return None;
             }
 
@@ -135,11 +135,11 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
             params
         }
         schema::layers::AnyLayer::SolidColor(solid_color_layer) => {
-            if let Some(true) = solid_color_layer.properties.hidden {
+            if let Some(true) = solid_color_layer.visual_layer.layer.hidden {
                 return None;
             }
 
-            setup_layer_base(&solid_color_layer.properties, &mut layer)
+            setup_layer_base(&solid_color_layer.visual_layer, &mut layer)
         }
     };
 
