@@ -55,11 +55,7 @@ pub fn setup_precomp_layer(
     }
     target.stretch = source.visual_layer.layer.time_stretch.unwrap_or(1.0);
     target.frames = source.visual_layer.layer.in_point..source.visual_layer.layer.out_point;
-    target.start_frame = if let Some(start_time) = source.visual_layer.layer.start_time {
-        start_time
-    } else {
-        source.start_time
-    };
+    target.start_frame = source.visual_layer.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source
         .visual_layer
@@ -133,11 +129,7 @@ pub fn setup_shape_layer(
     }
     target.stretch = source.visual_layer.layer.time_stretch.unwrap_or(1.0);
     target.frames = source.visual_layer.layer.in_point..source.visual_layer.layer.out_point;
-    target.start_frame = if let Some(start_time) = source.visual_layer.layer.start_time {
-        start_time
-    } else {
-        0.0
-    };
+    target.start_frame = source.visual_layer.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source
         .visual_layer
@@ -200,11 +192,7 @@ pub fn setup_layer_base(
     }
     target.stretch = source.layer.time_stretch.unwrap_or(1.0);
     target.frames = source.layer.in_point..source.layer.out_point;
-    target.start_frame = if let Some(start_time) = source.layer.start_time {
-        start_time
-    } else {
-        0.0
-    };
+    target.start_frame = source.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source.masks_properties.as_ref().unwrap_or(&Vec::default()) {
         if let Some(shape) = &mask_source.shape {
