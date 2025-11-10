@@ -14,24 +14,21 @@ use self::visual::VisualLayer;
 use image::ImageLayer;
 use null::NullLayer;
 use precomposition::PrecompositionLayer;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use shape::ShapeLayer;
 
 /// There are several layer types, which is specified by the 'ty' attribute. All
 /// layers share the properties in `layers::common::Properties`.
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum AnyLayer {
     /// Renders a Precomposition
     Precomposition(PrecompositionLayer),
-
     /// Static rectangle filling the canvas with a single color
     Solid(SolidLayer),
-
     /// No contents, only used for parenting.
     /// Has an array of shapes
     Shape(ShapeLayer),
-
     /// Null
     Null(NullLayer),
     // unimplemented - Text(TextLayer),
@@ -45,6 +42,44 @@ pub enum AnyLayer {
     // unimplemented - Camera(CameraLayer)
     // unimplemented - Light(LightLayer)
     // unimplemented - Data(DataLayer)
+}
+
+impl<'de> Deserialize<'de> for AnyLayer {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        use serde::de::Error;
+
+        let value = serde_json::Value::deserialize(deserializer)?;
+
+        let layer_type = value
+            .get("ty")
+            .and_then(|v| v.as_u64())
+            .ok_or_else(|| D::Error::missing_field("ty"))?;
+
+        match layer_type {
+            0 => serde_json::from_value(value)
+                .map(AnyLayer::Precomposition)
+                .map_err(D::Error::custom),
+            1 => serde_json::from_value(value)
+                .map(AnyLayer::Solid)
+                .map_err(D::Error::custom),
+            2 => serde_json::from_value(value)
+                .map(AnyLayer::Image)
+                .map_err(D::Error::custom),
+            3 => serde_json::from_value(value)
+                .map(AnyLayer::Null)
+                .map_err(D::Error::custom),
+            4 => serde_json::from_value(value)
+                .map(AnyLayer::Shape)
+                .map_err(D::Error::custom),
+            _ => Err(D::Error::custom(format!(
+                "unknown layer type: {}",
+                layer_type
+            ))),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -156,7 +191,7 @@ mod tests {
                     layer_type: 4,
                     three_dimensional: Some(BoolInt::False),
                     index: Some(1),
-                    start_time: 0.0,
+                    start_time: Some(0.0),
                     in_point: 0.0,
                     out_point: 180.0,
                     hidden: None,

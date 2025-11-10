@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 pub struct ShapeLayer {
     /// Visual layer data
     #[serde(flatten)]
-    pub visual_layer: crate::schema::layers::visual::VisualLayer,
+    pub visual_layer: VisualLayer,
     /// Has an array of shapes
     #[serde(rename = "shapes")]
     pub shapes: Vec<AnyShape>,

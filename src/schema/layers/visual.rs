@@ -1,11 +1,11 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::constants::blend_mode::BlendMode;
 use crate::schema::constants::matte_mode::MatteMode;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::schema::helpers::mask::Mask;
 use crate::schema::helpers::transform::Transform;
+use crate::schema::{constants::blend_mode::BlendMode, layers::layer::Layer};
 use serde::{Deserialize, Serialize};
 
 /// Common properties between layers
@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 pub struct VisualLayer {
     /// layer data
     #[serde(flatten)]
-    pub layer: crate::schema::layers::layer::Layer,
+    pub layer: Layer,
 
     /// Matte mode
     #[serde(rename = "tt")]

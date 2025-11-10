@@ -47,6 +47,7 @@ pub struct Layer {
     #[serde(rename = "op")]
     pub out_point: f64,
     /// Start Time
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "st")]
-    pub start_time: f64,
+    pub start_time: Option<f64>,
 }
