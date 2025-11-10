@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 pub struct SolidLayer {
     /// Visual layer data
     #[serde(flatten)]
-    pub visual_layer: crate::schema::layers::visual::VisualLayer,
+    pub visual_layer: VisualLayer,
     #[serde(rename = "sw")]
     pub width: f64,
     #[serde(rename = "sh")]

@@ -15,7 +15,7 @@ use super::visual::VisualLayer;
 pub struct ImageLayer {
     /// Visual layer data
     #[serde(flatten)]
-    pub visual_layer: crate::schema::layers::visual::VisualLayer,
+    pub visual_layer: VisualLayer,
     /// ID of the image asset as specified in the assets
     #[serde(rename = "refId")]
     pub ref_id: String,

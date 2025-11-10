@@ -1,7 +1,12 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::{assets::AnyAsset, helpers::int_boolean::BoolInt, layers::AnyLayer};
+use crate::schema::{
+    animation::composition::Composition,
+    assets::AnyAsset,
+    helpers::{int_boolean::BoolInt, visual_object::VisualObject},
+    layers::AnyLayer,
+};
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -10,10 +15,10 @@ use std::fmt::Display;
 pub struct Animation {
     /// Visual object properties
     #[serde(flatten)]
-    pub visual_object: crate::schema::helpers::visual_object::VisualObject,
+    pub visual_object: VisualObject,
     /// Composition properties
     #[serde(flatten)]
-    pub composition: crate::schema::animation::composition::Composition,
+    pub composition: Composition,
     /// Bodymovin version
     #[serde(rename = "v")]
     #[serde(skip_serializing_if = "Option::is_none")]

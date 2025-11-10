@@ -12,7 +12,7 @@ use super::visual::VisualLayer;
 pub struct PrecompositionLayer {
     /// Visual layer data
     #[serde(flatten)]
-    pub visual_layer: crate::schema::layers::visual::VisualLayer,
+    pub visual_layer: VisualLayer,
     /// ID of the precomp as specified in the assets
     #[serde(rename = "refId")]
     pub ref_id: String,

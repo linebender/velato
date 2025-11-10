@@ -3,6 +3,8 @@
 
 use serde::{Deserialize, Serialize};
 
+use crate::schema::helpers::visual_object::VisualObject;
+
 ///
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Asset {
@@ -10,5 +12,5 @@ pub struct Asset {
     #[serde(rename = "id")]
     pub id: String,
     #[serde(flatten)]
-    pub visual_object: crate::schema::helpers::visual_object::VisualObject,
+    pub visual_object: VisualObject,
 }
