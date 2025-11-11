@@ -14,8 +14,9 @@ This release has an [MSRV][] of 1.86.
 
 ### Added
 
-- Added ImageLayer to schema. ([#78][] by [@RobertBrewitz][])
+- Added image schema layer. ([#78][] by [@RobertBrewitz][])
 - Added deserializer to deserialize into the correct Layer type based on the "ty" field. ([#78][] by [@RobertBrewitz][])
+- Added twist, stroke_dash, modifier and rounded_corners schema shapes. ([#78][] by [@RobertBrewitz][])
 
 ### Changed
 
