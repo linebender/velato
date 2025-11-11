@@ -28,7 +28,7 @@ pub struct Transform {
     pub scale: Value<Vec2>,
     /// Skew factor.
     pub skew: Value<f64>,
-    /// Skew angle.
+    /// Skew angle, 0 skews along the x axis, 90 along the y axis.
     pub skew_angle: Value<f64>,
 }
 
@@ -63,8 +63,6 @@ impl Transform {
         let skew = self.skew.evaluate(frame);
         let skew_angle = self.skew_angle.evaluate(frame);
         let skew_matrix = if skew != 0.0 {
-            const SKEW_LIMIT: f64 = 85.0;
-            let skew = -skew.clamp(-SKEW_LIMIT, SKEW_LIMIT);
             let skew = skew.to_radians();
             let angle = skew_angle.to_radians();
             Affine::rotate(-angle) * Affine::skew(skew.tan(), 0.0) * Affine::rotate(angle)
