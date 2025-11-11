@@ -21,6 +21,10 @@ pub use animation::animation::Animation;
 
 #[cfg(test)]
 mod tests {
+    use crate::schema::{
+        animation::composition::Composition, helpers::visual_object::VisualObject,
+    };
+
     use super::{Animation, helpers::int_boolean::BoolInt};
     use once_cell::sync::Lazy;
     use serde_json::json;
@@ -42,15 +46,19 @@ mod tests {
     });
 
     static LOTTIE: Lazy<Animation> = Lazy::new(|| Animation {
+        ver: None,
+        visual_object: VisualObject {
+            name: Some("Example".to_string()),
+            ..Default::default()
+        },
+        composition: Composition { layers: vec![] },
         version: Some("5.5.2".to_string()),
-        name: Some("Example".to_string()),
         frame_rate: 60.0,
         in_point: 0.0,
         out_point: 60.0,
         width: 512,
         height: 512,
         three_dimensional: Some(BoolInt::False),
-        layers: vec![],
         assets: None,
     });
 

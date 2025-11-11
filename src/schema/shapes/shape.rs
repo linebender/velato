@@ -1,7 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use super::shape_element::ShapeElement;
+use super::graphic_element::GraphicElementShape;
 use crate::schema::constants::shape_direction::ShapeDirection;
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Shape {
     #[serde(flatten)]
-    pub shape_element: ShapeElement,
+    pub graphic_element: GraphicElementShape,
 
     /// Direction the shape is drawn as, mostly relevant when using trim path
     #[serde(rename = "d")]

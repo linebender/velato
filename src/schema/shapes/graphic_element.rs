@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 /// Base class for all elements of `ShapeLayer` and `Group`
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub struct ShapeElement {
+pub struct GraphicElementShape {
     #[serde(flatten)]
     pub visual_object: VisualObject,
 

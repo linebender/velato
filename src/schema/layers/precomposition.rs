@@ -7,29 +7,24 @@ use crate::schema::animated_properties::value::FloatValue;
 
 use super::visual::VisualLayer;
 
-#[derive(serde_repr::Deserialize_repr, serde_repr::Serialize_repr, Debug, Clone, PartialEq)]
-#[repr(u8)]
-pub enum LayerId {
-    Precomposition = 0,
-}
-
 /// Renders a Precomposition
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct PrecompositionLayer {
+    /// Visual layer data
     #[serde(flatten)]
-    pub properties: VisualLayer,
-    /// Layer type, must be 0
-    #[serde(rename = "ty")]
-    pub layer_type: LayerId,
+    pub visual_layer: VisualLayer,
     /// ID of the precomp as specified in the assets
     #[serde(rename = "refId")]
-    pub precomp_id: String,
+    pub ref_id: String,
     /// Width of the clipping rect
     #[serde(rename = "w")]
     pub width: f64,
     /// Height of the clipping rect
     #[serde(rename = "h")]
     pub height: f64,
+    /// Start time
+    #[serde(rename = "st")]
+    pub start_time: f64,
     /// Time Remapping
     #[serde(rename = "tm")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -41,7 +36,7 @@ mod tests {
     use crate::schema::{
         animation::composition::Composition,
         assets::{asset::Asset, precomposition::Precomposition},
-        helpers::int_boolean::BoolInt,
+        helpers::{int_boolean::BoolInt, visual_object::VisualObject},
     };
     use once_cell::sync::Lazy;
     use serde_json::json;
@@ -59,8 +54,11 @@ mod tests {
     });
     static PRECOMP: Lazy<Precomposition> = Lazy::new(|| Precomposition {
         asset: Asset {
+            visual_object: VisualObject {
+                name: Some("Example".to_string()),
+                ..Default::default()
+            },
             id: "precomp_0".to_string(),
-            name: Some("Example".to_string()),
         },
         composition: Composition { layers: vec![] },
         frame_rate: Some(60.0),

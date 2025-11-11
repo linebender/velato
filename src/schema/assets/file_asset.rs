@@ -5,7 +5,7 @@ use super::asset::Asset;
 use crate::schema::helpers::int_boolean::BoolInt;
 use serde::{Deserialize, Serialize};
 
-///
+/// Asset referencing a file
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct FileAsset {
     #[serde(flatten)]

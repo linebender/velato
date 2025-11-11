@@ -85,7 +85,7 @@
 
 pub(crate) mod import;
 pub(crate) mod runtime;
-pub(crate) mod schema;
+pub mod schema;
 
 mod error;
 pub use error::Error;

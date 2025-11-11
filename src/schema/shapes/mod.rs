@@ -1,11 +1,16 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+pub mod base_gradient;
+pub mod base_stroke;
 pub mod ellipse;
 pub mod fill;
+pub mod gradient_fill;
 pub mod gradient_stroke;
+pub mod graphic_element;
 pub mod group;
 pub mod merge;
+pub mod modifier;
 pub mod offset_path;
 pub mod path;
 pub mod polystar;
@@ -13,22 +18,19 @@ pub mod pucker_bloat;
 pub mod rectangle;
 pub mod repeater;
 pub mod repeater_transform;
+pub mod rounded_corners;
 pub mod shape;
-pub mod shape_element;
+pub mod shape_style;
 pub mod stroke;
 pub mod stroke_dash;
 pub mod transform;
-pub mod trim;
-// todo pub mod stroke_dash;
+pub mod trim_path;
+pub mod twist;
 // todo pub mod shape_list;
 // todo pub mod zig_zag;
 // todo pub mod no_style;
-pub mod base_stroke;
-// todo pub mod twist;
-// todo pub mod rounded_corners;
-pub mod gradient;
-pub mod gradient_fill;
-// todo pub mod modifier;
+
+use crate::schema::shapes::{rounded_corners::RoundedCornersShape, twist::TwistShape};
 
 use self::fill::FillShape;
 use self::gradient_fill::GradientFillShape;
@@ -41,7 +43,7 @@ use self::rectangle::RectangleShape;
 use self::repeater::RepeaterShape;
 use self::stroke::StrokeShape;
 use self::transform::TransformShape;
-use self::trim::TrimShape;
+use self::trim_path::TrimPathShape;
 use super::animated_properties::value::FloatValue;
 use ellipse::EllipseShape;
 use group::GroupShape;
@@ -51,12 +53,9 @@ use serde::{Deserialize, Serialize};
 /// share the properties in `shapes::common::Properties`.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(tag = "ty")]
-#[cfg_attr(
-    not(target_arch = "wasm32"),
-    expect(
-        clippy::large_enum_variant,
-        reason = "Deferred. Furthermore, for some reason, only on wasm32, this isn't triggering clippy."
-    )
+#[expect(
+    clippy::large_enum_variant,
+    reason = "Shapes have inherently different sizes based on the Lottie spec"
 )]
 pub enum AnyShape {
     /// A group is a shape that can contain other shapes (including other
@@ -84,18 +83,20 @@ pub enum AnyShape {
     #[serde(rename = "fl")]
     Fill(FillShape),
     #[serde(rename = "tm")]
-    Trim(TrimShape),
+    Trim(TrimPathShape),
     #[serde(rename = "sh")]
     Path(PathShape),
     #[serde(rename = "gf")]
     GradientFill(GradientFillShape),
     #[serde(rename = "gs")]
     GradientStroke(GradientStrokeShape),
+    #[serde(rename = "tw")]
+    Twist(TwistShape),
+    #[serde(rename = "rd")]
+    RoundedCorners(RoundedCornersShape),
     // TODO: model other shapes
     // todo ZigZag(zig_zag),
     // todo no_style(no_style),
-    // todo Twist(twist),
-    // todo RoundedCorners(rounded_corners),
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
@@ -142,7 +143,9 @@ pub enum ShapeType {
 
 #[cfg(test)]
 mod tests {
-    use super::{AnyShape, ellipse::EllipseShape, group::GroupShape, shape_element::ShapeElement};
+    use super::{
+        AnyShape, ellipse::EllipseShape, graphic_element::GraphicElementShape, group::GroupShape,
+    };
     use crate::schema::{
         animated_properties::{
             animated_property::{AnimatedProperty, AnimatedPropertyK},
@@ -150,6 +153,7 @@ mod tests {
             position::{Position, PositionValueK},
         },
         helpers::{int_boolean::BoolInt, visual_object::VisualObject},
+        shapes::shape::Shape,
     };
     use once_cell::sync::Lazy;
     use serde_json::json;
@@ -187,7 +191,7 @@ mod tests {
 
     static LAYER: Lazy<AnyShape> = Lazy::new(|| {
         AnyShape::Group(GroupShape {
-            shape_element: ShapeElement {
+            graphic_element: GraphicElementShape {
                 visual_object: VisualObject {
                     name: Some("Group".to_string()),
                     match_name: Some("{f1becc2a-49f0-4f0c-918f-bdffe4c6870f}".to_string()),
@@ -202,17 +206,20 @@ mod tests {
             num_properties: None,
             property_index: None,
             shapes: vec![AnyShape::Ellipse(EllipseShape {
-                shape_element: ShapeElement {
-                    visual_object: VisualObject {
-                        name: Some("Ellipse".to_string()),
-                        match_name: Some("{2aabac6e-1dd8-41b0-b60b-baf75ccb6318}".to_string()),
+                shape: Shape {
+                    graphic_element: GraphicElementShape {
+                        visual_object: VisualObject {
+                            name: Some("Ellipse".to_string()),
+                            match_name: Some("{2aabac6e-1dd8-41b0-b60b-baf75ccb6318}".to_string()),
+                        },
+                        index: None,
+                        hidden: None,
+                        blend_mode: None,
+                        property_index: None,
+                        css_class: None,
+                        xml_id: None,
                     },
-                    index: None,
-                    hidden: None,
-                    blend_mode: None,
-                    property_index: None,
-                    css_class: None,
-                    xml_id: None,
+                    direction: None,
                 },
                 position: Position {
                     property_index: None,

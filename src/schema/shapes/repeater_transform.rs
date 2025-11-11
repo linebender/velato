@@ -1,12 +1,15 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::shapes::FloatValue;
+use crate::schema::shapes::{FloatValue, transform::TransformShape};
 use serde::{Deserialize, Serialize};
 
 /// Transform used by a repe…equent repeated object.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct RepeaterTransformShape {
+    #[serde(flatten)]
+    pub transform: TransformShape,
+
     /// Transform used by a repeater, the transform is applied to each
     /// subsequent repeated object.
     #[serde(rename = "so")]
