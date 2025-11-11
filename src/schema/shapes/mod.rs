@@ -53,12 +53,9 @@ use serde::{Deserialize, Serialize};
 /// share the properties in `shapes::common::Properties`.
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(tag = "ty")]
-#[cfg_attr(
-    not(target_arch = "wasm32"),
-    expect(
-        clippy::large_enum_variant,
-        reason = "Deferred. Furthermore, for some reason, only on wasm32, this isn't triggering clippy."
-    )
+#[expect(
+    clippy::large_enum_variant,
+    reason = "Shapes have inherently different sizes based on the Lottie spec"
 )]
 pub enum AnyShape {
     /// A group is a shape that can contain other shapes (including other
