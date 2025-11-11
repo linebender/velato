@@ -12,6 +12,10 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.86.
 
+### Removed
+
+- Removed SKEW_LIMIT from Transform::evaluate method as it can cause rendering errors. ([#79][] by [@RobertBrewitz][])
+
 ## [0.7.0]  - 2025-10-11
 
 This release has an [MSRV][] of 1.86.
@@ -109,6 +113,7 @@ This release has an [MSRV][] of 1.75.
 [#49]: https://github.com/linebender/velato/pull/49
 [#60]: https://github.com/linebender/velato/pull/60
 [#63]: https://github.com/linebender/velato/pull/63
+[#79]: https://github.com/linebender/velato/pull/79
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.7.0...HEAD
 [0.7.0]: https://github.com/linebender/velato/compare/v0.6.0...v0.7.0
