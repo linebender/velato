@@ -5,13 +5,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::schema::constants::merge_mode::MergeMode;
 
-use super::shape_element::ShapeElement;
+use super::graphic_element::GraphicElementShape;
 
 /// Boolean operator on shapes
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct MergeShape {
     #[serde(flatten)]
-    pub shape_element: ShapeElement,
+    pub graphic_element: GraphicElementShape,
 
     /// Merge Mode
     #[serde(rename = "mm")]

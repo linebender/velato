@@ -1,17 +1,16 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::constants::line_join::LineJoin;
 use crate::schema::shapes::FloatValue;
+use crate::schema::{constants::line_join::LineJoin, shapes::modifier::ModifierShape};
 use serde::{Deserialize, Serialize};
 
 /// Interpolates the shape with its center point and bezier tangents with the
 /// opposite direction
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct OffsetPathShape {
-    /// Shape Type
-    #[serde(rename = "ty")]
-    pub shape_type: String,
+    #[serde(flatten)]
+    pub modifier: ModifierShape,
 
     #[serde(rename = "a")]
     #[serde(skip_serializing_if = "Option::is_none")]

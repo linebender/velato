@@ -10,7 +10,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 /// Represents a gradient.
-pub struct Gradient {
+pub struct BaseGradientShape {
+    /// Describes the gradient colors.
+    #[serde(rename = "g")]
+    pub colors: GradientColors,
+
     /// Describes the starting point for the gradient.
     #[serde(rename = "s")]
     pub start_point: MultiDimensional,
@@ -32,8 +36,4 @@ pub struct Gradient {
     /// end points.
     #[serde(rename = "a")]
     pub highlight_angle: Option<FloatValue>,
-
-    /// Describes the gradient colors.
-    #[serde(rename = "g")]
-    pub colors: GradientColors,
 }

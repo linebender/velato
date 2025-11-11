@@ -1,17 +1,17 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::animated_properties::value::FloatValue;
 use crate::schema::constants::trim_multiple_shapes::TrimMultipleShapes;
+use crate::schema::{animated_properties::value::FloatValue, shapes::modifier::ModifierShape};
 use serde::{Deserialize, Serialize};
 
-use super::shape_element::ShapeElement;
+use super::graphic_element::GraphicElementShape;
 
 /// Trims shapes into a segment.
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub struct TrimShape {
+pub struct TrimPathShape {
     #[serde(flatten)]
-    pub shape_element: ShapeElement,
+    pub modifier: ModifierShape,
 
     /// Segment start.
     #[serde(rename = "s")]

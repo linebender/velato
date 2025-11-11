@@ -8,10 +8,11 @@ use serde::{Deserialize, Serialize};
 
 /// An item used to described the dashe pattern in a stroked path
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub struct StrokeDash {
+pub struct StrokeDashShape {
     #[serde(flatten)]
     visual_object: VisualObject,
 
+    /// Type of the dash
     #[serde(rename = "n")]
     #[serde(skip_serializing_if = "Option::is_none")]
     dash_type: Option<StrokeDashType>,

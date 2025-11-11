@@ -398,7 +398,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
         AnyShape::Fill(value) => {
             let color = conv_color(&value.color);
             let brush = animated::Brush::Solid(color).into_model();
-            let opacity = conv_scalar(value.opacity.as_ref().unwrap_or(&FLOAT_VALUE_ONE_HUNDRED));
+            let opacity = conv_scalar(&value.shape_style.opacity);
             Some(runtime::model::Draw {
                 stroke: None,
                 brush,
@@ -407,14 +407,24 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
         }
         AnyShape::Stroke(value) => {
             let stroke = animated::Stroke {
-                width: conv_scalar(&value.stroke_width),
-                join: match value.line_join.as_ref().unwrap_or(&LineJoin::Bevel) {
+                width: conv_scalar(&value.base_stroke.width),
+                join: match value
+                    .base_stroke
+                    .line_join
+                    .as_ref()
+                    .unwrap_or(&LineJoin::Bevel)
+                {
                     LineJoin::Bevel => Join::Bevel,
                     LineJoin::Round => Join::Round,
                     LineJoin::Miter => Join::Miter,
                 },
-                miter_limit: value.miter_limit,
-                cap: match value.line_cap.as_ref().unwrap_or(&LineCap::Butt) {
+                miter_limit: value.base_stroke.miter_limit,
+                cap: match value
+                    .base_stroke
+                    .line_cap
+                    .as_ref()
+                    .unwrap_or(&LineCap::Butt)
+                {
                     LineCap::Butt => Cap::Butt,
                     LineCap::Round => Cap::Round,
                     LineCap::Square => Cap::Square,
@@ -422,7 +432,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
             };
             let color = conv_color(&value.stroke_color);
             let brush = animated::Brush::Solid(color).into_model();
-            let opacity = conv_scalar(&value.opacity);
+            let opacity = conv_scalar(&value.shape_style.opacity);
             Some(runtime::model::Draw {
                 stroke: Some(stroke.into_model()),
                 brush,
