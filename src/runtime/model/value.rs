@@ -1,8 +1,10 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use vello::kurbo::{self};
-use vello::peniko;
+use vello::{
+    kurbo::{self, ParamCurve, Point, common::solve_cubic},
+    peniko,
+};
 
 /// Fixed or animated value.
 #[derive(Clone, Debug)]
@@ -171,15 +173,14 @@ pub trait Tween: Clone {
 
 impl Tween for f64 {
     fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
-        keyframe::ease(
-            keyframe::functions::BezierCurve::from(
-                keyframe::mint::Vector2::from_slice(&[easing.o.x, easing.o.y]),
-                keyframe::mint::Vector2::from_slice(&[easing.i.x, easing.i.y]),
-            ),
-            *self,
-            *other,
-            t,
-        )
+        let curve = kurbo::CubicBez::new(
+            Point::new(0.0, 0.0),
+            Point::new(easing.o.x, easing.o.y),
+            Point::new(easing.i.x, easing.i.y),
+            Point::new(1.0, 1.0),
+        );
+        let eased_t = curve.eval(t).y;
+        self + (other - self) * eased_t
     }
 }
 
