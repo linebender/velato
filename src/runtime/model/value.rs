@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use vello::{
-    kurbo::{self, ParamCurve, Point, common::solve_cubic},
+    kurbo::{
+        self, ParamCurve, Point,
+        common::{solve_cubic, solve_itp},
+    },
     peniko,
 };
 
@@ -172,15 +175,50 @@ pub trait Tween: Clone {
 }
 
 impl Tween for f64 {
+    /// Tween between two f64 values using a cubic bezier easing curve.
+    ///
+    /// Unfortunately, kurbo doesn't expose a way to get the eased value of t directly, so we have
+    /// to re-implement it here.
     fn tween(&self, other: &Self, t: f64, easing: &Easing) -> Self {
+        if t <= 0.0 {
+            return *self;
+        }
+
+        if t >= 1.0 {
+            return *other;
+        }
+
+        // Not sure this is the best way to do it, but looks easiest to just
+        // use solve_cubic directly with this.
         let curve = kurbo::CubicBez::new(
             Point::new(0.0, 0.0),
             Point::new(easing.o.x, easing.o.y),
             Point::new(easing.i.x, easing.i.y),
             Point::new(1.0, 1.0),
         );
-        let eased_t = curve.eval(t).y;
-        self + (other - self) * eased_t
+
+        // Manual copy-paste of [kurbo::bezpath::cubic_bez_coefs]
+        // in preparation for [kurbo::common::solve_cubic]
+        let x0 = curve.p0.x;
+        let x1 = curve.p1.x;
+        let x2 = curve.p2.x;
+        let x3 = curve.p3.x;
+        let c0 = x0 - t;
+        let c1 = 3.0 * x1 - 3.0 * x0;
+        let c2 = 3.0 * x2 - 6.0 * x1 + 3.0 * x0;
+        let c3 = x3 - 3.0 * x2 + 3.0 * x1 - x0;
+
+        // Not sure this is the best way to do it
+        let roots = kurbo::common::solve_cubic(c0, c1, c2, c3);
+        let x_at_t = roots
+            .iter()
+            .copied()
+            .find(|&r| r >= 0.0 && r <= 1.0)
+            .unwrap_or_else(|| t.clamp(0.0, 1.0));
+
+        let eased_y = curve.eval(x_at_t).y;
+
+        self + (other - self) * eased_y
     }
 }
 
