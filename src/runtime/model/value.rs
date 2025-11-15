@@ -213,7 +213,7 @@ impl Tween for f64 {
         let x_at_t = roots
             .iter()
             .copied()
-            .find(|&r| r >= 0.0 && r <= 1.0)
+            .find(|&r| (0.0..=1.0).contains(&r))
             .unwrap_or_else(|| t.clamp(0.0, 1.0));
 
         let eased_y = curve.eval(x_at_t).y;
