@@ -15,6 +15,7 @@ This release has an [MSRV][] of 1.86.
 ### Fixed
 
 - Fixed tweening issue by replacing keyframe with kurbo cubic bezier implementation. ([#80][] & [#81][] by [@RobertBrewitz][])
+- Fixed flickering of hold frames in splines. ([#82][] by [@RobertBrewitz][])
 
 ### Removed
 
@@ -120,6 +121,7 @@ This release has an [MSRV][] of 1.75.
 [#79]: https://github.com/linebender/velato/pull/79
 [#80]: https://github.com/linebender/velato/pull/80
 [#81]: https://github.com/linebender/velato/pull/81
+[#82]: https://github.com/linebender/velato/pull/82
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.7.0...HEAD
 [0.7.0]: https://github.com/linebender/velato/compare/v0.6.0...v0.7.0
