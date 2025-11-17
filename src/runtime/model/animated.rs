@@ -198,11 +198,11 @@ impl Spline {
     /// Evaluates the spline at the given frame and emits the elements
     /// to the specified path.
     pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) -> bool {
-        let Some(([ix0, ix1], t, _easing, _hold)) = Time::frames_and_weight(&self.times, frame)
+        let Some(([ix0, ix1], t, _easing, hold)) = Time::frames_and_weight(&self.times, frame)
         else {
-            // TODO: evaluate whether hold frame is needed here
             return false;
         };
+        let t = if hold { 0.0 } else { t };
         let (Some(from), Some(to)) = (self.values.get(ix0), self.values.get(ix1)) else {
             return false;
         };
