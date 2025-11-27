@@ -244,19 +244,21 @@ pub fn conv_keyframes<'a, T: Tween>(
     let collect_tangents = |handle: &Option<KeyframeBezierHandle>| {
         let mut handles = vec![];
         let Some(handle) = handle else { return handles };
+
         match (&handle.x_coordinate, &handle.y_coordinate) {
             (KeyframeComponent::ArrayOfValues(xarr), KeyframeComponent::ArrayOfValues(yarr)) => {
                 handles.extend(
                     xarr.iter()
-                        .zip(yarr)
+                        .take(2)
+                        .zip(yarr.iter().take(2))
                         .map(|(x, y)| EasingHandle { x: *x, y: *y }),
                 );
             }
             (KeyframeComponent::ArrayOfValues(xarr), KeyframeComponent::SingleValue(y)) => {
-                handles.extend(xarr.iter().map(|x| EasingHandle { x: *x, y: *y }));
+                handles.extend(xarr.iter().take(2).map(|x| EasingHandle { x: *x, y: *y }));
             }
             (KeyframeComponent::SingleValue(x), KeyframeComponent::ArrayOfValues(yarr)) => {
-                handles.extend(yarr.iter().map(|y| EasingHandle { x: *x, y: *y }));
+                handles.extend(yarr.iter().take(2).map(|y| EasingHandle { x: *x, y: *y }));
             }
             (KeyframeComponent::SingleValue(x), KeyframeComponent::SingleValue(y)) => {
                 handles.push(EasingHandle { x: *x, y: *y });
