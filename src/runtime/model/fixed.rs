@@ -72,10 +72,12 @@ pub struct Trim {
     pub offset: f64,
 }
 
+type NormalizedTrim = ((f64, f64), Option<(f64, f64)>);
+
 impl Trim {
     // Returns normalized segments in 0.0..1.0 range.
     /// Second tuple element is Some if offset causes wrap-around.
-    pub fn normalized(&self) -> Option<((f64, f64), Option<(f64, f64)>)> {
+    pub fn normalized(&self) -> Option<NormalizedTrim> {
         let (lo, hi) = if self.start <= self.end {
             (self.start, self.end)
         } else {
