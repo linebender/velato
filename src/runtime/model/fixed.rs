@@ -78,23 +78,23 @@ impl Trim {
     // Returns normalized segments in 0.0..1.0 range.
     /// Second tuple element is Some if offset causes wrap-around.
     pub fn normalized(&self) -> Option<NormalizedTrim> {
-        let (lo, hi) = if self.start <= self.end {
+        let (start_pct, end_pct) = if self.start <= self.end {
             (self.start, self.end)
         } else {
             (self.end, self.start)
         };
 
-        let length = hi - lo;
-        if length < 1e-9 {
+        let range_pct = end_pct - start_pct;
+        if range_pct < 1e-9 {
             return None;
         }
-        if length >= 100.0 - 1e-9 {
+        if range_pct >= 100.0 - 1e-9 {
             return Some(((0.0, 1.0), None));
         }
 
         let offset_pct = self.offset * (100.0 / 360.0);
-        let start_pct = (lo + offset_pct).rem_euclid(100.0);
-        let end_pct = start_pct + length;
+        let start_pct = (start_pct + offset_pct).rem_euclid(100.0);
+        let end_pct = start_pct + range_pct;
 
         if end_pct <= 100.0 {
             Some(((start_pct / 100.0, end_pct / 100.0), None))
