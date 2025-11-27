@@ -69,10 +69,8 @@ fn process_layers(
 
         if layer.is_mask {
             prev_matte_layer = Some(idx);
-        } else {
-            if matte_mode.is_some() {
-                prev_matte_layer = None;
-            }
+        } else if matte_mode.is_some() {
+            prev_matte_layer = None;
         }
 
         layers.push(layer);
