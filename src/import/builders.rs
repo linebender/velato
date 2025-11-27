@@ -8,7 +8,11 @@ use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{runtime, schema};
 use vello::peniko::{self, BlendMode, Compose, Mix};
 
-pub type LayerSetupParams = (usize, Option<BlendMode>, Option<usize>);
+pub struct LayerSetupParams {
+    pub layer_index: usize,
+    pub matte_mode: Option<BlendMode>,
+    pub matte_layer_index: Option<usize>,
+}
 
 pub fn setup_precomp_layer(
     source: &schema::layers::precomposition::PrecompositionLayer,
@@ -79,11 +83,11 @@ pub fn setup_precomp_layer(
         }
     }
 
-    (
-        source.properties.index.unwrap_or(0),
+    LayerSetupParams {
+        layer_index: source.properties.index.unwrap_or(0),
         matte_mode,
         matte_layer_index,
-    )
+    }
 }
 
 pub fn setup_shape_layer(
@@ -153,11 +157,11 @@ pub fn setup_shape_layer(
         }
     }
 
-    (
-        source.properties.index.unwrap_or(0),
+    LayerSetupParams {
+        layer_index: source.properties.index.unwrap_or(0),
         matte_mode,
         matte_layer_index,
-    )
+    }
 }
 
 pub fn setup_layer_base(
@@ -217,5 +221,9 @@ pub fn setup_layer_base(
         }
     }
 
-    (source.index.unwrap_or(0), matte_mode, matte_layer_index)
+    LayerSetupParams {
+        layer_index: source.index.unwrap_or(0),
+        matte_mode,
+        matte_layer_index,
+    }
 }
