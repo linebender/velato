@@ -562,6 +562,14 @@ fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model:
         //     };
         //     Some(Shape::Repeater(repeater.to_model()))
         // }
+        schema::shapes::AnyShape::Trim(value) => {
+            let trim = animated::Trim {
+                start: conv_scalar(&value.start),
+                end: conv_scalar(&value.end),
+                offset: conv_scalar(&value.offset),
+            };
+            Some(crate::runtime::model::Shape::Trim(trim.into_model()))
+        }
         _ => None,
     }
 }

@@ -176,6 +176,8 @@ pub enum Shape {
     Draw(Draw),
     /// Repeater element.
     Repeater(Repeater),
+    /// Trim element.
+    Trim(Trim),
 }
 
 /// Transform and opacity for a shape group.
@@ -254,4 +256,23 @@ pub enum Content {
     },
     /// Collection of shapes.
     Shape(Vec<Shape>),
+}
+
+#[derive(Clone, Debug)]
+pub enum Trim {
+    Fixed(fixed::Trim),
+    Animated(animated::Trim),
+}
+
+impl Trim {
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, Self::Fixed(_))
+    }
+
+    pub fn evaluate(&self, frame: f64) -> ValueRef<'_, fixed::Trim> {
+        match self {
+            Self::Fixed(value) => ValueRef::Borrowed(value),
+            Self::Animated(value) => ValueRef::Owned(value.evaluate(frame)),
+        }
+    }
 }
