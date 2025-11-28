@@ -12,10 +12,15 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.86.
 
+### Added
+
+- Added support for trim paths in animations. ([#83][] by [@RobertBrewitz][])
+
 ### Fixed
 
 - Fixed tweening issue by replacing keyframe with kurbo cubic bezier implementation. ([#80][] & [#81][] by [@RobertBrewitz][])
 - Fixed flickering of hold frames in splines. ([#82][] by [@RobertBrewitz][])
+- Fixed matte layer clipping. ([#84][] by [@RobertBrewitz][])
 - Fixed easing handles, only use the first two components ([#85][] by [@RobertBrewitz][])
 
 ### Removed
@@ -123,6 +128,8 @@ This release has an [MSRV][] of 1.75.
 [#80]: https://github.com/linebender/velato/pull/80
 [#81]: https://github.com/linebender/velato/pull/81
 [#82]: https://github.com/linebender/velato/pull/82
+[#83]: https://github.com/linebender/velato/pull/83
+[#84]: https://github.com/linebender/velato/pull/82
 [#85]: https://github.com/linebender/velato/pull/85
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.7.0...HEAD
