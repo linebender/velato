@@ -5,6 +5,8 @@
 Representations of fixed (non-animated) values.
 */
 
+use std::mem::swap;
+
 use vello::kurbo::{self, Affine, Point, Vec2};
 use vello::peniko;
 
@@ -57,5 +59,50 @@ impl Repeater {
                 (self.scale.y / 100.0).powf(t),
             )
             * Affine::translate((-self.anchor_point.x, -self.anchor_point.y))
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Trim {
+    /// Start of the visible segment (0.0 to 100.0).
+    pub start: f64,
+    /// End of the visible segment (0.0 to 100.0).
+    pub end: f64,
+    /// Offset rotation in degrees.
+    pub offset: f64,
+}
+
+type NormalizedTrim = ((f64, f64), Option<(f64, f64)>);
+
+impl Trim {
+    // Returns normalized segments in 0.0..1.0 range.
+    /// Second tuple element is Some if offset causes wrap-around.
+    pub fn normalized(&self) -> Option<NormalizedTrim> {
+        let (start_pct, end_pct) = if self.start <= self.end {
+            (self.start, self.end)
+        } else {
+            (self.end, self.start)
+        };
+
+        let range_pct = end_pct - start_pct;
+        if range_pct < 1e-9 {
+            return None;
+        }
+        if range_pct >= 100.0 - 1e-9 {
+            return Some(((0.0, 1.0), None));
+        }
+
+        let offset_pct = self.offset * (100.0 / 360.0);
+        let start_pct = (start_pct + offset_pct).rem_euclid(100.0);
+        let end_pct = start_pct + range_pct;
+
+        if end_pct <= 100.0 {
+            Some(((start_pct / 100.0, end_pct / 100.0), None))
+        } else {
+            Some((
+                (start_pct / 100.0, 1.0),
+                Some((0.0, (end_pct - 100.0) / 100.0)),
+            ))
+        }
     }
 }
