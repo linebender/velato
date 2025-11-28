@@ -3,6 +3,7 @@
 
 use super::builders::{setup_layer_base, setup_precomp_layer, setup_shape_layer};
 use super::defaults::{FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE, POSITION_ZERO};
+use crate::import::builders::LayerSetupParams;
 use crate::runtime::model::Easing;
 use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
@@ -21,6 +22,63 @@ use std::collections::HashMap;
 use vello::kurbo::{Cap, Join, Point, Size, Vec2};
 use vello::peniko::{BlendMode, Color, Mix};
 
+fn process_layers(
+    source_layers: &[schema::layers::AnyLayer],
+    idmap: &mut HashMap<usize, usize>,
+) -> Vec<Layer> {
+    idmap.clear();
+
+    let mut converted: Vec<(Layer, usize, Option<BlendMode>, Option<usize>)> = vec![];
+
+    for layer in source_layers {
+        if let Some((layer, id, matte_mode, matte_layer_index)) = conv_layer(layer) {
+            let index = converted.len();
+            idmap.insert(id, index);
+            converted.push((layer, id, matte_mode, matte_layer_index));
+        }
+    }
+
+    let matte_targets: HashMap<usize, usize> = converted
+        .iter()
+        .enumerate()
+        .filter(|(_, (layer, _, _, _))| layer.is_mask)
+        .map(|(idx, (_, id, _, _))| (*id, idx))
+        .collect();
+
+    let mut layers: Vec<Layer> = Vec::with_capacity(converted.len());
+    let mut prev_matte_layer: Option<usize> = None;
+
+    for (idx, (mut layer, _id, matte_mode, explicit_matte_index)) in
+        converted.into_iter().enumerate()
+    {
+        if let Some(parent) = layer.parent {
+            layer.parent = idmap.get(&parent).copied();
+        }
+
+        if let Some(matte_mode) = matte_mode {
+            let matte_layer_idx = if let Some(explicit_idx) = explicit_matte_index {
+                idmap.get(&explicit_idx).copied()
+            } else {
+                prev_matte_layer
+            };
+
+            if let Some(matte_idx) = matte_layer_idx {
+                layer.mask_layer = Some((matte_mode, matte_idx));
+            }
+        }
+
+        if layer.is_mask {
+            prev_matte_layer = Some(idx);
+        } else if matte_mode.is_some() {
+            prev_matte_layer = None;
+        }
+
+        layers.push(layer);
+    }
+
+    layers
+}
+
 pub fn conv_animation(source: schema::Animation) -> Composition {
     let mut target = Composition {
         frames: source.in_point..source.out_point,
@@ -33,33 +91,12 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
 
     // Collect assets and layers
     let mut idmap: HashMap<usize, usize> = HashMap::default();
+
     if let Some(assets) = source.assets {
         for asset in assets {
             match asset {
                 schema::assets::AnyAsset::Precomposition(precomp) => {
-                    idmap.clear();
-                    let mut layers = vec![];
-                    let mut mask_layer = None;
-                    for layer in precomp.composition.layers.iter() {
-                        let index = layers.len();
-                        if let Some((mut layer, id, mask_blend)) = conv_layer(layer) {
-                            if let (Some(mask_blend), Some(mask_layer)) =
-                                (mask_blend, mask_layer.take())
-                            {
-                                layer.mask_layer = Some((mask_blend, mask_layer));
-                            }
-                            if layer.is_mask {
-                                mask_layer = Some(index);
-                            }
-                            idmap.insert(id, index);
-                            layers.push(layer);
-                        }
-                    }
-                    for layer in &mut layers {
-                        if let Some(parent) = layer.parent {
-                            layer.parent = idmap.get(&parent).copied();
-                        }
-                    }
+                    let layers = process_layers(&precomp.composition.layers, &mut idmap);
                     target.assets.insert(precomp.asset.id.clone(), layers);
                 }
                 asset => {
@@ -69,33 +106,14 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
         }
     }
 
-    idmap.clear();
-    let mut layers = vec![];
-    let mut mask_layer = None;
-    for layer in &source.layers {
-        let index = layers.len();
-        if let Some((mut layer, id, mask_blend)) = conv_layer(layer) {
-            if let (Some(mask_blend), Some(mask_layer)) = (mask_blend, mask_layer.take()) {
-                layer.mask_layer = Some((mask_blend, mask_layer));
-            }
-            if layer.is_mask {
-                mask_layer = Some(index);
-            }
-            idmap.insert(id, index);
-            layers.push(layer);
-        }
-    }
-    for layer in &mut layers {
-        if let Some(parent) = layer.parent {
-            layer.parent = idmap.get(&parent).copied();
-        }
-    }
-    target.layers = layers;
+    target.layers = process_layers(&source.layers, &mut idmap);
 
     target
 }
 
-pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Option<BlendMode>)> {
+pub fn conv_layer(
+    source: &schema::layers::AnyLayer,
+) -> Option<(Layer, usize, Option<BlendMode>, Option<usize>)> {
     let mut layer = Layer::default();
 
     let params = match source {
@@ -143,8 +161,13 @@ pub fn conv_layer(source: &schema::layers::AnyLayer) -> Option<(Layer, usize, Op
         }
     };
 
-    let (id, matte_mode) = params;
-    Some((layer, id, matte_mode))
+    let LayerSetupParams {
+        layer_index: id,
+        matte_mode,
+        matte_layer_index,
+    } = params;
+
+    Some((layer, id, matte_mode, matte_layer_index))
 }
 
 pub fn conv_transform(
