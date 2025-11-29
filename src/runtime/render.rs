@@ -3,8 +3,12 @@
 
 use super::Composition;
 use super::model::{Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed};
+use std::mem::swap;
 use std::ops::Range;
-use vello::kurbo::{Affine, PathEl, Rect};
+use vello::kurbo::{
+    Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
+    Rect,
+};
 use vello::peniko::{Fill, Mix};
 
 /// Renders a composition into a scene.
@@ -183,6 +187,10 @@ impl Renderer {
                     self.batch
                         .repeat(repeater.as_ref(), geometry_start, draw_start);
                 }
+                Shape::Trim(trim) => {
+                    let trim = trim.evaluate(frame);
+                    self.batch.apply_trim(trim.as_ref(), geometry_start);
+                }
             }
         }
     }
@@ -258,6 +266,7 @@ struct Batch {
     /// Length of geometries at time of most recent draw. This is
     /// used to prevent merging into already used geometries.
     drawn_geometry: usize,
+    trim_elements: Vec<PathEl>,
 }
 
 impl Batch {
@@ -338,6 +347,106 @@ impl Batch {
         self.drawn_geometry = self.geometries.len();
     }
 
+    fn apply_trim(&mut self, trim: &fixed::Trim, geometry_start: usize) {
+        let Some((first, second)) = trim.normalized() else {
+            for geometry in &mut self.geometries[geometry_start..] {
+                geometry.elements = 0..0;
+            }
+            return;
+        };
+
+        if first.0 <= 1e-9 && first.1 >= 1.0 - 1e-9 && second.is_none() {
+            return;
+        }
+
+        for geometry in &self.geometries[..geometry_start] {
+            self.trim_elements
+                .extend(self.elements[geometry.elements.clone()].iter().cloned());
+        }
+
+        const ACCURACY: f64 = 0.1;
+
+        for geometry in &mut self.geometries[geometry_start..] {
+            let path: BezPath = self.elements[geometry.elements.clone()]
+                .iter()
+                .cloned()
+                .collect();
+            let segs: Vec<PathSeg> = path.segments().collect();
+            let total_length: f64 = segs.iter().map(|s| s.arclen(ACCURACY)).sum();
+
+            if total_length <= 0.0 || segs.is_empty() {
+                let pos = self.trim_elements.len();
+                geometry.elements = pos..pos;
+                continue;
+            }
+
+            let trim_ranges = [Some(first), second];
+            let mut trimmed = BezPath::new();
+            for range in trim_ranges.into_iter().flatten() {
+                let (norm_start, norm_end) = range;
+                let start_len = norm_start * total_length;
+                let end_len = norm_end * total_length;
+                let mut current_len = 0.0;
+                let mut need_move = true;
+
+                for seg in &segs {
+                    let seg_len = seg.arclen(ACCURACY);
+                    let seg_end = current_len + seg_len;
+
+                    if seg_end < start_len - 1e-9 {
+                        current_len = seg_end;
+                        continue;
+                    }
+                    if current_len > end_len + 1e-9 {
+                        break;
+                    }
+
+                    let t_start = if current_len < start_len {
+                        seg.inv_arclen(start_len - current_len, ACCURACY)
+                            .clamp(0.0, 1.0)
+                    } else {
+                        0.0
+                    };
+                    let t_end = if seg_end > end_len {
+                        seg.inv_arclen(end_len - current_len, ACCURACY)
+                            .clamp(0.0, 1.0)
+                    } else {
+                        1.0
+                    };
+
+                    if t_end > t_start + 1e-9 {
+                        let sub = seg.subsegment(t_start..t_end);
+                        if need_move {
+                            trimmed.move_to(sub.start());
+                            need_move = false;
+                        }
+                        match sub {
+                            PathSeg::Line(l) => trimmed.line_to(l.p1),
+                            PathSeg::Quad(q) => trimmed.quad_to(q.p1, q.p2),
+                            PathSeg::Cubic(c) => trimmed.curve_to(c.p1, c.p2, c.p3),
+                        }
+                    }
+                    current_len = seg_end;
+                }
+            }
+
+            let new_start = self.trim_elements.len();
+            self.trim_elements
+                .extend(trimmed.elements().iter().cloned());
+            geometry.elements = new_start..self.trim_elements.len();
+        }
+
+        let mut offset = 0;
+        for geometry in &mut self.geometries[..geometry_start] {
+            let len = geometry.elements.len();
+            geometry.elements = offset..offset + len;
+            offset += len;
+        }
+
+        swap(&mut self.elements, &mut self.trim_elements);
+        self.trim_elements.clear();
+    }
+
     fn render(&self, scene: &mut vello::Scene) {
         // Process all draws in reverse
         for draw in self.draws.iter().rev() {
@@ -367,5 +476,6 @@ impl Batch {
         self.repeat_geometries.clear();
         self.repeat_draws.clear();
         self.drawn_geometry = 0;
+        self.trim_elements.clear();
     }
 }

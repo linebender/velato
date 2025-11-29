@@ -17,10 +17,18 @@ This release has an [MSRV][] of 1.86.
 - Added image schema layer. ([#78][] by [@RobertBrewitz][])
 - Added deserializer to deserialize into the correct Layer type based on the "ty" field. ([#78][] by [@RobertBrewitz][])
 - Added twist, stroke_dash, modifier and rounded_corners schema shapes. ([#78][] by [@RobertBrewitz][])
+- Added support for trim paths in animations. ([#83][] by [@RobertBrewitz][])
 
 ### Changed
 
 - Changed the rust schema to better match the lottie spec. ([#78][] by [@RobertBrewitz][])
+
+### Fixed
+
+- Fixed tweening issue by replacing keyframe with kurbo cubic bezier implementation. ([#80][] & [#81][] by [@RobertBrewitz][])
+- Fixed flickering of hold frames in splines. ([#82][] by [@RobertBrewitz][])
+- Fixed matte layer clipping. ([#84][] by [@RobertBrewitz][])
+- Fixed easing handles, only use the first two components ([#85][] by [@RobertBrewitz][])
 
 ### Removed
 
@@ -127,6 +135,12 @@ This release has an [MSRV][] of 1.75.
 [#63]: https://github.com/linebender/velato/pull/63
 [#78]: https://github.com/linebender/velato/pull/78
 [#79]: https://github.com/linebender/velato/pull/79
+[#80]: https://github.com/linebender/velato/pull/80
+[#81]: https://github.com/linebender/velato/pull/81
+[#82]: https://github.com/linebender/velato/pull/82
+[#83]: https://github.com/linebender/velato/pull/83
+[#84]: https://github.com/linebender/velato/pull/82
+[#85]: https://github.com/linebender/velato/pull/85
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.7.0...HEAD
 [0.7.0]: https://github.com/linebender/velato/compare/v0.6.0...v0.7.0

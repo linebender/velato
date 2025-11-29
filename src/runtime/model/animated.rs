@@ -198,11 +198,11 @@ impl Spline {
     /// Evaluates the spline at the given frame and emits the elements
     /// to the specified path.
     pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) -> bool {
-        let Some(([ix0, ix1], t, _easing, _hold)) = Time::frames_and_weight(&self.times, frame)
+        let Some(([ix0, ix1], t, _easing, hold)) = Time::frames_and_weight(&self.times, frame)
         else {
-            // TODO: evaluate whether hold frame is needed here
             return false;
         };
+        let t = if hold { 0.0 } else { t };
         let (Some(from), Some(to)) = (self.values.get(ix0), self.values.get(ix1)) else {
             return false;
         };
@@ -434,6 +434,41 @@ impl Brush {
             super::Brush::Fixed(self.evaluate(1.0, 0.0))
         } else {
             super::Brush::Animated(self)
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Trim {
+    /// Start of the visible segment (0.0 to 100.0).
+    pub start: Value<f64>,
+    /// End of the visible segment (0.0 to 100.0).
+    pub end: Value<f64>,
+    /// Offset rotation in degrees.
+    pub offset: Value<f64>,
+}
+
+impl Trim {
+    /// Returns true if the trim is fixed.
+    pub fn is_fixed(&self) -> bool {
+        self.start.is_fixed() && self.end.is_fixed() && self.offset.is_fixed()
+    }
+
+    /// Evaluates the trim at the specified frame.
+    pub fn evaluate(&self, frame: f64) -> fixed::Trim {
+        fixed::Trim {
+            start: self.start.evaluate(frame),
+            end: self.end.evaluate(frame),
+            offset: self.offset.evaluate(frame),
+        }
+    }
+
+    /// Converts the animated value to its model representation.
+    pub fn into_model(self) -> super::Trim {
+        if self.is_fixed() {
+            super::Trim::Fixed(self.evaluate(0.0))
+        } else {
+            super::Trim::Animated(self)
         }
     }
 }

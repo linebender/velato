@@ -8,10 +8,16 @@ use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{runtime, schema};
 use vello::peniko::{self, BlendMode, Compose, Mix};
 
+pub struct LayerSetupParams {
+    pub layer_index: usize,
+    pub matte_mode: Option<BlendMode>,
+    pub matte_layer_index: Option<usize>,
+}
+
 pub fn setup_precomp_layer(
     source: &schema::layers::precomposition::PrecompositionLayer,
     target: &mut Layer,
-) -> (usize, Option<BlendMode>) {
+) -> LayerSetupParams {
     target.name = source
         .visual_layer
         .layer
@@ -43,6 +49,11 @@ pub fn setup_precomp_layer(
             | schema::constants::matte_mode::MatteMode::InvertedLuma => Compose::SrcOut.into(),
         });
 
+    let matte_layer_index = source
+        .visual_layer
+        .matte_layer_index
+        .map(|idx| idx as usize);
+
     target.blend_mode = conv_blend_mode(
         source
             .visual_layer
@@ -81,13 +92,17 @@ pub fn setup_precomp_layer(
         }
     }
 
-    (source.visual_layer.layer.index.unwrap_or(0), matte_mode)
+    LayerSetupParams {
+        layer_index: source.visual_layer.layer.index.unwrap_or(0),
+        matte_mode,
+        matte_layer_index,
+    }
 }
 
 pub fn setup_shape_layer(
     source: &schema::layers::shape::ShapeLayer,
     target: &mut Layer,
-) -> (usize, Option<BlendMode>) {
+) -> LayerSetupParams {
     target.name = source
         .visual_layer
         .layer
@@ -117,6 +132,11 @@ pub fn setup_shape_layer(
             | schema::constants::matte_mode::MatteMode::InvertedLuma => Compose::SrcOut.into(),
         });
 
+    let matte_layer_index = source
+        .visual_layer
+        .matte_layer_index
+        .map(|idx| idx as usize);
+
     target.blend_mode = conv_blend_mode(
         source
             .visual_layer
@@ -155,13 +175,17 @@ pub fn setup_shape_layer(
         }
     }
 
-    (source.visual_layer.layer.index.unwrap_or(0), matte_mode)
+    LayerSetupParams {
+        layer_index: source.visual_layer.layer.index.unwrap_or(0),
+        matte_mode,
+        matte_layer_index,
+    }
 }
 
 pub fn setup_layer_base(
     source: &schema::layers::visual::VisualLayer,
     target: &mut Layer,
-) -> (usize, Option<BlendMode>) {
+) -> LayerSetupParams {
     target.name = source.layer.visual_object.name.clone().unwrap_or_default();
     target.parent = source.layer.parent_index;
     let (transform, opacity) = conv_transform(&source.transform);
@@ -179,6 +203,8 @@ pub fn setup_layer_base(
         schema::constants::matte_mode::MatteMode::InvertedAlpha
         | schema::constants::matte_mode::MatteMode::InvertedLuma => Compose::SrcOut.into(),
     });
+
+    let matte_layer_index = source.matte_layer_index.map(|idx| idx as usize);
 
     target.blend_mode = conv_blend_mode(
         source
@@ -213,5 +239,9 @@ pub fn setup_layer_base(
         }
     }
 
-    (source.layer.index.unwrap_or(0), matte_mode)
+    LayerSetupParams {
+        layer_index: source.layer.index.unwrap_or(0),
+        matte_mode,
+        matte_layer_index,
+    }
 }
