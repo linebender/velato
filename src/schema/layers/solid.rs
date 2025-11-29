@@ -4,30 +4,18 @@
 use super::visual::VisualLayer;
 use serde::{Deserialize, Serialize};
 
-#[derive(serde_repr::Deserialize_repr, serde_repr::Serialize_repr, Debug, Clone, PartialEq)]
-#[repr(u8)]
-pub enum LayerId {
-    SolidColor = 1,
-}
-
 /// Has an array of shapes
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub struct SolidColorLayer {
+pub struct SolidLayer {
+    /// Visual layer data
     #[serde(flatten)]
-    pub properties: VisualLayer,
-
-    /// Layer type, must be 1
-    #[serde(rename = "ty")]
-    pub layer_type: LayerId,
-
+    pub visual_layer: VisualLayer,
+    #[serde(rename = "sw")]
+    pub width: f64,
+    #[serde(rename = "sh")]
+    pub height: f64,
     /// Color of the layer, unlike most other places, the color is a #rrggbb
     /// hex string
     #[serde(rename = "sc")]
     pub color: String,
-
-    #[serde(rename = "sh")]
-    pub height: f64,
-
-    #[serde(rename = "sw")]
-    pub width: f64,
 }

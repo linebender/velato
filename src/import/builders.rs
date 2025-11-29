@@ -18,21 +18,27 @@ pub fn setup_precomp_layer(
     source: &schema::layers::precomposition::PrecompositionLayer,
     target: &mut Layer,
 ) -> LayerSetupParams {
-    target.name = source.properties.name.clone().unwrap_or_default();
-    target.parent = source.properties.parent_index;
-    let (transform, opacity) = conv_transform(&source.properties.transform);
+    target.name = source
+        .visual_layer
+        .layer
+        .visual_object
+        .name
+        .clone()
+        .unwrap_or_default();
+    target.parent = source.visual_layer.layer.parent_index;
+    let (transform, opacity) = conv_transform(&source.visual_layer.transform);
     target.transform = transform;
     target.opacity = opacity;
     target.width = source.width;
     target.height = source.height;
     target.is_mask = source
-        .properties
+        .visual_layer
         .matte_target
         .as_ref()
         .is_some_and(|td| *td == BoolInt::True);
 
     let matte_mode = source
-        .properties
+        .visual_layer
         .matte_mode
         .as_ref()
         .map(|mode| match mode {
@@ -43,11 +49,14 @@ pub fn setup_precomp_layer(
             | schema::constants::matte_mode::MatteMode::InvertedLuma => Compose::SrcOut.into(),
         });
 
-    let matte_layer_index = source.properties.matte_layer_index.map(|idx| idx as usize);
+    let matte_layer_index = source
+        .visual_layer
+        .matte_layer_index
+        .map(|idx| idx as usize);
 
     target.blend_mode = conv_blend_mode(
         source
-            .properties
+            .visual_layer
             .blend_mode
             .as_ref()
             .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
@@ -55,12 +64,12 @@ pub fn setup_precomp_layer(
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
     }
-    target.stretch = source.properties.time_stretch.unwrap_or(1.0);
-    target.frames = source.properties.in_point..source.properties.out_point;
-    target.start_frame = source.properties.start_time;
+    target.stretch = source.visual_layer.layer.time_stretch.unwrap_or(1.0);
+    target.frames = source.visual_layer.layer.in_point..source.visual_layer.layer.out_point;
+    target.start_frame = source.visual_layer.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source
-        .properties
+        .visual_layer
         .masks_properties
         .as_ref()
         .unwrap_or(&Vec::default())
@@ -84,7 +93,7 @@ pub fn setup_precomp_layer(
     }
 
     LayerSetupParams {
-        layer_index: source.properties.index.unwrap_or(0),
+        layer_index: source.visual_layer.layer.index.unwrap_or(0),
         matte_mode,
         matte_layer_index,
     }
@@ -94,19 +103,25 @@ pub fn setup_shape_layer(
     source: &schema::layers::shape::ShapeLayer,
     target: &mut Layer,
 ) -> LayerSetupParams {
-    target.name = source.properties.name.clone().unwrap_or_default();
-    target.parent = source.properties.parent_index;
-    let (transform, opacity) = conv_transform(&source.properties.transform);
+    target.name = source
+        .visual_layer
+        .layer
+        .visual_object
+        .name
+        .clone()
+        .unwrap_or_default();
+    target.parent = source.visual_layer.layer.parent_index;
+    let (transform, opacity) = conv_transform(&source.visual_layer.transform);
     target.transform = transform;
     target.opacity = opacity;
     target.is_mask = source
-        .properties
+        .visual_layer
         .matte_target
         .as_ref()
         .is_some_and(|td| *td == BoolInt::True);
 
     let matte_mode = source
-        .properties
+        .visual_layer
         .matte_mode
         .as_ref()
         .map(|mode| match mode {
@@ -117,11 +132,14 @@ pub fn setup_shape_layer(
             | schema::constants::matte_mode::MatteMode::InvertedLuma => Compose::SrcOut.into(),
         });
 
-    let matte_layer_index = source.properties.matte_layer_index.map(|idx| idx as usize);
+    let matte_layer_index = source
+        .visual_layer
+        .matte_layer_index
+        .map(|idx| idx as usize);
 
     target.blend_mode = conv_blend_mode(
         source
-            .properties
+            .visual_layer
             .blend_mode
             .as_ref()
             .unwrap_or(&crate::schema::constants::blend_mode::BlendMode::Normal),
@@ -129,12 +147,12 @@ pub fn setup_shape_layer(
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
     }
-    target.stretch = source.properties.time_stretch.unwrap_or(1.0);
-    target.frames = source.properties.in_point..source.properties.out_point;
-    target.start_frame = source.properties.start_time;
+    target.stretch = source.visual_layer.layer.time_stretch.unwrap_or(1.0);
+    target.frames = source.visual_layer.layer.in_point..source.visual_layer.layer.out_point;
+    target.start_frame = source.visual_layer.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source
-        .properties
+        .visual_layer
         .masks_properties
         .as_ref()
         .unwrap_or(&Vec::default())
@@ -158,7 +176,7 @@ pub fn setup_shape_layer(
     }
 
     LayerSetupParams {
-        layer_index: source.properties.index.unwrap_or(0),
+        layer_index: source.visual_layer.layer.index.unwrap_or(0),
         matte_mode,
         matte_layer_index,
     }
@@ -168,8 +186,8 @@ pub fn setup_layer_base(
     source: &schema::layers::visual::VisualLayer,
     target: &mut Layer,
 ) -> LayerSetupParams {
-    target.name = source.name.clone().unwrap_or_default();
-    target.parent = source.parent_index;
+    target.name = source.layer.visual_object.name.clone().unwrap_or_default();
+    target.parent = source.layer.parent_index;
     let (transform, opacity) = conv_transform(&source.transform);
     target.transform = transform;
     target.opacity = opacity;
@@ -198,9 +216,9 @@ pub fn setup_layer_base(
     if target.blend_mode == Some(peniko::Mix::Normal.into()) {
         target.blend_mode = None;
     }
-    target.stretch = source.time_stretch.unwrap_or(1.0);
-    target.frames = source.in_point..source.out_point;
-    target.start_frame = source.start_time;
+    target.stretch = source.layer.time_stretch.unwrap_or(1.0);
+    target.frames = source.layer.in_point..source.layer.out_point;
+    target.start_frame = source.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source.masks_properties.as_ref().unwrap_or(&Vec::default()) {
         if let Some(shape) = &mask_source.shape {
@@ -222,7 +240,7 @@ pub fn setup_layer_base(
     }
 
     LayerSetupParams {
-        layer_index: source.index.unwrap_or(0),
+        layer_index: source.layer.index.unwrap_or(0),
         matte_mode,
         matte_layer_index,
     }

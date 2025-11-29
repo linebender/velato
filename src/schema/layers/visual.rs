@@ -1,54 +1,20 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::constants::blend_mode::BlendMode;
 use crate::schema::constants::matte_mode::MatteMode;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::schema::helpers::mask::Mask;
 use crate::schema::helpers::transform::Transform;
+use crate::schema::{constants::blend_mode::BlendMode, layers::layer::Layer};
 use serde::{Deserialize, Serialize};
 
 /// Common properties between layers
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct VisualLayer {
-    /// Name, as seen from editors and the like
-    #[serde(rename = "nm")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// Match name, used in expressions
-    #[serde(rename = "mn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub match_name: Option<String>,
-    /// Whether the layer is 3D. Lottie doesn't actually support 3D stuff so
-    /// this should always be 0
-    #[serde(rename = "ddd", default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub three_dimensional: Option<BoolInt>,
-    /// Whether the layer is hidden
-    #[serde(rename = "hd", default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub hidden: Option<bool>,
-    /// Layer index for parenting
-    #[serde(rename = "ind")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub index: Option<usize>,
-    /// Parent index for parenting
-    #[serde(rename = "parent")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parent_index: Option<usize>,
-    /// Time Stretch
-    #[serde(rename = "sr")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_stretch: Option<f64>,
-    /// Frame when the layer becomes visible
-    #[serde(rename = "ip")]
-    pub in_point: f64,
-    /// Frame when the layer becomes invisible
-    #[serde(rename = "op")]
-    pub out_point: f64,
-    /// Start Time
-    #[serde(rename = "st")]
-    pub start_time: f64,
+    /// layer data
+    #[serde(flatten)]
+    pub layer: Layer,
+
     /// Matte mode
     #[serde(rename = "tt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -61,6 +27,7 @@ pub struct VisualLayer {
     #[serde(rename = "masksProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub masks_properties: Option<Vec<Mask>>,
+
     // TODO:
     /// Effects for the layer
     //#[serde(rename = "ef")]

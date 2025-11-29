@@ -14,7 +14,14 @@ This release has an [MSRV][] of 1.86.
 
 ### Added
 
+- Added image schema layer. ([#78][] by [@RobertBrewitz][])
+- Added deserializer to deserialize into the correct Layer type based on the "ty" field. ([#78][] by [@RobertBrewitz][])
+- Added twist, stroke_dash, modifier and rounded_corners schema shapes. ([#78][] by [@RobertBrewitz][])
 - Added support for trim paths in animations. ([#83][] by [@RobertBrewitz][])
+
+### Changed
+
+- Changed the rust schema to better match the lottie spec. ([#78][] by [@RobertBrewitz][])
 
 ### Fixed
 
@@ -25,6 +32,8 @@ This release has an [MSRV][] of 1.86.
 
 ### Removed
 
+- Removed custom LayerId type in favor for new deserializer. ([#78][] by [@RobertBrewitz][])
+- Removed unused layer enumeration. ([#78][] by [@RobertBrewitz][])
 - Removed SKEW_LIMIT from Transform::evaluate method as it can cause rendering errors. ([#79][] by [@RobertBrewitz][])
 
 ## [0.7.0]  - 2025-10-11
@@ -124,6 +133,7 @@ This release has an [MSRV][] of 1.75.
 [#49]: https://github.com/linebender/velato/pull/49
 [#60]: https://github.com/linebender/velato/pull/60
 [#63]: https://github.com/linebender/velato/pull/63
+[#78]: https://github.com/linebender/velato/pull/78
 [#79]: https://github.com/linebender/velato/pull/79
 [#80]: https://github.com/linebender/velato/pull/80
 [#81]: https://github.com/linebender/velato/pull/81

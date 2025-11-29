@@ -1,21 +1,32 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::schema::{assets::AnyAsset, helpers::int_boolean::BoolInt, layers::AnyLayer};
+use crate::schema::{
+    animation::composition::Composition,
+    assets::AnyAsset,
+    helpers::{int_boolean::BoolInt, visual_object::VisualObject},
+    layers::AnyLayer,
+};
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
 /// Top level object, describing the animation
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Animation {
-    /// Lottie file version
+    /// Visual object properties
+    #[serde(flatten)]
+    pub visual_object: VisualObject,
+    /// Composition properties
+    #[serde(flatten)]
+    pub composition: Composition,
+    /// Bodymovin version
     #[serde(rename = "v")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    // Name, as seen from editors and the like
-    #[serde(rename = "nm")]
+    /// Specification version
+    #[serde(rename = "ver")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub ver: Option<u32>,
     /// Framerate in frames per second
     #[serde(rename = "fr")]
     pub frame_rate: f64,
@@ -39,9 +50,14 @@ pub struct Animation {
     /// List of assets that can be referenced by layers
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assets: Option<Vec<AnyAsset>>,
-    /// List of layers
-    #[serde(default)]
-    pub layers: Vec<AnyLayer>,
+    // TODO: comps
+    // TODO: fonts
+    // TODO: chars
+    // TODO: meta
+    // TODO: metadata
+    // TODO: markers
+    // TODO: mb
+    // TODO: slots
 }
 
 impl Animation {

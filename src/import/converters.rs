@@ -106,7 +106,32 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
         }
     }
 
-    target.layers = process_layers(&source.layers, &mut idmap);
+    // <<<<<<< HEAD
+    //     idmap.clear();
+    //     let mut layers = vec![];
+    //     let mut mask_layer = None;
+    //     for layer in &source.composition.layers {
+    //         let index = layers.len();
+    //         if let Some((mut layer, id, mask_blend)) = conv_layer(layer) {
+    //             if let (Some(mask_blend), Some(mask_layer)) = (mask_blend, mask_layer.take()) {
+    //                 layer.mask_layer = Some((mask_blend, mask_layer));
+    //             }
+    //             if layer.is_mask {
+    //                 mask_layer = Some(index);
+    //             }
+    //             idmap.insert(id, index);
+    //             layers.push(layer);
+    //         }
+    //     }
+    //     for layer in &mut layers {
+    //         if let Some(parent) = layer.parent {
+    //             layer.parent = idmap.get(&parent).copied();
+    //         }
+    //     }
+    //     target.layers = layers;
+    // =======
+    target.layers = process_layers(&source.composition.layers, &mut idmap);
+    // >>>>>>> main
 
     target
 }
@@ -118,26 +143,26 @@ pub fn conv_layer(
 
     let params = match source {
         schema::layers::AnyLayer::Null(null_layer) => {
-            if let Some(true) = null_layer.properties.hidden {
+            if let Some(true) = null_layer.visual_layer.layer.hidden {
                 return None;
             }
 
-            setup_layer_base(&null_layer.properties, &mut layer)
+            setup_layer_base(&null_layer.visual_layer, &mut layer)
         }
         schema::layers::AnyLayer::Precomposition(precomp_layer) => {
-            if let Some(true) = precomp_layer.properties.hidden {
+            if let Some(true) = precomp_layer.visual_layer.layer.hidden {
                 return None;
             }
 
             let params = setup_precomp_layer(precomp_layer, &mut layer);
-            let name = precomp_layer.precomp_id.clone();
+            let name = precomp_layer.ref_id.clone();
             let time_remap = precomp_layer.time_remap.as_ref().map(conv_scalar);
             layer.content = Content::Instance { name, time_remap };
 
             params
         }
         schema::layers::AnyLayer::Shape(shape_layer) => {
-            if let Some(true) = shape_layer.properties.hidden {
+            if let Some(true) = shape_layer.visual_layer.layer.hidden {
                 return None;
             }
 
@@ -152,12 +177,19 @@ pub fn conv_layer(
 
             params
         }
-        schema::layers::AnyLayer::SolidColor(solid_color_layer) => {
-            if let Some(true) = solid_color_layer.properties.hidden {
+        schema::layers::AnyLayer::Solid(solid_color_layer) => {
+            if let Some(true) = solid_color_layer.visual_layer.layer.hidden {
                 return None;
             }
 
-            setup_layer_base(&solid_color_layer.properties, &mut layer)
+            setup_layer_base(&solid_color_layer.visual_layer, &mut layer)
+        }
+        schema::layers::AnyLayer::Image(image_layer) => {
+            if let Some(true) = image_layer.visual_layer.layer.hidden {
+                return None;
+            }
+
+            setup_layer_base(&image_layer.visual_layer, &mut layer)
         }
     };
 
@@ -416,7 +448,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
         AnyShape::Fill(value) => {
             let color = conv_color(&value.color);
             let brush = animated::Brush::Solid(color).into_model();
-            let opacity = conv_scalar(value.opacity.as_ref().unwrap_or(&FLOAT_VALUE_ONE_HUNDRED));
+            let opacity = conv_scalar(&value.shape_style.opacity);
             Some(runtime::model::Draw {
                 stroke: None,
                 brush,
@@ -425,14 +457,24 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
         }
         AnyShape::Stroke(value) => {
             let stroke = animated::Stroke {
-                width: conv_scalar(&value.stroke_width),
-                join: match value.line_join.as_ref().unwrap_or(&LineJoin::Bevel) {
+                width: conv_scalar(&value.base_stroke.width),
+                join: match value
+                    .base_stroke
+                    .line_join
+                    .as_ref()
+                    .unwrap_or(&LineJoin::Bevel)
+                {
                     LineJoin::Bevel => Join::Bevel,
                     LineJoin::Round => Join::Round,
                     LineJoin::Miter => Join::Miter,
                 },
-                miter_limit: value.miter_limit,
-                cap: match value.line_cap.as_ref().unwrap_or(&LineCap::Butt) {
+                miter_limit: value.base_stroke.miter_limit,
+                cap: match value
+                    .base_stroke
+                    .line_cap
+                    .as_ref()
+                    .unwrap_or(&LineCap::Butt)
+                {
                     LineCap::Butt => Cap::Butt,
                     LineCap::Round => Cap::Round,
                     LineCap::Square => Cap::Square,
@@ -440,7 +482,7 @@ fn conv_draw(value: &schema::shapes::AnyShape) -> Option<runtime::model::Draw> {
             };
             let color = conv_color(&value.stroke_color);
             let brush = animated::Brush::Solid(color).into_model();
-            let opacity = conv_scalar(&value.opacity);
+            let opacity = conv_scalar(&value.shape_style.opacity);
             Some(runtime::model::Draw {
                 stroke: Some(stroke.into_model()),
                 brush,

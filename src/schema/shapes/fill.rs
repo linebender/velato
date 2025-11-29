@@ -1,22 +1,19 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use super::shape_element::ShapeElement;
-use crate::schema::animated_properties::color_value::ColorValue;
+use super::graphic_element::GraphicElementShape;
 use crate::schema::constants::fill_rule::FillRule;
 use crate::schema::shapes::FloatValue;
+use crate::schema::{
+    animated_properties::color_value::ColorValue, shapes::shape_style::ShapeStyleShape,
+};
 use serde::{Deserialize, Serialize};
 
 /// Solid fill color
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct FillShape {
     #[serde(flatten)]
-    pub shape_element: ShapeElement,
-
-    /// Opacity, 100 means fully opaque
-    #[serde(rename = "o")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub opacity: Option<FloatValue>,
+    pub shape_style: ShapeStyleShape,
 
     /// Color
     #[serde(rename = "c")]
