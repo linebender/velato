@@ -12,11 +12,11 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.86.
 
+- Nothing yet!
+
 ## [0.8.0]
 
 This release has an [MSRV][] of 1.86.
-
-- Nothing yet!
 
 ### Added
 
