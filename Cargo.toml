@@ -4,7 +4,7 @@ members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
 
 [workspace.package]
 edition = "2024"
-version = "0.7.0"
+version = "0.8.0"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/velato"
 # Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml, with the relevant README.md files
@@ -102,7 +102,7 @@ serde_json = "1.0.145"
 serde_repr = "0.1.20"
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.54"
+wasm-bindgen-test = "0.3.56"
 
 [features]
 default = []

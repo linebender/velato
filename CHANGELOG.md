@@ -12,6 +12,12 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.86.
 
+## [0.8.0]
+
+This release has an [MSRV][] of 1.86.
+
+- Nothing yet!
+
 ### Added
 
 - Added image schema layer. ([#78][] by [@RobertBrewitz][])
@@ -142,7 +148,8 @@ This release has an [MSRV][] of 1.75.
 [#84]: https://github.com/linebender/velato/pull/82
 [#85]: https://github.com/linebender/velato/pull/85
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/linebender/velato/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/linebender/velato/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/linebender/velato/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/linebender/velato/compare/v0.4.0...v0.5.0
