@@ -207,12 +207,23 @@ impl Tween for f64 {
         let c3 = x3 - 3.0 * x2 + 3.0 * x1 - x0;
 
         // Find where along the curve we are at normalized time `t`
+        // See: https://github.com/jneem/linesweeper/blob/7d620ed004605141519037c681edac93e22f5855/src/curve/mod.rs#L355
+        let max_coeff = c0.abs().max(c1.abs()).max(c2.abs()).max(c3.abs());
+        let eps = 1e-12 * max_coeff.max(1.0);
+
         let roots = kurbo::common::solve_cubic(c0 - t, c1, c2, c3);
         let u = roots
             .iter()
             .copied()
-            .find(|&r| (0.0..=1.0).contains(&r))
-            .expect("a valid curve should always have a root in [0, 1]");
+            .find(|&r| (-eps..=1.0 + eps).contains(&r))
+            .unwrap_or_else(|| {
+                // Fallback when no valid root found due to precision issues
+                // The cubic evaluates to (c0 - t) at u=0 and (c0 + c1 + c2 + c3 - t) at u=1
+                let val_at_0 = (c0 - t).abs();
+                let val_at_1 = (c0 + c1 + c2 + c3 - t).abs();
+
+                if val_at_0 <= val_at_1 { 0.0 } else { 1.0 }
+            });
 
         // Evaluate the curve at that point to get the y value
         let eased_y = curve.eval(u).y;
