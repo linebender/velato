@@ -4,7 +4,7 @@ members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
 
 [workspace.package]
 edition = "2024"
-version = "0.8.0"
+version = "0.8.1"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/velato"
 # Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml, with the relevant README.md files
