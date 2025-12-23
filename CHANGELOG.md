@@ -12,7 +12,9 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.86.
 
-- Nothing yet!
+### Fixed
+
+- A panic on WASM when finding roots.
 
 ## [0.8.0]
 
