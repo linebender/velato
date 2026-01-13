@@ -12,6 +12,34 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.86.
 
+### Migration
+
+To continue rendering with Vello you can follow the following migration instructions:
+
+If you previously had codee like:
+
+```rust
+let lottie = Composition = ...;
+let renderer : velato::Renderer = ...;
+let frame : f64  = ...;
+let scene : vello::Scene = renderer.render(lottie, frame, Affine::IDENTITY, 1.0);
+```
+
+You should replace it with the following:
+
+```rust
+let lottie = Composition = ...;
+let renderer : velato::Renderer = ...;
+let frame : f64  = ...;
+let mut scene = vello::Scene::new();
+let mut painter = anyrender_vello::VelloScenePainter::new(&mut scene);
+renderer.render(lottie, frame, Affine::IDENTITY, 1.0, &mut painter);
+```
+
+### Changed
+
+- Velato no longer depends directly on [Vello](https://github.com/linebender/vello). It now depends on the [AnyRender](https://github.com/dioxuslabs/anyrender) rendering abstraction instead. This allows Velato to be integrated with any rendering backend by implementing AnyRender's [PaintScene](https://docs.rs/anyrender/latest/anyrender/trait.PaintScene.html) trait (The AnyRender projects currently provides implementations Vello, Vello CPU, Vello Hybrid, and Skia). ([#92][] by [@nicoburns][])
+
 ## [0.8.1]
 
 This release has an [MSRV][] of 1.86.
@@ -26,7 +54,7 @@ This release has an [MSRV][] of 1.86.
 
 ### Added
 
-- Added image schema layer. ([#78][] by [@RobertBrewitz][])
+- Added image schema layer. 
 - Added deserializer to deserialize into the correct Layer type based on the "ty" field. ([#78][] by [@RobertBrewitz][])
 - Added twist, stroke_dash, modifier and rounded_corners schema shapes. ([#78][] by [@RobertBrewitz][])
 - Added support for trim paths in animations. ([#83][] by [@RobertBrewitz][])
@@ -137,6 +165,7 @@ This release has an [MSRV][] of 1.75.
 [@atoktoto]: https://github.com/atoktoto
 [@RishiChalla]: https://github.com/RishiChalla
 [@RobertBrewitz]: https://github.com/RobertBrewitz
+[@nicoburns]: https://github.com/nicoburns
 
 [#16]: https://github.com/linebender/velato/pull/16
 [#17]: https://github.com/linebender/velato/pull/17
@@ -153,6 +182,7 @@ This release has an [MSRV][] of 1.75.
 [#83]: https://github.com/linebender/velato/pull/83
 [#84]: https://github.com/linebender/velato/pull/82
 [#85]: https://github.com/linebender/velato/pull/85
+[#92]: https://github.com/linebender/velato/pull/92
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.8.1...HEAD
 [0.8.1]: https://github.com/linebender/velato/compare/v0.8.0...v0.8.1
