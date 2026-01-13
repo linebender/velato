@@ -93,7 +93,6 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true }
-thiserror = "2.0.17"
 
 # For the parser
 serde = { version = "1.0.228", features = ["derive"] }
