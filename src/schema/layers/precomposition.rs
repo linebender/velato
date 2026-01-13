@@ -38,10 +38,10 @@ mod tests {
         assets::{asset::Asset, precomposition::Precomposition},
         helpers::{int_boolean::BoolInt, visual_object::VisualObject},
     };
-    use once_cell::sync::Lazy;
     use serde_json::json;
+    use std::sync::LazyLock;
 
-    static JSON: Lazy<serde_json::Value> = Lazy::new(|| {
+    static JSON: LazyLock<serde_json::Value> = LazyLock::new(|| {
         json!(
             {
                 "id": "precomp_0",
@@ -52,7 +52,7 @@ mod tests {
             }
         )
     });
-    static PRECOMP: Lazy<Precomposition> = Lazy::new(|| Precomposition {
+    static PRECOMP: LazyLock<Precomposition> = LazyLock::new(|| Precomposition {
         asset: Asset {
             visual_object: VisualObject {
                 name: Some("Example".to_string()),

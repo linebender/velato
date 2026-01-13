@@ -155,10 +155,10 @@ mod tests {
         helpers::{int_boolean::BoolInt, visual_object::VisualObject},
         shapes::shape::Shape,
     };
-    use once_cell::sync::Lazy;
     use serde_json::json;
+    use std::sync::LazyLock;
 
-    static JSON: Lazy<serde_json::Value> = Lazy::new(|| {
+    static JSON: LazyLock<serde_json::Value> = LazyLock::new(|| {
         json!(
             {
                 "ty": "gr",
@@ -189,7 +189,7 @@ mod tests {
         )
     });
 
-    static LAYER: Lazy<AnyShape> = Lazy::new(|| {
+    static LAYER: LazyLock<AnyShape> = LazyLock::new(|| {
         AnyShape::Group(GroupShape {
             graphic_element: GraphicElementShape {
                 visual_object: VisualObject {

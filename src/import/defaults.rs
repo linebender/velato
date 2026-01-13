@@ -7,9 +7,9 @@ use crate::schema::animated_properties::position::Position;
 use crate::schema::animated_properties::value::FloatValue;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::schema::{self};
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
-pub static FLOAT_VALUE_ZERO: Lazy<FloatValue> = Lazy::new(|| FloatValue {
+pub static FLOAT_VALUE_ZERO: LazyLock<FloatValue> = LazyLock::new(|| FloatValue {
     animated_property: AnimatedProperty {
         property_index: None,
         animated: Some(BoolInt::False),
@@ -19,7 +19,7 @@ pub static FLOAT_VALUE_ZERO: Lazy<FloatValue> = Lazy::new(|| FloatValue {
     },
 });
 
-pub static FLOAT_VALUE_ONE_HUNDRED: Lazy<FloatValue> = Lazy::new(|| FloatValue {
+pub static FLOAT_VALUE_ONE_HUNDRED: LazyLock<FloatValue> = LazyLock::new(|| FloatValue {
     animated_property: AnimatedProperty {
         property_index: None,
         animated: Some(BoolInt::False),
@@ -29,7 +29,7 @@ pub static FLOAT_VALUE_ONE_HUNDRED: Lazy<FloatValue> = Lazy::new(|| FloatValue {
     },
 });
 
-pub static MULTIDIM_ONE: Lazy<MultiDimensional> = Lazy::new(|| MultiDimensional {
+pub static MULTIDIM_ONE: LazyLock<MultiDimensional> = LazyLock::new(|| MultiDimensional {
     animated_property: AnimatedProperty {
         property_index: None,
         animated: Some(BoolInt::False),
@@ -40,7 +40,7 @@ pub static MULTIDIM_ONE: Lazy<MultiDimensional> = Lazy::new(|| MultiDimensional 
     length: None,
 });
 
-pub static POSITION_ZERO: Lazy<Position> = Lazy::new(|| Position {
+pub static POSITION_ZERO: LazyLock<Position> = LazyLock::new(|| Position {
     property_index: None,
     animated: Some(BoolInt::False),
     expression: None,
