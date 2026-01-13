@@ -105,10 +105,10 @@ mod tests {
     };
 
     use super::{AnyLayer, shape::ShapeLayer, visual::VisualLayer};
-    use once_cell::sync::Lazy;
     use serde_json::json;
+    use std::sync::LazyLock;
 
-    static JSON: Lazy<serde_json::Value> = Lazy::new(|| {
+    static JSON: LazyLock<serde_json::Value> = LazyLock::new(|| {
         json!(
             {
                 "ddd": 0,
@@ -183,7 +183,7 @@ mod tests {
     });
 
     #[expect(deprecated, reason = "Uses deprecated attributes")]
-    static LAYER: Lazy<AnyLayer> = Lazy::new(|| {
+    static LAYER: LazyLock<AnyLayer> = LazyLock::new(|| {
         AnyLayer::Shape(ShapeLayer {
             visual_layer: VisualLayer {
                 layer: Layer {

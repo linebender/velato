@@ -68,10 +68,10 @@ mod tests {
             int_boolean::BoolInt, slottable_object::SlottableObject, visual_object::VisualObject,
         },
     };
-    use once_cell::sync::Lazy;
     use serde_json::json;
+    use std::sync::LazyLock;
 
-    static JSON: Lazy<serde_json::Value> = Lazy::new(|| {
+    static JSON: LazyLock<serde_json::Value> = LazyLock::new(|| {
         json!(
             {
                 "id": "my image",
@@ -82,7 +82,7 @@ mod tests {
             }
         )
     });
-    static IMAGE: Lazy<Image> = Lazy::new(|| Image {
+    static IMAGE: LazyLock<Image> = LazyLock::new(|| Image {
         slottable_object: SlottableObject::default(),
         file_asset: FileAsset {
             asset: Asset {

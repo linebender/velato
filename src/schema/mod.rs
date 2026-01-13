@@ -26,10 +26,10 @@ mod tests {
     };
 
     use super::{Animation, helpers::int_boolean::BoolInt};
-    use once_cell::sync::Lazy;
     use serde_json::json;
+    use std::sync::LazyLock;
 
-    static JSON: Lazy<serde_json::Value> = Lazy::new(|| {
+    static JSON: LazyLock<serde_json::Value> = LazyLock::new(|| {
         json!(
             {
                 "v": "5.5.2",
@@ -45,7 +45,7 @@ mod tests {
         )
     });
 
-    static LOTTIE: Lazy<Animation> = Lazy::new(|| Animation {
+    static LOTTIE: LazyLock<Animation> = LazyLock::new(|| Animation {
         ver: None,
         visual_object: VisualObject {
             name: Some("Example".to_string()),
