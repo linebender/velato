@@ -2832,11 +2832,13 @@ name = "velato"
 version = "0.8.1"
 dependencies = [
  "anyrender",
+ "anyrender_vello",
  "kurbo",
  "peniko",
  "serde",
  "serde_json",
  "serde_repr",
+ "vello",
  "wasm-bindgen-test",
 ]
 
