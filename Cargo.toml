@@ -87,12 +87,16 @@ clippy.wildcard_dependencies = "warn"
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
 vello = { version = "0.6.0", default-features = false }
+kurbo = { version = "0.12.0" }
+peniko = { version = "0.5.0" }
 
 [lints]
 workspace = true
 
 [dependencies]
 vello = { workspace = true }
+kurbo = { workspace = true }
+peniko = { workspace = true }
 
 # For the parser
 serde = { version = "1.0.228", features = ["derive"] }

@@ -3,13 +3,13 @@
 
 use super::Composition;
 use super::model::{Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed};
-use std::mem::swap;
-use std::ops::Range;
-use vello::kurbo::{
+use kurbo::{
     Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
     Rect,
 };
-use vello::peniko::{Fill, Mix};
+use peniko::{Fill, Mix};
+use std::mem::swap;
+use std::ops::Range;
 
 /// Renders a composition into a scene.
 #[derive(Debug, Default)]

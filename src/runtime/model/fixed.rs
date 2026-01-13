@@ -7,8 +7,7 @@ Representations of fixed (non-animated) values.
 
 use std::mem::swap;
 
-use vello::kurbo::{self, Affine, Point, Vec2};
-use vello::peniko;
+use kurbo::{Affine, Point, Vec2};
 
 /// Fixed affine transformation.
 pub type Transform = kurbo::Affine;

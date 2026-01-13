@@ -4,7 +4,7 @@
 /// Adapted from <https://github.com/emilk/egui/blob/212656f3fc6b931b21eaad401e5cec2b0da93baa/crates/egui/src/input_state/touch_state.rs>
 use std::{collections::BTreeMap, fmt::Debug};
 
-use vello::kurbo::{Point, Vec2};
+use kurbo::{Point, Vec2};
 use winit::event::{Touch, TouchPhase};
 
 /// All you probably need to know about a multi-touch gesture.

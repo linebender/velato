@@ -1,11 +1,11 @@
 // Copyright 2023 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use kurbo::{Affine, PathEl, Rect, Stroke};
+use peniko::{Brush, Color, Fill};
 use scenes::RobotoText;
 use std::collections::VecDeque;
-use vello::kurbo::{Affine, PathEl, Rect, Stroke};
 use vello::low_level::BumpAllocators;
-use vello::peniko::{Brush, Color, Fill};
 use vello::{AaConfig, Scene};
 
 const SLIDING_WINDOW_SIZE: usize = 100;

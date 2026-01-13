@@ -24,10 +24,10 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use clap::{CommandFactory, Parser};
+use kurbo::{Affine, Vec2};
+use peniko::Color;
 use scenes::{RobotoText, SceneParams, SceneSet};
-use vello::kurbo::{Affine, Vec2};
 use vello::low_level::BumpAllocators;
-use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
 use vello::{AaConfig, Renderer, RendererOptions, Scene, wgpu};
 

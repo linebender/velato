@@ -7,6 +7,7 @@ use crate::{ExampleScene, SceneSet};
 #[cfg(not(target_arch = "wasm32"))]
 use anyhow::{Ok, Result};
 use instant::Instant;
+use kurbo::{Affine, Vec2};
 use std::sync::Arc;
 #[cfg(not(target_arch = "wasm32"))]
 use std::{
@@ -15,7 +16,6 @@ use std::{
 };
 use velato::Composition;
 use vello::Scene;
-use vello::kurbo::{Affine, Vec2};
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn scene_from_files(files: &[PathBuf]) -> Result<SceneSet> {
