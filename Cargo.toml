@@ -86,6 +86,8 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
+anyrender = { version = "0.6.0" }
+anyrender_vello = { version = "0.6.0" }
 vello = { version = "0.6.0", default-features = false }
 kurbo = { version = "0.12.0" }
 peniko = { version = "0.5.0" }
@@ -94,7 +96,7 @@ peniko = { version = "0.5.0" }
 workspace = true
 
 [dependencies]
-vello = { workspace = true }
+anyrender = { workspace = true }
 kurbo = { workspace = true }
 peniko = { workspace = true }
 
@@ -108,4 +110,3 @@ wasm-bindgen-test = "0.3.56"
 
 [features]
 default = []
-wgpu = ["vello/wgpu"]

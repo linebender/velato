@@ -106,7 +106,11 @@ pub fn lottie_function_of<R: AsRef<str>>(
         let frame = ((start.elapsed().as_secs_f64() * lottie.frame_rate)
             % (lottie.frames.end - lottie.frames.start))
             + lottie.frames.start;
-        renderer.render(lottie, frame, Affine::IDENTITY, 1.0)
+
+        let mut scene = vello::Scene::new();
+        let mut painter = anyrender_vello::VelloScenePainter::new(&mut scene);
+        renderer.render(lottie, frame, Affine::IDENTITY, 1.0, &mut painter);
+        scene
     }
     let started = Instant::now();
     let mut renderer = velato::Renderer::new();

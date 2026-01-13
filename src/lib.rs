@@ -90,7 +90,4 @@ pub mod schema;
 mod error;
 pub use error::Error;
 
-// Re-export vello
-pub use vello;
-
 pub use runtime::{Composition, Renderer, model};

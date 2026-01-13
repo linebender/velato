@@ -3,11 +3,12 @@
 
 use super::Composition;
 use super::model::{Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed};
+use anyrender::PaintScene;
 use kurbo::{
     Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
     Rect,
 };
-use peniko::{Fill, Mix};
+use peniko::{BrushRef, Fill, Mix};
 use std::mem::swap;
 use std::ops::Range;
 
@@ -31,10 +32,9 @@ impl Renderer {
         frame: f64,
         transform: Affine,
         alpha: f64,
-    ) -> vello::Scene {
-        let mut scene = vello::Scene::new();
-        self.append(animation, frame, transform, alpha, &mut scene);
-        scene
+        scene: &mut impl PaintScene,
+    ) {
+        self.append(animation, frame, transform, alpha, scene);
     }
 
     /// Renders and appends the animation at a given frame to the provided scene.
@@ -44,7 +44,7 @@ impl Renderer {
         frame: f64,
         transform: Affine,
         alpha: f64,
-        scene: &mut vello::Scene,
+        scene: &mut impl PaintScene,
     ) {
         self.batch.clear();
         scene.push_clip_layer(
@@ -77,7 +77,7 @@ impl Renderer {
         transform: Affine,
         alpha: f64,
         frame: f64,
-        scene: &mut vello::Scene,
+        scene: &mut impl PaintScene,
     ) {
         if !layer.frames.contains(&frame) {
             return;
@@ -447,7 +447,7 @@ impl Batch {
         self.trim_elements.clear();
     }
 
-    fn render(&self, scene: &mut vello::Scene) {
+    fn render(&self, scene: &mut impl PaintScene) {
         // Process all draws in reverse
         for draw in self.draws.iter().rev() {
             // Some nastiness to avoid cloning the brush if unnecessary
@@ -456,11 +456,11 @@ impl Batch {
             } else {
                 None
             };
-            let brush = modified_brush.as_ref().unwrap_or(&draw.brush);
+            let brush = BrushRef::from(modified_brush.as_ref().unwrap_or(&draw.brush));
             for geometry in self.geometries[draw.geometry.clone()].iter() {
                 let path = &self.elements[geometry.elements.clone()];
                 let transform = geometry.transform;
-                if let Some(stroke) = draw.stroke.as_ref() {
+                if let Some(stroke) = &draw.stroke {
                     scene.stroke(stroke, transform, brush, None, &path);
                 } else {
                     scene.fill(Fill::NonZero, transform, brush, None, &path);
