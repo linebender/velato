@@ -28,7 +28,7 @@
 //! let frame = 0.0; // Arbitrary number chosen. Ensure it's a valid frame!
 //! let transform = vello::kurbo::Affine::IDENTITY;
 //! let alpha = 1.0;
-//! let scene = renderer.render(&composition, frame, transform, alpha);
+//! let scene = renderer.render_to_vello_scene(&composition, frame, transform, alpha);
 //! ```
 //!
 //! # Unsupported features
@@ -91,6 +91,7 @@ mod error;
 pub use error::Error;
 
 // Re-export vello
+#[cfg(feature = "vello")]
 pub use vello;
 
-pub use runtime::{Composition, Renderer, model};
+pub use runtime::{Composition, RenderSink, Renderer, model};

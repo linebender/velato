@@ -9,9 +9,12 @@ use crate::schema::Animation;
 use std::collections::HashMap;
 use std::ops::Range;
 
+#[cfg(feature = "vello")]
+mod vello;
+
 pub mod model;
 
-pub use render::Renderer;
+pub use render::{RenderSink, Renderer};
 
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]

@@ -11,6 +11,28 @@ use peniko::{Fill, Mix};
 use std::mem::swap;
 use std::ops::Range;
 
+pub trait RenderSink {
+    fn push_layer(
+        &mut self,
+        blend: impl Into<peniko::BlendMode>,
+        alpha: f32,
+        transform: Affine,
+        shape: &impl kurbo::Shape,
+    );
+
+    fn push_clip_layer(&mut self, transform: Affine, shape: &impl kurbo::Shape);
+
+    fn pop_layer(&mut self);
+
+    fn draw(
+        &mut self,
+        stroke: Option<&fixed::Stroke>,
+        transform: Affine,
+        brush: &fixed::Brush,
+        shape: &impl kurbo::Shape,
+    );
+}
+
 /// Renders a composition into a scene.
 #[derive(Debug, Default)]
 pub struct Renderer {
@@ -24,19 +46,6 @@ impl Renderer {
         Self::default()
     }
 
-    /// Renders the animation at a given frame to a new scene.
-    pub fn render(
-        &mut self,
-        animation: &Composition,
-        frame: f64,
-        transform: Affine,
-        alpha: f64,
-    ) -> vello::Scene {
-        let mut scene = vello::Scene::new();
-        self.append(animation, frame, transform, alpha, &mut scene);
-        scene
-    }
-
     /// Renders and appends the animation at a given frame to the provided scene.
     pub fn append(
         &mut self,
@@ -44,7 +53,7 @@ impl Renderer {
         frame: f64,
         transform: Affine,
         alpha: f64,
-        scene: &mut vello::Scene,
+        scene: &mut impl RenderSink,
     ) {
         self.batch.clear();
         scene.push_clip_layer(
@@ -77,7 +86,7 @@ impl Renderer {
         transform: Affine,
         alpha: f64,
         frame: f64,
-        scene: &mut vello::Scene,
+        scene: &mut impl RenderSink,
     ) {
         if !layer.frames.contains(&frame) {
             return;
@@ -447,7 +456,7 @@ impl Batch {
         self.trim_elements.clear();
     }
 
-    fn render(&self, scene: &mut vello::Scene) {
+    fn render(&self, scene: &mut impl RenderSink) {
         // Process all draws in reverse
         for draw in self.draws.iter().rev() {
             // Some nastiness to avoid cloning the brush if unnecessary
@@ -460,11 +469,7 @@ impl Batch {
             for geometry in self.geometries[draw.geometry.clone()].iter() {
                 let path = &self.elements[geometry.elements.clone()];
                 let transform = geometry.transform;
-                if let Some(stroke) = draw.stroke.as_ref() {
-                    scene.stroke(stroke, transform, brush, None, &path);
-                } else {
-                    scene.fill(Fill::NonZero, transform, brush, None, &path);
-                }
+                scene.draw(draw.stroke.as_ref(), transform, brush, &path);
             }
         }
     }

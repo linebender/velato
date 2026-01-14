@@ -94,7 +94,7 @@ peniko = { version = "0.5.0" }
 workspace = true
 
 [dependencies]
-vello = { workspace = true }
+vello = { workspace = true, optional = true }
 kurbo = { workspace = true }
 peniko = { workspace = true }
 
@@ -103,9 +103,13 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 serde_repr = "0.1.20"
 
+[dev-dependencies]
+vello = { workspace = true }
+
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
 wasm-bindgen-test = "0.3.56"
 
 [features]
-default = []
-wgpu = ["vello/wgpu"]
+default = ["vello"]
+vello = ["dep:vello"]
+wgpu = ["vello", "vello/wgpu"]
