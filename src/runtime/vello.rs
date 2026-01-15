@@ -14,11 +14,11 @@ impl RenderSink for vello::Scene {
         transform: Affine,
         shape: &impl Shape,
     ) {
-        self.push_layer(blend, alpha, transform, shape);
+        self.push_layer(Fill::NonZero, blend, alpha, transform, shape);
     }
 
     fn push_clip_layer(&mut self, transform: Affine, shape: &impl Shape) {
-        self.push_clip_layer(transform, shape);
+        self.push_clip_layer(Fill::NonZero, transform, shape);
     }
 
     fn pop_layer(&mut self) {
