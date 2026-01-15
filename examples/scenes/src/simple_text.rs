@@ -1,11 +1,11 @@
 // Copyright 2022 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use kurbo::Affine;
+use peniko::{Blob, Brush, BrushRef, FontData, StyleRef};
 use skrifa::MetadataProvider;
 use skrifa::raw::FontRef;
 use std::sync::Arc;
-use vello::kurbo::Affine;
-use vello::peniko::{Blob, Brush, BrushRef, FontData, StyleRef};
 use vello::{Glyph, Scene};
 
 // This is very much a hack to get things working.
@@ -113,7 +113,7 @@ impl RobotoText {
         transform: Affine,
         text: &str,
     ) {
-        use vello::peniko::{Color, Fill};
+        use peniko::{Color, Fill};
         let brush = brush.unwrap_or(&Brush::Solid(Color::WHITE));
         self.add_run(
             scene,

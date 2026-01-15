@@ -1,9 +1,9 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use kurbo::{Affine, PathEl, Point, Shape as _, Size, Vec2};
+use peniko::{BlendMode, Color};
 use std::ops::Range;
-use vello::kurbo::{self, Affine, PathEl, Point, Shape as _, Size, Vec2};
-use vello::peniko::{self, BlendMode, Color};
 
 mod spline;
 mod value;

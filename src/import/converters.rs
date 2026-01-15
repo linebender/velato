@@ -18,9 +18,9 @@ use crate::schema::animated_properties::split_vector::SplitVector;
 use crate::schema::constants::gradient_type::GradientType;
 use crate::schema::helpers::int_boolean::BoolInt;
 use crate::{Composition, schema};
+use kurbo::{Cap, Join, Point, Size, Vec2};
+use peniko::{BlendMode, Color, Mix};
 use std::collections::HashMap;
-use vello::kurbo::{Cap, Join, Point, Size, Vec2};
-use vello::peniko::{BlendMode, Color, Mix};
 
 fn process_layers(
     source_layers: &[schema::layers::AnyLayer],

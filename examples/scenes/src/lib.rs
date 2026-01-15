@@ -37,9 +37,9 @@ pub use lottie::{default_scene, scene_from_files};
 pub use simple_text::RobotoText;
 pub use test_scenes::test_scenes;
 
+use kurbo::Vec2;
+use peniko::{Color, color};
 use vello::Scene;
-use vello::kurbo::Vec2;
-use vello::peniko::{Color, color};
 
 pub struct SceneParams<'a> {
     pub time: f64,

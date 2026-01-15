@@ -1,12 +1,9 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use vello::{
-    kurbo::{
-        self, ParamCurve, Point,
-        common::{solve_cubic, solve_itp},
-    },
-    peniko,
+use kurbo::{
+    ParamCurve, Point,
+    common::{solve_cubic, solve_itp},
 };
 
 /// Fixed or animated value.

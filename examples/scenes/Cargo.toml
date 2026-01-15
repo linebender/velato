@@ -11,6 +11,8 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true }
+kurbo = { workspace = true }
+peniko = { workspace = true }
 velato = { path = "../.." }
 anyhow = "1"
 clap = { version = "4.5.38", features = ["derive"] }
