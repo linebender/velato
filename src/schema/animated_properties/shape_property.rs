@@ -60,10 +60,10 @@ where
     }
 
     // Early return if last keyframe has a start value.
-    if let Some(last_keyframe) = keyframes.last() {
-        if last_keyframe.start.is_some() {
-            return Ok(keyframes);
-        }
+    if let Some(last_keyframe) = keyframes.last()
+        && last_keyframe.start.is_some()
+    {
+        return Ok(keyframes);
     }
 
     // The last keyframe has no start value - so there must be at least one other keyframe present.
