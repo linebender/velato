@@ -10,7 +10,23 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## [Unreleased]
 
-This release has an [MSRV][] of 1.86.
+This release has an [MSRV][] of 1.88.
+
+## [0.9.0]
+
+This release has an [MSRV][] of 1.88.
+
+### Changed
+
+- The `RenderSink` trait has been reintroduced, making it possible to use `velato` with any rendering backend. The `vello` dependency is now optional. ([#95][] by [@nicoburns][])
+- Vello has been upgraded to v0.7 ([#96][] by [@nicoburns][])
+
+### Removed
+
+- The `thiserror` dependency has been removed ([#94][] by [@nicoburns][])
+- The `once_cell` dependency has been removed ([#93][] by [@nicoburns][])
+
+### Changed
 
 ## [0.8.1]
 
@@ -137,6 +153,7 @@ This release has an [MSRV][] of 1.75.
 [@atoktoto]: https://github.com/atoktoto
 [@RishiChalla]: https://github.com/RishiChalla
 [@RobertBrewitz]: https://github.com/RobertBrewitz
+[@nicoburns]: https://github.com/nicoburns
 
 [#16]: https://github.com/linebender/velato/pull/16
 [#17]: https://github.com/linebender/velato/pull/17
@@ -153,8 +170,13 @@ This release has an [MSRV][] of 1.75.
 [#83]: https://github.com/linebender/velato/pull/83
 [#84]: https://github.com/linebender/velato/pull/82
 [#85]: https://github.com/linebender/velato/pull/85
+[#93]: https://github.com/linebender/velato/pull/93
+[#94]: https://github.com/linebender/velato/pull/94
+[#95]: https://github.com/linebender/velato/pull/95
+[#96]: https://github.com/linebender/velato/pull/96
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/linebender/velato/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/linebender/velato/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/linebender/velato/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/linebender/velato/compare/v0.6.0...v0.7.0

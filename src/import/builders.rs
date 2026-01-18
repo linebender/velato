@@ -74,21 +74,21 @@ pub fn setup_precomp_layer(
         .as_ref()
         .unwrap_or(&Vec::default())
     {
-        if let Some(shape) = &mask_source.shape {
-            if let Some(geometry) = conv_shape_geometry(shape) {
-                let mode = peniko::BlendMode::default();
-                let opacity = conv_scalar(
-                    mask_source
-                        .opacity
-                        .as_ref()
-                        .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
-                );
-                target.masks.push(runtime::model::Mask {
-                    mode,
-                    geometry,
-                    opacity,
-                });
-            }
+        if let Some(shape) = &mask_source.shape
+            && let Some(geometry) = conv_shape_geometry(shape)
+        {
+            let mode = peniko::BlendMode::default();
+            let opacity = conv_scalar(
+                mask_source
+                    .opacity
+                    .as_ref()
+                    .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
+            );
+            target.masks.push(runtime::model::Mask {
+                mode,
+                geometry,
+                opacity,
+            });
         }
     }
 
@@ -157,21 +157,21 @@ pub fn setup_shape_layer(
         .as_ref()
         .unwrap_or(&Vec::default())
     {
-        if let Some(shape) = &mask_source.shape {
-            if let Some(geometry) = conv_shape_geometry(shape) {
-                let mode = peniko::BlendMode::default();
-                let opacity = conv_scalar(
-                    mask_source
-                        .opacity
-                        .as_ref()
-                        .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
-                );
-                target.masks.push(runtime::model::Mask {
-                    mode,
-                    geometry,
-                    opacity,
-                });
-            }
+        if let Some(shape) = &mask_source.shape
+            && let Some(geometry) = conv_shape_geometry(shape)
+        {
+            let mode = peniko::BlendMode::default();
+            let opacity = conv_scalar(
+                mask_source
+                    .opacity
+                    .as_ref()
+                    .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
+            );
+            target.masks.push(runtime::model::Mask {
+                mode,
+                geometry,
+                opacity,
+            });
         }
     }
 
@@ -221,21 +221,21 @@ pub fn setup_layer_base(
     target.start_frame = source.layer.start_time.unwrap_or(0.0);
 
     for mask_source in source.masks_properties.as_ref().unwrap_or(&Vec::default()) {
-        if let Some(shape) = &mask_source.shape {
-            if let Some(geometry) = conv_shape_geometry(shape) {
-                let mode = peniko::BlendMode::default();
-                let opacity = conv_scalar(
-                    mask_source
-                        .opacity
-                        .as_ref()
-                        .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
-                );
-                target.masks.push(runtime::model::Mask {
-                    mode,
-                    geometry,
-                    opacity,
-                });
-            }
+        if let Some(shape) = &mask_source.shape
+            && let Some(geometry) = conv_shape_geometry(shape)
+        {
+            let mode = peniko::BlendMode::default();
+            let opacity = conv_scalar(
+                mask_source
+                    .opacity
+                    .as_ref()
+                    .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
+            );
+            target.masks.push(runtime::model::Mask {
+                mode,
+                geometry,
+                opacity,
+            });
         }
     }
 

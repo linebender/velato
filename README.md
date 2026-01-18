@@ -2,7 +2,9 @@
 
 # Velato
 
-**An integration to parse and render [Lottie](https://lottie.github.io/) with [Vello](https://vello.dev).**
+**A library to parse and render [Lottie](https://lottie.github.io/) animations.**
+
+Render with the (optional) built-in [Vello](https://vello.dev) integration, or implement the [`RenderSink`](https://docs.rs/velato/latest/velato/trait.RenderSink.html) trait to bring your own renderer.
 
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23vello-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-vello)
 [![dependency status](https://deps.rs/repo/github/linebender/velato/status.svg)](https://deps.rs/repo/github/linebender/velato)
@@ -19,14 +21,15 @@
 
 ## Version compatibility
 
-| velato | vello |
-| ------ | ----- |
-| 0.7-0.8,main| 0.6   |
-| 0.6    | 0.5   |
-| 0.5    | 0.4   |
-| 0.4    | 0.3   |
-| 0.3    | 0.2   |
-| 0.1, 0.2 | 0.1   |
+| velato    | vello |
+| ------    | ----- |
+| 0.9, main | 0.7   |
+| 0.7, 0.8  | 0.6   |
+| 0.6       | 0.5   |
+| 0.5       | 0.4   |
+| 0.4       | 0.3   |
+| 0.3       | 0.2   |
+| 0.1, 0.2  | 0.1   |
 
 ## Missing features
 
