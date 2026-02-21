@@ -23,7 +23,7 @@ workspace = true
 vello = { workspace = true, features = ["wgpu"] }
 kurbo = { workspace = true }
 peniko = { workspace = true }
-wgpu = { version = "26.0", features = ["vulkan", "metal", "dx12"] }
+wgpu = { version = "27.0", features = ["vulkan", "metal", "dx12"] }
 scenes = { path = "../scenes" }
 anyhow = "1"
 clap = { version = "4.5.38", features = ["derive"] }
