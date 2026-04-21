@@ -66,7 +66,7 @@ pub fn setup_precomp_layer(
     }
     target.stretch = source.visual_layer.layer.time_stretch.unwrap_or(1.0);
     target.frames = source.visual_layer.layer.in_point..source.visual_layer.layer.out_point;
-    target.start_frame = source.visual_layer.layer.start_time.unwrap_or(0.0);
+    target.start_frame = source.start_time;
 
     for mask_source in source
         .visual_layer
