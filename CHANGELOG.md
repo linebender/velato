@@ -15,6 +15,7 @@ This release has an [MSRV][] of 1.88.
 ### Fixed
 
 - Fixed `with_winit` example failing to start due to `wgpu` version mismatch (v26 vs v27) left behind during the Vello 0.7 upgrade. ([#100][] by [@RobertBrewitz][])
+- Fixed `AnyAsset` deserialization errors not naming the failing asset. Errors now include the asset id, and also forward the actual inner failure (e.g. an unknown shape variant inside a precomposition's layers) instead of the generic "did not match any variant of untagged enum" message. ([#105][] by [@RobertBrewitz][])
 
 ## [0.9.0]
 
@@ -179,6 +180,7 @@ This release has an [MSRV][] of 1.75.
 [#95]: https://github.com/linebender/velato/pull/95
 [#96]: https://github.com/linebender/velato/pull/96
 [#100]: https://github.com/linebender/velato/pull/100
+[#105]: https://github.com/linebender/velato/pull/105
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.9.0...HEAD
 [0.9.0]: https://github.com/linebender/velato/compare/v0.8.1...v0.9.0
