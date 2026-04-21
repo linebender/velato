@@ -31,6 +31,15 @@ pub trait RenderSink {
         brush: &fixed::Brush,
         shape: &impl kurbo::Shape,
     );
+
+    /// Called before rendering a Lottie layer.
+    ///
+    /// - `name` is the layer's `nm` field.
+    /// - `index` is the layer's position in the layer array.
+    fn begin_layer_group(&mut self, _name: &str, _index: usize) {}
+
+    /// Called after rendering a Lottie layer.
+    fn end_layer_group(&mut self) {}
 }
 
 /// Renders a composition into a scene.
@@ -60,7 +69,7 @@ impl Renderer {
             transform,
             &Rect::new(0.0, 0.0, animation.width as _, animation.height as _),
         );
-        for layer in animation.layers.iter().rev() {
+        for (layer_index, layer) in animation.layers.iter().enumerate().rev() {
             if layer.is_mask {
                 continue;
             }
@@ -68,6 +77,7 @@ impl Renderer {
                 animation,
                 &animation.layers,
                 layer,
+                layer_index,
                 transform,
                 alpha,
                 frame,
@@ -83,6 +93,7 @@ impl Renderer {
         animation: &Composition,
         layer_set: &[Layer],
         layer: &Layer,
+        layer_index: usize,
         transform: Affine,
         alpha: f64,
         frame: f64,
@@ -91,6 +102,7 @@ impl Renderer {
         if !layer.frames.contains(&frame) {
             return;
         }
+        scene.begin_layer_group(&layer.name, layer_index);
         let parent_transform = transform;
         let transform = self.compute_transform(layer_set, layer, parent_transform, frame);
         let full_rect = Rect::new(0.0, 0.0, animation.width as f64, animation.height as f64);
@@ -104,6 +116,7 @@ impl Renderer {
                     animation,
                     layer_set,
                     mask,
+                    0,
                     parent_transform,
                     alpha,
                     frame,
@@ -140,6 +153,7 @@ impl Renderer {
                             animation,
                             asset_layers,
                             asset_layer,
+                            0,
                             transform,
                             alpha,
                             frame + frame_delta,
@@ -157,6 +171,7 @@ impl Renderer {
         for _ in 0..layer.masks.len() + (layer.mask_layer.is_some() as usize * 2) {
             scene.pop_layer();
         }
+        scene.end_layer_group();
     }
 
     fn render_shapes(&mut self, shapes: &[Shape], transform: Affine, alpha: f64, frame: f64) {

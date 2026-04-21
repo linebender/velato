@@ -24,6 +24,7 @@
 #[cfg(not(target_arch = "wasm32"))]
 pub mod download;
 mod lottie;
+mod picking;
 mod simple_text;
 mod test_scenes;
 use std::path::PathBuf;
@@ -37,7 +38,7 @@ pub use lottie::{default_scene, scene_from_files};
 pub use simple_text::RobotoText;
 pub use test_scenes::test_scenes;
 
-use kurbo::Vec2;
+use kurbo::{Affine, Vec2};
 use peniko::{Color, color};
 use vello::Scene;
 
@@ -51,6 +52,12 @@ pub struct SceneParams<'a> {
     pub resolution: Option<Vec2>,
     pub base_color: Option<Color>,
     pub complexity: usize,
+    /// Cursor position in window coordinates, if known.
+    pub cursor_position: Option<Vec2>,
+    /// Viewport size in physical pixels.
+    pub viewport_size: Option<Vec2>,
+    /// User camera transform (pan/zoom/rotate) applied to the scene fragment.
+    pub camera_transform: Affine,
 }
 
 pub struct SceneConfig {

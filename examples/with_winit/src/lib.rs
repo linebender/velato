@@ -345,6 +345,9 @@ fn run(
                             base_color: None,
                             interactive: true,
                             complexity,
+                            cursor_position: prior_position,
+                            viewport_size: Some(Vec2::new(width as f64, height as f64)),
+                            camera_transform: transform,
                         };
                         example_scene
                             .function
