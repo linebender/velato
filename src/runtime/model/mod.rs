@@ -134,6 +134,7 @@ pub enum Geometry {
     Rect(animated::Rect),
     Ellipse(animated::Ellipse),
     Spline(animated::Spline),
+    Star(animated::Star),
 }
 
 impl Geometry {
@@ -149,6 +150,9 @@ impl Geometry {
                 path.extend(value.evaluate(frame).path_elements(0.1));
             }
             Self::Spline(value) => {
+                value.evaluate(frame, path);
+            }
+            Self::Star(value) => {
                 value.evaluate(frame, path);
             }
         }

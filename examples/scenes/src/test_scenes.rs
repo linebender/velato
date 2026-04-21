@@ -27,7 +27,10 @@ macro_rules! scene {
 }
 
 pub fn test_scenes() -> SceneSet {
-    let scenes = vec![scene!(splash_with_tiger(), "Tiger", true)];
+    let scenes = vec![
+        scene!(splash_with_tiger(), "Tiger", true),
+        scene!(polystar_test(), "PolyStarTest", true),
+    ];
     SceneSet { scenes }
 }
 
@@ -68,4 +71,12 @@ fn splash_with_tiger() -> impl FnMut(&mut Scene, &mut SceneParams<'_>) {
         lottie(scene, params);
         splash_screen(scene, params);
     }
+}
+
+fn polystar_test() -> impl FnMut(&mut Scene, &mut SceneParams<'_>) {
+    let contents = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../assets/PolyStarTest.json"
+    ));
+    crate::lottie::lottie_function_of("PolyStarTest".to_string(), move || contents)
 }

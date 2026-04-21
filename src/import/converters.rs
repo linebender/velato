@@ -640,9 +640,51 @@ fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::mod
             Some(crate::runtime::model::Geometry::Rect(rect))
         }
         AnyShape::Path(value) => conv_shape_geometry(&value.shape_property),
-        // todo: generic shape
+        AnyShape::PolyStar(value) => conv_polystar_geometry(value),
         _ => None,
     }
+}
+
+fn conv_polystar_geometry(
+    value: &schema::shapes::polystar::PolyStarShape,
+) -> Option<runtime::model::Geometry> {
+    use schema::constants::star_type::StarType;
+
+    let is_polygon = matches!(value.star_type, StarType::Polygon);
+    let position = conv_pos_point(&value.position);
+    let outer_radius = conv_scalar(&value.outer_radius);
+    let outer_roundness = conv_scalar(&value.outer_roundness);
+    let rotation = conv_scalar(&value.rotation);
+    let points = conv_scalar(&value.points);
+
+    let (inner_radius, inner_roundness) = if is_polygon {
+        (Value::Fixed(0.0), Value::Fixed(0.0))
+    } else {
+        let ir = value
+            .inner_radius
+            .as_ref()
+            .map(conv_scalar)
+            .unwrap_or(Value::Fixed(0.0));
+        let is = value
+            .inner_roundness
+            .as_ref()
+            .map(conv_scalar)
+            .unwrap_or(Value::Fixed(0.0));
+        (ir, is)
+    };
+
+    let star = animated::Star {
+        is_polygon,
+        direction: 1.0,
+        position,
+        inner_radius,
+        inner_roundness,
+        outer_radius,
+        outer_roundness,
+        rotation,
+        points,
+    };
+    Some(star.into_model())
 }
 
 pub fn conv_shape_geometry(

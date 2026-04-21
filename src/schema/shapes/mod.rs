@@ -38,6 +38,7 @@ use self::gradient_stroke::GradientStrokeShape;
 use self::merge::MergeShape;
 use self::offset_path::OffsetPathShape;
 use self::path::PathShape;
+use self::polystar::PolyStarShape;
 use self::pucker_bloat::PuckerBloatShape;
 use self::rectangle::RectangleShape;
 use self::repeater::RepeaterShape;
@@ -94,6 +95,8 @@ pub enum AnyShape {
     Twist(TwistShape),
     #[serde(rename = "rd")]
     RoundedCorners(RoundedCornersShape),
+    #[serde(rename = "sr")]
+    PolyStar(PolyStarShape),
     // TODO: model other shapes
     // todo ZigZag(zig_zag),
     // todo no_style(no_style),
