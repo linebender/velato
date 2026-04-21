@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::schema::{
-    animation::composition::Composition,
+    animation::{composition::Composition, meta::Meta},
     assets::AnyAsset,
-    helpers::{int_boolean::BoolInt, visual_object::VisualObject},
+    helpers::{int_boolean::BoolInt, marker::Marker, visual_object::VisualObject},
     layers::AnyLayer,
 };
 use serde::{Deserialize, Serialize};
@@ -50,12 +50,27 @@ pub struct Animation {
     /// List of assets that can be referenced by layers
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assets: Option<Vec<AnyAsset>>,
+    /// Markers (named time spans)
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub markers: Option<Vec<Marker>>,
+    /// File metadata from the authoring tool (Bodymovin/LottieFiles extension)
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meta: Option<Meta>,
+    /// User-defined metadata bag. Schema is consumer-defined.
+    ///
+    /// - Bodymovin uses keys like `filename`/`customProps`.
+    /// - Lottielab embeds its interactivity extension here under `lottielabInteractivity`.
+    /// - Custom embeds are permitted.
+    ///
+    /// Left as a raw JSON value so consumers own the schema.
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<serde_json::Value>,
     // TODO: comps
     // TODO: fonts
     // TODO: chars
-    // TODO: meta
-    // TODO: metadata
-    // TODO: markers
     // TODO: mb
     // TODO: slots
 }

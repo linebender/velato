@@ -12,6 +12,10 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.88.
 
+### Added
+
+- Added `markers`, `meta` and `metadata` fields to the Animation schema. ([#101][] by [@RobertBrewitz][])
+
 ### Fixed
 
 - Fixed `with_winit` example failing to start due to `wgpu` version mismatch (v26 vs v27) left behind during the Vello 0.7 upgrade. ([#100][] by [@RobertBrewitz][])
@@ -182,6 +186,7 @@ This release has an [MSRV][] of 1.75.
 [#95]: https://github.com/linebender/velato/pull/95
 [#96]: https://github.com/linebender/velato/pull/96
 [#100]: https://github.com/linebender/velato/pull/100
+[#101]: https://github.com/linebender/velato/pull/101
 [#103]: https://github.com/linebender/velato/pull/103
 [#105]: https://github.com/linebender/velato/pull/105
 
