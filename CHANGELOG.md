@@ -12,6 +12,10 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.88.
 
+### Fixed
+
+- Fixed `with_winit` example failing to start due to `wgpu` version mismatch (v26 vs v27) left behind during the Vello 0.7 upgrade. ([#100][] by [@RobertBrewitz][])
+
 ## [0.9.0]
 
 This release has an [MSRV][] of 1.88.
@@ -174,6 +178,7 @@ This release has an [MSRV][] of 1.75.
 [#94]: https://github.com/linebender/velato/pull/94
 [#95]: https://github.com/linebender/velato/pull/95
 [#96]: https://github.com/linebender/velato/pull/96
+[#100]: https://github.com/linebender/velato/pull/100
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.9.0...HEAD
 [0.9.0]: https://github.com/linebender/velato/compare/v0.8.1...v0.9.0
