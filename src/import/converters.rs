@@ -141,57 +141,45 @@ pub fn conv_layer(
 ) -> Option<(Layer, usize, Option<BlendMode>, Option<usize>)> {
     let mut layer = Layer::default();
 
+    let hidden = is_layer_hidden(source);
+
     let params = match source {
         schema::layers::AnyLayer::Null(null_layer) => {
-            if let Some(true) = null_layer.visual_layer.layer.hidden {
-                return None;
-            }
-
             setup_layer_base(&null_layer.visual_layer, &mut layer)
         }
         schema::layers::AnyLayer::Precomposition(precomp_layer) => {
-            if let Some(true) = precomp_layer.visual_layer.layer.hidden {
-                return None;
-            }
-
             let params = setup_precomp_layer(precomp_layer, &mut layer);
-            let name = precomp_layer.ref_id.clone();
-            let time_remap = precomp_layer.time_remap.as_ref().map(conv_scalar);
-            layer.content = Content::Instance { name, time_remap };
-
+            if !hidden {
+                let name = precomp_layer.ref_id.clone();
+                let time_remap = precomp_layer.time_remap.as_ref().map(conv_scalar);
+                layer.content = Content::Instance { name, time_remap };
+            }
             params
         }
         schema::layers::AnyLayer::Shape(shape_layer) => {
-            if let Some(true) = shape_layer.visual_layer.layer.hidden {
-                return None;
-            }
-
             let params = setup_shape_layer(shape_layer, &mut layer);
-            let mut shapes = vec![];
-            for shape in &shape_layer.shapes {
-                if let Some(shape) = conv_shape(shape) {
-                    shapes.push(shape);
+            if !hidden {
+                let mut shapes = vec![];
+                for shape in &shape_layer.shapes {
+                    if let Some(shape) = conv_shape(shape) {
+                        shapes.push(shape);
+                    }
                 }
+                layer.content = Content::Shape(shapes);
             }
-            layer.content = Content::Shape(shapes);
-
             params
         }
         schema::layers::AnyLayer::Solid(solid_color_layer) => {
-            if let Some(true) = solid_color_layer.visual_layer.layer.hidden {
-                return None;
-            }
-
             setup_layer_base(&solid_color_layer.visual_layer, &mut layer)
         }
         schema::layers::AnyLayer::Image(image_layer) => {
-            if let Some(true) = image_layer.visual_layer.layer.hidden {
-                return None;
-            }
-
             setup_layer_base(&image_layer.visual_layer, &mut layer)
         }
     };
+
+    if hidden {
+        layer.is_mask = false;
+    }
 
     let LayerSetupParams {
         layer_index: id,
@@ -200,6 +188,17 @@ pub fn conv_layer(
     } = params;
 
     Some((layer, id, matte_mode, matte_layer_index))
+}
+
+fn is_layer_hidden(source: &schema::layers::AnyLayer) -> bool {
+    let hidden = match source {
+        schema::layers::AnyLayer::Null(l) => l.visual_layer.layer.hidden,
+        schema::layers::AnyLayer::Precomposition(l) => l.visual_layer.layer.hidden,
+        schema::layers::AnyLayer::Shape(l) => l.visual_layer.layer.hidden,
+        schema::layers::AnyLayer::Solid(l) => l.visual_layer.layer.hidden,
+        schema::layers::AnyLayer::Image(l) => l.visual_layer.layer.hidden,
+    };
+    hidden == Some(true)
 }
 
 pub fn conv_transform(
@@ -948,4 +947,117 @@ pub fn normalize_to_range(a: f64, b: f64, x: f64) -> f64 {
 
     // Calculate the normalized value
     (x - a) / (b - a)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        import::converters::conv_layer,
+        model::Content,
+        schema::{
+            animated_properties::{
+                animated_property::{AnimatedProperty, AnimatedPropertyK},
+                position::{Position, PositionValueK},
+                value::FloatValue,
+            },
+            helpers::{
+                int_boolean::BoolInt,
+                transform::{AnyTransformP, AnyTransformR, Transform},
+                visual_object::VisualObject,
+            },
+            layers::{AnyLayer, layer::Layer, shape::ShapeLayer, visual::VisualLayer},
+        },
+    };
+
+    #[expect(deprecated, reason = "Uses deprecated VisualLayer fields")]
+    fn make_shape_layer(hidden: bool, matte_target: bool) -> AnyLayer {
+        AnyLayer::Shape(ShapeLayer {
+            visual_layer: VisualLayer {
+                layer: Layer {
+                    visual_object: VisualObject {
+                        name: Some("test".to_string()),
+                        match_name: None,
+                    },
+                    layer_type: 4,
+                    three_dimensional: None,
+                    index: Some(0),
+                    start_time: Some(0.0),
+                    in_point: 0.0,
+                    out_point: 60.0,
+                    hidden: if hidden { Some(true) } else { None },
+                    parent_index: None,
+                    time_stretch: None,
+                },
+                transform: Transform {
+                    anchor_point: None,
+                    position: AnyTransformP::Position(Position {
+                        property_index: None,
+                        animated: Some(BoolInt::False),
+                        expression: None,
+                        length: None,
+                        value: PositionValueK::Static(vec![0.0, 0.0]),
+                    }),
+                    scale: None,
+                    rotation: Some(AnyTransformR::Rotation(FloatValue {
+                        animated_property: AnimatedProperty {
+                            animated: Some(BoolInt::False),
+                            property_index: None,
+                            expression: None,
+                            slot_id: None,
+                            value: AnimatedPropertyK::Static(0.0),
+                        },
+                    })),
+                    opacity: None,
+                    skew: None,
+                    skew_axis: None,
+                },
+                matte_mode: None,
+                matte_target: if matte_target {
+                    Some(BoolInt::True)
+                } else {
+                    None
+                },
+                masks_properties: None,
+                rotate_to_match_anim_pos_path: None,
+                matte_layer_index: None,
+                has_mask: None,
+                motion_blur: None,
+                blend_mode: None,
+                css_class: None,
+                id: None,
+                tag_name: None,
+                tranform_before_mask_deprecated: None,
+                transform_before_mask: None,
+            },
+            shapes: vec![],
+        })
+    }
+
+    #[test]
+    fn hidden_layer_has_no_content() {
+        let source = make_shape_layer(true, false);
+        let (layer, ..) = conv_layer(&source).unwrap();
+        assert!(matches!(layer.content, Content::None));
+    }
+
+    #[test]
+    fn hidden_matte_layer_has_is_mask_false() {
+        let source = make_shape_layer(true, true);
+        let (layer, ..) = conv_layer(&source).unwrap();
+        assert!(!layer.is_mask);
+    }
+
+    #[test]
+    fn visible_matte_layer_has_is_mask_true() {
+        let source = make_shape_layer(false, true);
+        let (layer, ..) = conv_layer(&source).unwrap();
+        assert!(layer.is_mask);
+    }
+
+    #[test]
+    fn visible_layer_has_content() {
+        let source = make_shape_layer(false, false);
+        let (layer, ..) = conv_layer(&source).unwrap();
+        assert!(matches!(layer.content, Content::Shape(_)));
+    }
 }
