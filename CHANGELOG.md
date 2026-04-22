@@ -15,6 +15,7 @@ This release has an [MSRV][] of 1.88.
 ### Added
 
 - Added `markers`, `meta` and `metadata` fields to the Animation schema. ([#101][] by [@RobertBrewitz][])
+- Added PolyStar shape support (star and polygon geometry), including animated properties for position, radii, roundness, rotation, and point count. ([#102][] by [@RobertBrewitz][])
 
 ### Fixed
 
@@ -187,6 +188,7 @@ This release has an [MSRV][] of 1.75.
 [#96]: https://github.com/linebender/velato/pull/96
 [#100]: https://github.com/linebender/velato/pull/100
 [#101]: https://github.com/linebender/velato/pull/101
+[#102]: https://github.com/linebender/velato/pull/102
 [#103]: https://github.com/linebender/velato/pull/103
 [#105]: https://github.com/linebender/velato/pull/105
 

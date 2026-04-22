@@ -162,18 +162,123 @@ pub struct Star {
     pub points: Value<f64>,
 }
 
-// TODO: Use this.
-//impl Star {
-//    pub fn is_fixed(&self) -> bool {
-//        self.position.is_fixed()
-//            && self.inner_radius.is_fixed()
-//            && self.inner_roundness.is_fixed()
-//            && self.outer_radius.is_fixed()
-//            && self.outer_roundness.is_fixed()
-//            && self.rotation.is_fixed()
-//            && self.points.is_fixed()
-//    }
-//}
+impl Star {
+    pub fn is_fixed(&self) -> bool {
+        self.position.is_fixed()
+            && self.inner_radius.is_fixed()
+            && self.inner_roundness.is_fixed()
+            && self.outer_radius.is_fixed()
+            && self.outer_roundness.is_fixed()
+            && self.rotation.is_fixed()
+            && self.points.is_fixed()
+    }
+
+    /// Evaluates the star or polygon at the given frame and emits the
+    /// elements to the specified path.
+    pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) {
+        use std::f64::consts::{FRAC_PI_2, TAU};
+
+        let center = self.position.evaluate(frame);
+        let num_points = self.points.evaluate(frame).round() as usize;
+        if num_points == 0 {
+            return;
+        }
+        let rotation_deg = self.rotation.evaluate(frame);
+        let outer_radius = self.outer_radius.evaluate(frame);
+        let outer_roundness = self.outer_roundness.evaluate(frame) / 100.0;
+
+        let is_star = !self.is_polygon;
+        let (inner_radius, inner_roundness) = if is_star {
+            (
+                self.inner_radius.evaluate(frame),
+                self.inner_roundness.evaluate(frame) / 100.0,
+            )
+        } else {
+            (outer_radius, 0.0)
+        };
+
+        let angle_per_point = TAU / num_points as f64;
+        let half_angle = angle_per_point / 2.0;
+        let rotation_rad = rotation_deg.to_radians() - FRAC_PI_2;
+
+        let total_vertices = if is_star { num_points * 2 } else { num_points };
+        let vertex_angle_step = if is_star { half_angle } else { angle_per_point };
+
+        let mut vertices: Vec<(Point, Point, Point)> = Vec::with_capacity(total_vertices);
+        let mut current_angle = rotation_rad;
+
+        for i in 0..total_vertices {
+            let (radius, roundness) = if !is_star || i % 2 == 0 {
+                (outer_radius, outer_roundness)
+            } else {
+                (inner_radius, inner_roundness)
+            };
+
+            let x = center.x + radius * current_angle.cos();
+            let y = center.y + radius * current_angle.sin();
+
+            let (in_pt, out_pt) = if roundness.abs() > 1e-6 {
+                let tangent_len = radius * (vertex_angle_step / 2.0).tan() * roundness * 4.0 / 3.0;
+                let perp_x = -current_angle.sin();
+                let perp_y = current_angle.cos();
+                (
+                    Point::new(x - tangent_len * perp_x, y - tangent_len * perp_y),
+                    Point::new(x + tangent_len * perp_x, y + tangent_len * perp_y),
+                )
+            } else {
+                (Point::new(x, y), Point::new(x, y))
+            };
+
+            vertices.push((Point::new(x, y), in_pt, out_pt));
+            current_angle += vertex_angle_step;
+        }
+
+        if vertices.is_empty() {
+            return;
+        }
+
+        path.reserve(total_vertices * 3 + 2);
+        path.push(PathEl::MoveTo(vertices[0].0));
+        for i in 1..vertices.len() {
+            let prev_out = vertices[i - 1].2;
+            let curr_in = vertices[i].1;
+            let curr_pt = vertices[i].0;
+            let prev_pt = vertices[i - 1].0;
+            if (prev_out.x - prev_pt.x).abs() < 1e-6
+                && (prev_out.y - prev_pt.y).abs() < 1e-6
+                && (curr_in.x - curr_pt.x).abs() < 1e-6
+                && (curr_in.y - curr_pt.y).abs() < 1e-6
+            {
+                path.push(PathEl::LineTo(curr_pt));
+            } else {
+                path.push(PathEl::CurveTo(prev_out, curr_in, curr_pt));
+            }
+        }
+        let last = vertices.last().unwrap();
+        let first = &vertices[0];
+        if (last.2.x - last.0.x).abs() < 1e-6
+            && (last.2.y - last.0.y).abs() < 1e-6
+            && (first.1.x - first.0.x).abs() < 1e-6
+            && (first.1.y - first.0.y).abs() < 1e-6
+        {
+            path.push(PathEl::ClosePath);
+        } else {
+            path.push(PathEl::CurveTo(last.2, first.1, first.0));
+            path.push(PathEl::ClosePath);
+        }
+    }
+
+    /// Converts the animated value to its model representation.
+    pub fn into_model(self) -> super::Geometry {
+        if self.is_fixed() {
+            let mut path = Vec::new();
+            self.evaluate(0.0, &mut path);
+            super::Geometry::Fixed(path)
+        } else {
+            super::Geometry::Star(self)
+        }
+    }
+}
 
 /// Animated cubic spline.
 #[derive(Clone, Debug)]
