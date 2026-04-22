@@ -79,6 +79,12 @@ You can also load an entire folder or individual files.
 cargo run -p with_winit -- examples/assets
 ```
 
+Run all test scenes with controls:
+
+```shell
+cargo run -p with_winit -- --test-scenes
+```
+
 ### Web platform
 
 Because Vello relies heavily on compute shaders, we rely on the emerging WebGPU standard to run on the web.

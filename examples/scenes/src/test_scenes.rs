@@ -29,6 +29,7 @@ macro_rules! scene {
 pub fn test_scenes() -> SceneSet {
     let scenes = vec![
         scene!(splash_with_tiger(), "Tiger", true),
+        scene!(crate::picking::picking_scene(), "Picking", true),
         scene!(polystar_test(), "PolyStarTest", true),
     ];
     SceneSet { scenes }
