@@ -4,6 +4,5 @@
 // todo motion-blur
 #[expect(clippy::module_inception, reason = "Schema uses this format")]
 pub mod animation;
-// todo user-metadata
 pub mod composition;
-// todo metadata
+pub mod meta;
