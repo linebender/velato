@@ -107,7 +107,7 @@ serde_repr = "0.1.20"
 vello = { workspace = true }
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.58"
+wasm-bindgen-test = "0.3.68"
 
 [features]
 default = ["vello"]
