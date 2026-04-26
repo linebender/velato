@@ -12,6 +12,10 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.88.
 
+## [0.10.0]
+
+This release has an [MSRV][] of 1.88.
+
 ### Added
 
 - Added `markers`, `meta` and `metadata` fields to the Animation schema. ([#101][] by [@RobertBrewitz][])
@@ -194,7 +198,8 @@ This release has an [MSRV][] of 1.75.
 [#104]: https://github.com/linebender/velato/pull/104
 [#105]: https://github.com/linebender/velato/pull/105
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/linebender/velato/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/linebender/velato/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/linebender/velato/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/linebender/velato/compare/v0.7.0...v0.8.0
