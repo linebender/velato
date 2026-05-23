@@ -13,7 +13,7 @@ workspace = true
 vello = { workspace = true }
 kurbo = { workspace = true }
 peniko = { workspace = true }
-velato = { path = "../.." }
+velato = { workspace = true }
 anyhow = "1"
 clap = { version = "4.6.1", features = ["derive"] }
 image = "0.24.9"
