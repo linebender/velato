@@ -14,8 +14,8 @@ rust-version = "1.88"
 
 
 [workspace.dependencies]
-lato = { version = "0.10.0", path = "./lato"}
-velato = { version = "0.10.0", path = "./velato"}
+lato = { version = "0.10.0", path = "./lato" }
+velato = { version = "0.10.0", path = "./velato" }
 
 # NOTE: Make sure to keep this in sync with the version badge in README.md
 vello = { version = "0.7.0", default-features = false }
