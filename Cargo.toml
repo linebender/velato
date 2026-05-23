@@ -1,43 +1,32 @@
 [workspace]
 resolver = "2"
-members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
+members = ["examples/with_winit", "examples/run_wasm", "examples/scenes", "velato"]
 
 [workspace.package]
 edition = "2024"
 version = "0.10.0"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/velato"
+readme = "./README.md"
 # Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml, with the relevant README.md files
 # and with the MSRV in the `Unreleased` section of CHANGELOG.md.
 rust-version = "1.88"
 
-[package]
-name = "velato"
-description = "A Lottie integration for vello."
-categories = ["rendering", "graphics"]
-keywords = ["2d", "vector-graphics", "vello", "animation", "lottie"]
-version.workspace = true
-rust-version.workspace = true
-license.workspace = true
-edition.workspace = true
-repository.workspace = true
 
-exclude = [
-    ".cargo",
-    ".clippy.toml",
-    ".github",
-    ".gitignore",
-    ".taplo.toml",
-    ".typos.toml",
-    "examples/",
-    "rustfmt.toml",
-]
+[workspace.dependencies]
+lato = { version = "0.10.0", path = "./lato" }
+velato = { version = "0.10.0", path = "./velato" }
 
-[package.metadata.docs.rs]
-all-features = true
-# There are no platform specific docs.
-default-target = "x86_64-unknown-linux-gnu"
-targets = []
+# NOTE: Make sure to keep this in sync with the version badge in README.md
+vello = { version = "0.7.0", default-features = false }
+kurbo = { version = "0.13.0" }
+peniko = { version = "0.6.0" }
+
+# For the parser
+serde = { version = "1.0.228" }
+serde_json = "1.0.149"
+serde_repr = "0.1.20"
+
 
 [workspace.lints]
 # LINEBENDER LINT SET - Cargo.toml - v6.1
@@ -83,33 +72,3 @@ clippy.negative_feature_names = "warn"
 clippy.redundant_feature_names = "warn"
 clippy.wildcard_dependencies = "warn"
 # END LINEBENDER LINT SET
-
-[workspace.dependencies]
-# NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { version = "0.7.0", default-features = false }
-kurbo = { version = "0.13.0" }
-peniko = { version = "0.6.0" }
-
-[lints]
-workspace = true
-
-[dependencies]
-vello = { workspace = true, optional = true }
-kurbo = { workspace = true }
-peniko = { workspace = true }
-
-# For the parser
-serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.149"
-serde_repr = "0.1.20"
-
-[dev-dependencies]
-vello = { workspace = true }
-
-[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.70"
-
-[features]
-default = ["vello"]
-vello = ["dep:vello"]
-wgpu = ["vello", "vello/wgpu"]

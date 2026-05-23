@@ -20,8 +20,8 @@
 use std::{collections::HashSet, sync::Arc, time::Instant};
 
 use kurbo::{Affine, Point, Rect, Shape, Vec2};
+use lato::{Composition, RenderSink, Renderer, model::fixed};
 use peniko::{BlendMode, Brush, Color, Fill};
-use velato::{Composition, RenderSink, Renderer, model::fixed};
 use vello::Scene;
 
 use crate::SceneParams;

@@ -1516,6 +1516,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "lato"
+version = "0.10.0"
+dependencies = [
+ "kurbo",
+ "peniko",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "wasm-bindgen-test",
+]
+
+[[package]]
 name = "leb128"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2370,6 +2382,7 @@ dependencies = [
  "inquire",
  "instant",
  "kurbo",
+ "lato",
  "peniko",
  "rand",
  "skrifa 0.26.6",
@@ -2869,10 +2882,8 @@ name = "velato"
 version = "0.10.0"
 dependencies = [
  "kurbo",
+ "lato",
  "peniko",
- "serde",
- "serde_json",
- "serde_repr",
  "vello",
  "wasm-bindgen-test",
 ]
