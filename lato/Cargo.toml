@@ -1,8 +1,8 @@
 [package]
-name = "velato"
-description = "A Lottie integration for vello."
+name = "lato"
+description = "Renderer-agnostic Lottie parsing/rendering."
 categories = ["rendering", "graphics"]
-keywords = ["2d", "vector-graphics", "vello", "animation", "lottie"]
+keywords = ["2d", "vector-graphics", "animation", "lottie"]
 version.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -25,19 +25,16 @@ exclude = [
 workspace = true
 
 [dependencies]
-lato = { workspace = true }
-vello = { workspace = true }
 kurbo = { workspace = true }
 peniko = { workspace = true }
 
-[dev-dependencies]
-vello = { workspace = true }
+# For the parser
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+serde_repr = { workspace = true }
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
 wasm-bindgen-test = "0.3.70"
-
-[features]
-wgpu = ["vello/wgpu"]
 
 [package.metadata.docs.rs]
 all-features = true

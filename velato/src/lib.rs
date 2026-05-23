@@ -54,27 +54,6 @@
 #![cfg_attr(target_pointer_width = "64", warn(clippy::trivially_copy_pass_by_ref))]
 // END LINEBENDER LINT SET
 #![cfg_attr(docsrs, feature(doc_cfg))]
-// The following lints are part of the Linebender standard set,
-// but resolving them has been deferred for now.
-// Feel free to send a PR that solves one or more of these.
-#![allow(unused, reason = "Many lottie types we don't yet support.")]
-#![allow(
-    unreachable_pub,
-    missing_docs,
-    elided_lifetimes_in_paths,
-    single_use_lifetimes,
-    unused_qualifications,
-    clippy::empty_docs,
-    clippy::use_self,
-    clippy::return_self_not_must_use,
-    clippy::cast_possible_truncation,
-    clippy::shadow_unrelated,
-    clippy::missing_assert_message,
-    clippy::missing_errors_doc,
-    clippy::exhaustive_enums,
-    clippy::todo,
-    reason = "Deferred"
-)]
 #![cfg_attr(
     test,
     allow(
@@ -83,15 +62,84 @@
     )
 )]
 
-pub(crate) mod import;
-pub(crate) mod runtime;
-pub mod schema;
-
-mod error;
-pub use error::Error;
-
-// Re-export vello
-#[cfg(feature = "vello")]
+pub use lato::*;
 pub use vello;
 
-pub use runtime::{Composition, RenderSink, Renderer, model};
+use kurbo::{Affine, Shape};
+use lato::model::fixed;
+use peniko::{BlendMode, Fill};
+
+struct VelatoSceneSink<'a>(pub &'a mut vello::Scene);
+
+impl RenderSink for VelatoSceneSink<'_> {
+    fn push_layer(
+        &mut self,
+        blend: impl Into<BlendMode>,
+        alpha: f32,
+        transform: Affine,
+        shape: &impl Shape,
+    ) {
+        self.0
+            .push_layer(Fill::NonZero, blend, alpha, transform, shape);
+    }
+
+    fn push_clip_layer(&mut self, transform: Affine, shape: &impl Shape) {
+        self.0.push_clip_layer(Fill::NonZero, transform, shape);
+    }
+
+    fn pop_layer(&mut self) {
+        self.0.pop_layer();
+    }
+
+    fn draw(
+        &mut self,
+        stroke: Option<&fixed::Stroke>,
+        transform: Affine,
+        brush: &fixed::Brush,
+        shape: &impl Shape,
+    ) {
+        if let Some(stroke) = stroke {
+            self.0.stroke(stroke, transform, brush, None, shape);
+        } else {
+            self.0.fill(Fill::NonZero, transform, brush, None, shape);
+        }
+    }
+}
+
+/// Renders a [`lato::Composition`] into a [`vello::Scene`].
+#[derive(Debug, Default)]
+pub struct Renderer(lato::Renderer);
+
+impl Renderer {
+    /// Create a new renderer.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Renders and appends the animation at a given frame to the provided scene.
+    pub fn append(
+        &mut self,
+        animation: &Composition,
+        frame: f64,
+        transform: Affine,
+        alpha: f64,
+        scene: &mut vello::Scene,
+    ) {
+        let mut scene = VelatoSceneSink(scene);
+        self.0
+            .append(animation, frame, transform, alpha, &mut scene);
+    }
+
+    /// Renders the animation at a given frame to a new scene.
+    pub fn render_to_vello_scene(
+        &mut self,
+        animation: &Composition,
+        frame: f64,
+        transform: Affine,
+        alpha: f64,
+    ) -> vello::Scene {
+        let mut scene = vello::Scene::new();
+        self.append(animation, frame, transform, alpha, &mut scene);
+        scene
+    }
+}

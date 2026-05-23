@@ -9,9 +9,6 @@ use crate::schema::Animation;
 use std::collections::HashMap;
 use std::ops::Range;
 
-#[cfg(feature = "vello")]
-mod vello;
-
 pub mod model;
 
 pub use render::{RenderSink, Renderer};

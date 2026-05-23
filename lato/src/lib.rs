@@ -1,0 +1,64 @@
+// Copyright 2024 the Velato Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
+//!
+//! # Unsupported features
+//!
+//! Missing features include:
+//! - Position keyframe (`ti`, `to`) easing
+//! - Time remapping (`tm`)
+//! - Text
+//! - Image embedding
+//! - Advanced shapes (stroke dash, zig-zag, etc.)
+//! - Advanced effects (motion blur, drop shadows, etc.)
+//! - Correct color stop handling
+//! - Split rotations
+//! - Split positions
+
+// LINEBENDER LINT SET - lib.rs - v4
+// See https://linebender.org/wiki/canonical-lints/
+// These lints shouldn't apply to examples or tests.
+#![cfg_attr(not(test), warn(unused_crate_dependencies))]
+// These lints shouldn't apply to examples.
+#![warn(clippy::print_stdout, clippy::print_stderr)]
+// Targeting e.g. 32-bit means structs containing usize can give false positives for 64-bit.
+#![cfg_attr(target_pointer_width = "64", warn(clippy::trivially_copy_pass_by_ref))]
+// END LINEBENDER LINT SET
+#![cfg_attr(docsrs, feature(doc_cfg))]
+// The following lints are part of the Linebender standard set,
+// but resolving them has been deferred for now.
+// Feel free to send a PR that solves one or more of these.
+#![allow(unused, reason = "Many lottie types we don't yet support.")]
+#![allow(
+    unreachable_pub,
+    missing_docs,
+    elided_lifetimes_in_paths,
+    single_use_lifetimes,
+    unused_qualifications,
+    clippy::empty_docs,
+    clippy::use_self,
+    clippy::return_self_not_must_use,
+    clippy::cast_possible_truncation,
+    clippy::shadow_unrelated,
+    clippy::missing_assert_message,
+    clippy::missing_errors_doc,
+    clippy::exhaustive_enums,
+    clippy::todo,
+    reason = "Deferred"
+)]
+#![cfg_attr(
+    test,
+    allow(
+        unused_crate_dependencies,
+        reason = "Some dev dependencies are only used in tests"
+    )
+)]
+
+pub(crate) mod import;
+pub(crate) mod runtime;
+pub mod schema;
+
+mod error;
+pub use error::Error;
+
+pub use runtime::{Composition, RenderSink, Renderer, model};

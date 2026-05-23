@@ -13,6 +13,7 @@ workspace = true
 vello = { workspace = true }
 kurbo = { workspace = true }
 peniko = { workspace = true }
+lato = { workspace = true }
 velato = { workspace = true }
 anyhow = "1"
 clap = { version = "4.6.1", features = ["derive"] }
