@@ -86,7 +86,7 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { version = "0.7.0", default-features = false }
+vello = { version = "0.9.0", default-features = false }
 kurbo = { version = "0.13.0" }
 peniko = { version = "0.6.0" }
 

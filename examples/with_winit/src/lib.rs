@@ -428,10 +428,14 @@ fn run(
                             )
                             .expect("failed to render to surface");
 
-                        let surface_texture = surface
-                            .surface
-                            .get_current_texture()
-                            .expect("failed to get surface texture");
+                        let surface_texture = surface.surface.get_current_texture();
+                        let surface_texture = match surface_texture {
+                            wgpu::CurrentSurfaceTexture::Success(surface_texture)
+                            | wgpu::CurrentSurfaceTexture::Suboptimal(surface_texture) => {
+                                surface_texture
+                            }
+                            _ => return,
+                        };
 
                         let mut encoder = device_handle.device.create_command_encoder(
                             &wgpu::CommandEncoderDescriptor {
