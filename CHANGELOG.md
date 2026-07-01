@@ -7,10 +7,17 @@ This changelog follows the patterns described here: <https://keepachangelog.com/
 Subheadings to categorize changes are `added, changed, deprecated, removed, fixed, security`.
 
 -->
-
 ## [Unreleased]
 
 This release has an [MSRV][] of 1.88.
+
+## [0.11.0]
+
+This release has an [MSRV][] of 1.88.
+
+### Changed
+
+- Vello has been upgraded to v0.9, and `wgpu` (in the `with_winit` example) to v29. ([#110][] by [@nixonyh][])
 
 ## [0.10.0]
 
@@ -171,6 +178,7 @@ This release has an [MSRV][] of 1.75.
 [@RishiChalla]: https://github.com/RishiChalla
 [@RobertBrewitz]: https://github.com/RobertBrewitz
 [@nicoburns]: https://github.com/nicoburns
+[@nixonyh]: https://github.com/nixonyh
 
 [#16]: https://github.com/linebender/velato/pull/16
 [#17]: https://github.com/linebender/velato/pull/17
@@ -197,6 +205,7 @@ This release has an [MSRV][] of 1.75.
 [#103]: https://github.com/linebender/velato/pull/103
 [#104]: https://github.com/linebender/velato/pull/104
 [#105]: https://github.com/linebender/velato/pull/105
+[#110]: https://github.com/linebender/velato/pull/110
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.10.0...HEAD
 [0.10.0]: https://github.com/linebender/velato/compare/v0.9.0...v0.10.0
