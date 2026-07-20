@@ -207,7 +207,8 @@ This release has an [MSRV][] of 1.75.
 [#105]: https://github.com/linebender/velato/pull/105
 [#110]: https://github.com/linebender/velato/pull/110
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/linebender/velato/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/linebender/velato/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/linebender/velato/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/linebender/velato/compare/v0.8.0...v0.8.1
