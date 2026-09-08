@@ -15,6 +15,10 @@ This release has an [MSRV][] of 1.88.
 
 - Fixed omitted transform scales defaulting to 1% instead of 100%. ([#113][] by [@RobertBrewitz])
 
+### Added
+
+- Retain unmodeled layer effects (`ef`) as raw JSON. ([#114][] by [@RobertBrewitz][])
+
 ## [0.11.0]
 
 This release has an [MSRV][] of 1.88.
@@ -211,6 +215,7 @@ This release has an [MSRV][] of 1.75.
 [#105]: https://github.com/linebender/velato/pull/105
 [#110]: https://github.com/linebender/velato/pull/110
 [#113]: https://github.com/linebender/velato/pull/113
+[#114]: https://github.com/linebender/velato/pull/114
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.11.0...HEAD
 [0.11.0]: https://github.com/linebender/velato/compare/v0.10.0...v0.11.0

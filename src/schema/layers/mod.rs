@@ -250,6 +250,7 @@ mod tests {
                 matte_mode: None,
                 matte_target: None,
                 masks_properties: None,
+                effects: None,
                 rotate_to_match_anim_pos_path: None,
                 matte_layer_index: None,
                 has_mask: None,

@@ -28,11 +28,10 @@ pub struct VisualLayer {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub masks_properties: Option<Vec<Mask>>,
 
-    // TODO:
-    /// Effects for the layer
-    //#[serde(rename = "ef")]
-    //#[serde(skip_serializing_if = "Option::is_none")]
-    //pub effects: Option<Vec<()>>,
+    /// Unmodeled layer effects, retained as raw JSON for import.
+    #[serde(rename = "ef", default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effects: Option<Vec<serde_json::Value>>,
     /// Layer styles
     //#[serde(rename = "sy")]
     //#[serde(skip_serializing_if = "Option::is_none")]
