@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use super::builders::{setup_layer_base, setup_precomp_layer, setup_shape_layer};
-use super::defaults::{FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE, POSITION_ZERO};
+use super::defaults::{
+    FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE_HUNDRED, POSITION_ZERO,
+};
 use crate::import::builders::LayerSetupParams;
 use crate::runtime::model::Easing;
 use crate::runtime::model::animated::{self, Position};
@@ -225,7 +227,7 @@ pub fn conv_transform(
     let transform = animated::Transform {
         anchor: conv_pos_point(value.anchor_point.as_ref().unwrap_or(&POSITION_ZERO)),
         position,
-        scale: conv_vec2(value.scale.as_ref().unwrap_or(&MULTIDIM_ONE)),
+        scale: conv_vec2(value.scale.as_ref().unwrap_or(&MULTIDIM_ONE_HUNDRED)),
         rotation: conv_scalar(rotation_in),
         skew: conv_scalar(value.skew.as_ref().unwrap_or(&FLOAT_VALUE_ZERO)),
         skew_angle: conv_scalar(value.skew_axis.as_ref().unwrap_or(&FLOAT_VALUE_ZERO)),
@@ -262,7 +264,13 @@ pub fn conv_shape_transform(value: &schema::shapes::transform::TransformShape) -
                 .unwrap_or(&POSITION_ZERO),
         ),
         position: Position::Value(conv_pos_point(position_in)),
-        scale: conv_vec2(value.transform.scale.as_ref().unwrap_or(&MULTIDIM_ONE)),
+        scale: conv_vec2(
+            value
+                .transform
+                .scale
+                .as_ref()
+                .unwrap_or(&MULTIDIM_ONE_HUNDRED),
+        ),
         rotation: conv_scalar(rotation_in),
         skew: conv_scalar(value.transform.skew.as_ref().unwrap_or(&FLOAT_VALUE_ZERO)),
         skew_angle: conv_scalar(

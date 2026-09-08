@@ -29,13 +29,13 @@ pub static FLOAT_VALUE_ONE_HUNDRED: LazyLock<FloatValue> = LazyLock::new(|| Floa
     },
 });
 
-pub static MULTIDIM_ONE: LazyLock<MultiDimensional> = LazyLock::new(|| MultiDimensional {
+pub static MULTIDIM_ONE_HUNDRED: LazyLock<MultiDimensional> = LazyLock::new(|| MultiDimensional {
     animated_property: AnimatedProperty {
         property_index: None,
         animated: Some(BoolInt::False),
         expression: None,
         slot_id: None,
-        value: AnimatedPropertyK::Static(vec![1.0, 1.0, 1.0]),
+        value: AnimatedPropertyK::Static(vec![100.0, 100.0, 100.0]),
     },
     length: None,
 });
