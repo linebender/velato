@@ -103,6 +103,17 @@ pub enum Repeater {
     Fixed(fixed::Repeater),
     Animated(animated::Repeater),
 }
+
+/// How repeater copies are stacked relative to the original shape.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum RepeaterComposite {
+    /// Later copies are painted below earlier copies.
+    #[default]
+    Below,
+    /// Later copies are painted above earlier copies.
+    Above,
+}
+
 impl Repeater {
     pub fn is_fixed(&self) -> bool {
         matches!(self, Self::Fixed(_))

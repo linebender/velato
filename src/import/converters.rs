@@ -9,7 +9,8 @@ use crate::import::builders::LayerSetupParams;
 use crate::runtime::model::Easing;
 use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
-    self, Content, Draw, EasingHandle, GroupTransform, Layer, SplineToPath, Time, Tween, Value,
+    self, Content, Draw, EasingHandle, GroupTransform, Layer, RepeaterComposite, SplineToPath,
+    Time, Tween, Value,
 };
 use crate::runtime::{self};
 use crate::schema::animated_properties::keyframe_bezier_handle::{
@@ -618,20 +619,61 @@ fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model:
                 None
             }
         }
-        // todo: implement repeater shape
-        // shapes::Shape::Repeater(value) => {
-        //     let repeater = animated::Repeater {
-        //         copies: conv_scalar(&value.copies),
-        //         offset: conv_scalar(&value.offset),
-        //         anchor_point: conv_point(&value.transform.anchor_point),
-        //         position: conv_point(&value.transform.position),
-        //         rotation: conv_scalar(&value.transform.rotation),
-        //         scale: conv_vec2(&value.transform.scale),
-        //         start_opacity: conv_scalar(&value.transform.start_opacity),
-        //         end_opacity: conv_scalar(&value.transform.end_opacity),
-        //     };
-        //     Some(Shape::Repeater(repeater.to_model()))
-        // }
+        schema::shapes::AnyShape::Repeater(value) => {
+            use schema::constants::composite::Composite;
+            use schema::helpers::transform::{AnyTransformP, AnyTransformR};
+
+            if value.modifier.graphic_element.hidden == Some(true) {
+                return None;
+            }
+
+            let transform = &value.transform.transform.transform;
+            let position = match &transform.position {
+                AnyTransformP::Position(position) => Position::Value(conv_pos_point(position)),
+                AnyTransformP::SplitPosition(SplitVector { x, y, .. }) => {
+                    Position::SplitValues((conv_scalar(x), conv_scalar(y)))
+                }
+            };
+            let rotation = transform
+                .rotation
+                .as_ref()
+                .map(|rotation| match rotation {
+                    AnyTransformR::Rotation(value) => value,
+                    AnyTransformR::SplitRotation { z_rotation, .. } => z_rotation,
+                })
+                .unwrap_or(&FLOAT_VALUE_ZERO);
+            let repeater = animated::Repeater {
+                copies: conv_scalar(&value.copies),
+                offset: conv_scalar(value.offset.as_ref().unwrap_or(&FLOAT_VALUE_ZERO)),
+                anchor_point: conv_pos_point(
+                    transform.anchor_point.as_ref().unwrap_or(&POSITION_ZERO),
+                ),
+                position,
+                rotation: conv_scalar(rotation),
+                scale: conv_vec2(transform.scale.as_ref().unwrap_or(&MULTIDIM_ONE_HUNDRED)),
+                start_opacity: conv_scalar(
+                    value
+                        .transform
+                        .start_opacity
+                        .as_ref()
+                        .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
+                ),
+                end_opacity: conv_scalar(
+                    value
+                        .transform
+                        .end_opacity
+                        .as_ref()
+                        .unwrap_or(&FLOAT_VALUE_ONE_HUNDRED),
+                ),
+                composite: match value.composite.as_ref().unwrap_or(&Composite::Below) {
+                    Composite::Below => RepeaterComposite::Below,
+                    Composite::Above => RepeaterComposite::Above,
+                },
+            };
+            Some(crate::runtime::model::Shape::Repeater(
+                repeater.into_model(),
+            ))
+        }
         schema::shapes::AnyShape::Trim(value) => {
             let trim = animated::Trim {
                 start: conv_scalar(&value.start),
@@ -1021,8 +1063,8 @@ pub fn normalize_to_range(a: f64, b: f64, x: f64) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::{
-        import::converters::conv_layer,
-        model::Content,
+        import::converters::{conv_layer, conv_shape},
+        model::{self, Content, RepeaterComposite},
         schema::{
             animated_properties::{
                 animated_property::{AnimatedProperty, AnimatedPropertyK},
@@ -1037,6 +1079,7 @@ mod tests {
             layers::{AnyLayer, layer::Layer, shape::ShapeLayer, visual::VisualLayer},
         },
     };
+    use kurbo::{Point, Vec2};
 
     #[expect(deprecated, reason = "Uses deprecated VisualLayer fields")]
     fn make_shape_layer(hidden: bool, matte_target: bool) -> AnyLayer {
@@ -1177,5 +1220,30 @@ mod tests {
             &composition.layers[0].content,
             Content::Image { asset_id } if asset_id == "texture"
         ));
+    }
+
+    #[test]
+    fn repeater_retains_split_position_identity_scale_and_composite() {
+        let source: crate::schema::shapes::AnyShape = serde_json::from_value(serde_json::json!({
+            "ty": "rp",
+            "c": { "a": 0, "k": 3 },
+            "m": 2,
+            "tr": {
+                "p": {
+                    "s": true,
+                    "x": { "a": 0, "k": 12 },
+                    "y": { "a": 0, "k": 34 }
+                }
+            }
+        }))
+        .unwrap();
+
+        let model::Shape::Repeater(model::Repeater::Fixed(repeater)) = conv_shape(&source).unwrap()
+        else {
+            panic!("expected a fixed repeater");
+        };
+        assert_eq!(repeater.position, Point::new(12.0, 34.0));
+        assert_eq!(repeater.scale, Vec2::new(100.0, 100.0));
+        assert_eq!(repeater.composite, RepeaterComposite::Above);
     }
 }

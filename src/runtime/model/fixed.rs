@@ -7,6 +7,7 @@ Representations of fixed (non-animated) values.
 
 use std::mem::swap;
 
+use super::RepeaterComposite;
 use kurbo::{Affine, Point, Vec2};
 
 /// Fixed affine transformation.
@@ -43,20 +44,29 @@ pub struct Repeater {
     pub start_opacity: f64,
     /// Opacity of the last element.
     pub end_opacity: f64,
+    /// How copies are stacked relative to the original shape.
+    pub composite: RepeaterComposite,
 }
 
 impl Repeater {
     /// Returns the transform for the given copy index.
     pub fn transform(&self, index: usize) -> Affine {
         let t = self.offset + index as f64;
+        let scale = |value: f64| {
+            let base = value / 100.0;
+            if base < 0.0 && t.fract() != 0.0 {
+                let lower = t.floor();
+                let fraction = t - lower;
+                base.powf(lower) * (1.0 - fraction) + base.powf(lower + 1.0) * fraction
+            } else {
+                base.powf(t)
+            }
+        };
         Affine::translate((
             t * self.position.x + self.anchor_point.x,
             t * self.position.y + self.anchor_point.y,
         )) * Affine::rotate((t * self.rotation).to_radians())
-            * Affine::scale_non_uniform(
-                (self.scale.x / 100.0).powf(t),
-                (self.scale.y / 100.0).powf(t),
-            )
+            * Affine::scale_non_uniform(scale(self.scale.x), scale(self.scale.y))
             * Affine::translate((-self.anchor_point.x, -self.anchor_point.y))
     }
 }

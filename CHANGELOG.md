@@ -14,11 +14,13 @@ This release has an [MSRV][] of 1.88.
 ### Fixed
 
 - Fixed omitted transform scales defaulting to 1% instead of 100%. ([#113][] by [@RobertBrewitz])
+- Fixed `Composite` values to `Below = 1`, `Above = 2` and defaults to `Below`. ([#116][] by [@RobertBrewitz][])
 
 ### Added
 
 - Retain unmodeled layer effects (`ef`) as raw JSON. ([#114][] by [@RobertBrewitz][])
 - Added image asset metadata and image layer rendering. ([#115][] by [@RobertBrewitz])
+- Added repeater shape import and rendering, including animated properties, split position, per-copy opacity, below/above compositing, hidden repeaters, and mirrored scales at fractional offsets. ([#116][] by [@RobertBrewitz][])
 
 ### Changed
 
@@ -222,6 +224,7 @@ This release has an [MSRV][] of 1.75.
 [#113]: https://github.com/linebender/velato/pull/113
 [#114]: https://github.com/linebender/velato/pull/114
 [#115]: https://github.com/linebender/velato/pull/115
+[#116]: https://github.com/linebender/velato/pull/116
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.11.0...HEAD
 [0.11.0]: https://github.com/linebender/velato/compare/v0.10.0...v0.11.0

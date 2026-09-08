@@ -2,12 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use super::Composition;
-use super::model::{Content, Draw, Geometry, GroupTransform, ImageAsset, Layer, Shape, fixed};
+use super::model::{
+    Content, Draw, Geometry, GroupTransform, ImageAsset, Layer, RepeaterComposite, Shape, fixed,
+};
 use kurbo::{
     Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
     Rect,
 };
-use peniko::{Fill, Mix};
+use peniko::Mix;
 use std::mem::swap;
 use std::ops::Range;
 
@@ -59,6 +61,9 @@ impl Renderer {
     }
 
     /// Renders and appends the animation at a given frame to the provided scene.
+    ///
+    /// Repeater expansion is unbounded. Callers handling untrusted animations should validate copy
+    /// counts and nesting, and benchmark representative workloads to establish their own limits.
     pub fn append(
         &mut self,
         animation: &Composition,
@@ -68,10 +73,9 @@ impl Renderer {
         scene: &mut impl RenderSink,
     ) {
         self.batch.clear();
-        scene.push_clip_layer(
-            transform,
-            &Rect::new(0.0, 0.0, animation.width as _, animation.height as _),
-        );
+        let clip = Rect::new(0.0, 0.0, animation.width as _, animation.height as _);
+        let clip_bounds = transform.transform_rect_bbox(clip);
+        scene.push_clip_layer(transform, &clip);
         for (layer_index, layer) in animation.layers.iter().enumerate().rev() {
             if layer.is_mask {
                 continue;
@@ -84,6 +88,7 @@ impl Renderer {
                 transform,
                 alpha,
                 frame,
+                &clip_bounds,
                 scene,
             );
         }
@@ -100,6 +105,7 @@ impl Renderer {
         transform: Affine,
         alpha: f64,
         frame: f64,
+        clip_bounds: &Rect,
         scene: &mut impl RenderSink,
     ) {
         if !layer.frames.contains(&frame) {
@@ -123,6 +129,7 @@ impl Renderer {
                     parent_transform,
                     alpha,
                     frame,
+                    clip_bounds,
                     scene,
                 );
             }
@@ -160,6 +167,7 @@ impl Renderer {
                             transform,
                             alpha,
                             frame + frame_delta,
+                            clip_bounds,
                             scene,
                         );
                     }
@@ -183,7 +191,7 @@ impl Renderer {
             }
             Content::Shape(shapes) => {
                 self.render_shapes(shapes, transform, alpha, frame);
-                self.batch.render(scene);
+                self.batch.render(scene, clip_bounds);
                 self.batch.clear();
             }
         }
@@ -197,6 +205,8 @@ impl Renderer {
         // Keep track of our local top of the geometry stack. Any subsequent
         // draws are bounded by this.
         let geometry_start = self.batch.geometries.len();
+        // Geometry cannot merge across group coordinate spaces.
+        self.batch.drawn_geometry = geometry_start;
         // Also keep track of top of draw stack for repeater evaluation.
         let draw_start = self.batch.draws.len();
         // Top to bottom, collect geometries and draws.
@@ -212,15 +222,10 @@ impl Renderer {
                         } else {
                             (Affine::IDENTITY, 1.0)
                         };
-                    self.render_shapes(
-                        shapes,
-                        transform * group_transform,
-                        alpha * group_alpha,
-                        frame,
-                    );
+                    self.render_shapes(shapes, group_transform, alpha * group_alpha, frame);
                 }
                 Shape::Geometry(geometry) => {
-                    self.batch.push_geometry(geometry, transform, frame);
+                    self.batch.push_geometry(geometry, Affine::IDENTITY, frame);
                 }
                 Shape::Draw(draw) => {
                     self.batch.push_draw(draw, alpha, geometry_start, frame);
@@ -236,6 +241,13 @@ impl Renderer {
                 }
             }
         }
+        for geometry in &mut self.batch.geometries[geometry_start..] {
+            geometry.transform = transform * geometry.transform;
+        }
+        for draw in &mut self.batch.draws[draw_start..] {
+            draw.transform = transform * draw.transform;
+        }
+        self.batch.drawn_geometry = self.batch.geometries.len();
     }
 
     /// Computes the transform for a single layer. This currently chases the
@@ -274,8 +286,11 @@ struct DrawData {
     stroke: Option<fixed::Stroke>,
     brush: fixed::Brush,
     alpha: f64,
+    transform: Affine,
     /// Range into `ShapeBatch::geometries`
     geometry: Range<usize>,
+    // Only repeaters that copied this style may share its opacity layers with other styles.
+    repeater_depth: usize,
 }
 
 impl DrawData {
@@ -287,7 +302,9 @@ impl DrawData {
                 .map(|stroke| stroke.evaluate(frame).into_owned()),
             brush: draw.brush.evaluate(1.0, frame).into_owned(),
             alpha: alpha * draw.opacity.evaluate(frame) / 100.0,
+            transform: Affine::IDENTITY,
             geometry,
+            repeater_depth: 0,
         }
     }
 }
@@ -297,6 +314,26 @@ struct GeometryData {
     /// Range into `ShapeBatch::elements`
     elements: Range<usize>,
     transform: Affine,
+    // Inherited styles need copy opacity without inheriting the repeated styles' stacking position.
+    copies: Vec<CopyLayer>,
+}
+
+impl GeometryData {
+    fn opacity_copies(&self) -> &[CopyLayer] {
+        // Opaque ancestors still distinguish separate instances of translucent descendants.
+        let end = self
+            .copies
+            .iter()
+            .rposition(|copy| copy.alpha != 1.0)
+            .map_or(0, |index| index + 1);
+        &self.copies[..end]
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+struct CopyLayer {
+    id: usize,
+    alpha: f64,
 }
 
 #[derive(Debug, Default)]
@@ -306,6 +343,7 @@ struct Batch {
     draws: Vec<DrawData>,
     repeat_geometries: Vec<GeometryData>,
     repeat_draws: Vec<DrawData>,
+    next_copy: usize,
     /// Length of geometries at time of most recent draw. This is
     /// used to prevent merging into already used geometries.
     drawn_geometry: usize,
@@ -330,6 +368,7 @@ impl Batch {
             self.geometries.push(GeometryData {
                 elements: start..end,
                 transform,
+                copies: Vec::new(),
             });
         }
     }
@@ -345,41 +384,63 @@ impl Batch {
     }
 
     fn repeat(&mut self, repeater: &fixed::Repeater, geometry_start: usize, draw_start: usize) {
+        if repeater.copies == 0 {
+            self.geometries.truncate(geometry_start);
+            self.draws.truncate(draw_start);
+            self.drawn_geometry = self.geometries.len();
+            return;
+        }
+        if geometry_start == self.geometries.len() {
+            return;
+        }
+
         // First move the relevant ranges of geometries and draws into side
         // buffers
         self.repeat_geometries
             .extend(self.geometries.drain(geometry_start..));
         self.repeat_draws.extend(self.draws.drain(draw_start..));
-        // Next, repeat the geometries and apply the offset transform
-        for geometry in self.repeat_geometries.iter() {
-            for i in 0..repeater.copies {
-                let transform = repeater.transform(i);
-                let mut geometry = geometry.clone();
-                geometry.transform *= transform;
-                self.geometries.push(geometry);
-            }
-        }
-        // Finally, repeat the draws, taking into account opacity and the
-        // modified newly repeated geometry ranges
+        let geometry_count = self.repeat_geometries.len();
         let start_alpha = repeater.start_opacity / 100.0;
         let end_alpha = repeater.end_opacity / 100.0;
         let delta_alpha = if repeater.copies > 1 {
-            // See note in Skottie: AE does not cover the full opacity range
-            (end_alpha - start_alpha) / repeater.copies as f64
+            (end_alpha - start_alpha) / (repeater.copies - 1) as f64
         } else {
             0.0
         };
-        for i in 0..repeater.copies {
-            let alpha = start_alpha + delta_alpha * i as f64;
-            if alpha <= 0.0 {
-                continue;
+        // Later styles traverse geometry directly, so it must be in paint order too.
+        for copy in 0..repeater.copies {
+            let i = match repeater.composite {
+                RepeaterComposite::Below => repeater.copies - 1 - copy,
+                RepeaterComposite::Above => copy,
+            };
+            let transform = repeater.transform(i);
+            let copy_layer = CopyLayer {
+                id: self.next_copy,
+                alpha: start_alpha + delta_alpha * i as f64,
+            };
+            self.next_copy += 1;
+            for geometry in &self.repeat_geometries {
+                let mut geometry = geometry.clone();
+                geometry.transform = transform * geometry.transform;
+                geometry.copies.insert(0, copy_layer);
+                self.geometries.push(geometry);
             }
+        }
+
+        // Draws are consumed in reverse, unlike geometries.
+        for copy in (0..repeater.copies).rev() {
+            let copy_start = geometry_start + copy * geometry_count;
+            let i = match repeater.composite {
+                RepeaterComposite::Below => repeater.copies - 1 - copy,
+                RepeaterComposite::Above => copy,
+            };
+            let transform = repeater.transform(i);
             for mut draw in self.repeat_draws.iter().cloned() {
-                draw.alpha *= alpha;
-                let count = draw.geometry.end - draw.geometry.start;
-                draw.geometry.start =
-                    geometry_start + (draw.geometry.start - geometry_start) * repeater.copies;
-                draw.geometry.end = draw.geometry.start + count * repeater.copies;
+                let start = draw.geometry.start - geometry_start;
+                let end = draw.geometry.end - geometry_start;
+                draw.geometry = copy_start + start..copy_start + end;
+                draw.transform = transform * draw.transform;
+                draw.repeater_depth += 1;
                 self.draws.push(draw);
             }
         }
@@ -490,21 +551,102 @@ impl Batch {
         self.trim_elements.clear();
     }
 
-    fn render(&self, scene: &mut impl RenderSink) {
-        // Process all draws in reverse
-        for draw in self.draws.iter().rev() {
-            // Some nastiness to avoid cloning the brush if unnecessary
-            let modified_brush = if draw.alpha != 1.0 {
-                Some(draw.brush.clone().multiply_alpha(draw.alpha as _))
-            } else {
-                None
-            };
-            let brush = modified_brush.as_ref().unwrap_or(&draw.brush);
-            for geometry in self.geometries[draw.geometry.clone()].iter() {
-                let path = &self.elements[geometry.elements.clone()];
-                let transform = geometry.transform;
-                scene.draw(draw.stroke.as_ref(), transform, brush, &path);
+    fn render(&self, scene: &mut impl RenderSink, clip_bounds: &Rect) {
+        let mut active_copies: &[CopyLayer] = &[];
+        let mut active_draw = None;
+        let mut active_repeater_depth = 0;
+        let mut path = Vec::new();
+
+        for (draw_index, draw) in self.draws.iter().enumerate().rev() {
+            if draw.alpha <= 0.0 || !draw.transform.is_finite() {
+                continue;
             }
+            let style_inverse = draw.transform.inverse();
+            // A singular style transform collapses both fill and stroke to zero area.
+            if !style_inverse.is_finite() {
+                continue;
+            }
+            // Compound paths must be assembled after group transforms and modifiers are resolved.
+            for geometries in self.geometries[draw.geometry.clone()]
+                .chunk_by(|a, b| a.opacity_copies() == b.opacity_copies())
+            {
+                let copies = geometries[0].opacity_copies();
+                if copies.iter().any(|copy| copy.alpha <= 0.0) {
+                    continue;
+                }
+
+                let shared = active_copies
+                    .iter()
+                    .zip(copies)
+                    .enumerate()
+                    .take_while(|(depth, (active, next))| {
+                        active.id == next.id
+                            && (active_draw == Some(draw_index)
+                                || (*depth < active_repeater_depth && *depth < draw.repeater_depth))
+                    })
+                    .count();
+                for copy in active_copies[shared..].iter().rev() {
+                    if copy.alpha != 1.0 {
+                        scene.pop_layer();
+                    }
+                }
+                for copy in &copies[shared..] {
+                    if copy.alpha != 1.0 {
+                        scene.push_layer(
+                            Mix::Normal,
+                            copy.alpha as _,
+                            Affine::IDENTITY,
+                            clip_bounds,
+                        );
+                    }
+                }
+                active_copies = copies;
+                active_draw = Some(draw_index);
+                active_repeater_depth = draw.repeater_depth;
+                self.render_draw(draw, style_inverse, geometries, &mut path, scene);
+            }
+        }
+        for copy in active_copies.iter().rev() {
+            if copy.alpha != 1.0 {
+                scene.pop_layer();
+            }
+        }
+    }
+
+    fn render_draw(
+        &self,
+        draw: &DrawData,
+        style_inverse: Affine,
+        geometries: &[GeometryData],
+        path: &mut Vec<PathEl>,
+        scene: &mut impl RenderSink,
+    ) {
+        let modified_brush = if draw.alpha != 1.0 {
+            Some(draw.brush.clone().multiply_alpha(draw.alpha as _))
+        } else {
+            None
+        };
+        let brush = modified_brush.as_ref().unwrap_or(&draw.brush);
+        let geometry = &geometries[0];
+        let path = if geometries.len() == 1 && geometry.transform == draw.transform {
+            &self.elements[geometry.elements.clone()]
+        } else {
+            path.clear();
+            for geometry in geometries {
+                let elements = &self.elements[geometry.elements.clone()];
+                if geometry.transform == draw.transform {
+                    path.extend_from_slice(elements);
+                } else {
+                    let transform = style_inverse * geometry.transform;
+                    if transform.is_finite() {
+                        path.extend(elements.iter().map(|element| transform * *element));
+                    }
+                }
+            }
+            path.as_slice()
+        };
+        if !path.is_empty() {
+            scene.draw(draw.stroke.as_ref(), draw.transform, brush, &path);
         }
     }
 
@@ -514,6 +656,7 @@ impl Batch {
         self.draws.clear();
         self.repeat_geometries.clear();
         self.repeat_draws.clear();
+        self.next_copy = 0;
         self.drawn_geometry = 0;
         self.trim_elements.clear();
     }

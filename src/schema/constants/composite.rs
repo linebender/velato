@@ -7,6 +7,6 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[repr(u8)]
 #[derive(Deserialize_repr, Serialize_repr, Debug, Clone, PartialEq)]
 pub enum Composite {
-    Above = 1,
-    Below = 2,
+    Below = 1,
+    Above = 2,
 }

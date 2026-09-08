@@ -333,7 +333,7 @@ pub struct Repeater {
     /// Anchor point.
     pub anchor_point: Value<Point>,
     /// Translation.
-    pub position: Value<Point>,
+    pub position: Position,
     /// Rotation in degrees.
     pub rotation: Value<f64>,
     /// Scale.
@@ -342,6 +342,8 @@ pub struct Repeater {
     pub start_opacity: Value<f64>,
     /// Opacity of the last element.
     pub end_opacity: Value<f64>,
+    /// How copies are stacked relative to the original shape.
+    pub composite: RepeaterComposite,
 }
 
 impl Repeater {
@@ -350,7 +352,10 @@ impl Repeater {
         self.copies.is_fixed()
             && self.offset.is_fixed()
             && self.anchor_point.is_fixed()
-            && self.position.is_fixed()
+            && match &self.position {
+                Position::Value(value) => value.is_fixed(),
+                Position::SplitValues((x, y)) => x.is_fixed() && y.is_fixed(),
+            }
             && self.rotation.is_fixed()
             && self.scale.is_fixed()
             && self.start_opacity.is_fixed()
@@ -362,7 +367,10 @@ impl Repeater {
         let copies = self.copies.evaluate(frame).round() as usize;
         let offset = self.offset.evaluate(frame);
         let anchor_point = self.anchor_point.evaluate(frame);
-        let position = self.position.evaluate(frame);
+        let position = match &self.position {
+            Position::Value(value) => value.evaluate(frame),
+            Position::SplitValues((x, y)) => Point::new(x.evaluate(frame), y.evaluate(frame)),
+        };
         let rotation = self.rotation.evaluate(frame);
         let scale = self.scale.evaluate(frame);
         let start_opacity = self.start_opacity.evaluate(frame);
@@ -376,6 +384,7 @@ impl Repeater {
             scale,
             start_opacity,
             end_opacity,
+            composite: self.composite,
         }
     }
 
