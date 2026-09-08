@@ -88,6 +88,7 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
         width: source.width,
         height: source.height,
         assets: Default::default(),
+        images: Default::default(),
         layers: Default::default(),
     };
 
@@ -101,8 +102,20 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
                     let layers = process_layers(&precomp.composition.layers, &mut idmap);
                     target.assets.insert(precomp.asset.id.clone(), layers);
                 }
-                asset => {
-                    unimplemented!("asset {:?} is not yet implemented", asset)
+                schema::assets::AnyAsset::Image(image) => {
+                    let file = image.file_asset;
+                    let id = file.asset.id;
+                    target.images.insert(
+                        id.clone(),
+                        model::ImageAsset {
+                            id,
+                            width: image.width,
+                            height: image.height,
+                            directory: file.dir,
+                            file_name: file.file_name,
+                            embedded: file.embedded == Some(BoolInt::True),
+                        },
+                    );
                 }
             }
         }
@@ -175,7 +188,13 @@ pub fn conv_layer(
             setup_layer_base(&solid_color_layer.visual_layer, &mut layer)
         }
         schema::layers::AnyLayer::Image(image_layer) => {
-            setup_layer_base(&image_layer.visual_layer, &mut layer)
+            let params = setup_layer_base(&image_layer.visual_layer, &mut layer);
+            if !hidden {
+                layer.content = Content::Image {
+                    asset_id: image_layer.ref_id.clone(),
+                };
+            }
+            params
         }
     };
 
@@ -1110,5 +1129,53 @@ mod tests {
         let source = make_shape_layer(false, false);
         let (layer, ..) = conv_layer(&source).unwrap();
         assert!(matches!(layer.content, Content::Shape(_)));
+    }
+
+    #[test]
+    fn image_assets_and_layer_references_are_retained() {
+        let composition = crate::Composition::from_json(serde_json::json!({
+            "v": "5.5.2",
+            "fr": 60,
+            "ip": 0,
+            "op": 60,
+            "w": 512,
+            "h": 512,
+            "assets": [{
+                "id": "texture",
+                "h": 32,
+                "w": 64,
+                "u": "i/",
+                "p": "texture.png",
+                "e": 0
+            }],
+            "layers": [{
+                "ty": 2,
+                "ind": 1,
+                "ip": 0,
+                "op": 60,
+                "st": 0,
+                "refId": "texture",
+                "ks": {
+                    "a": { "a": 0, "k": [0, 0] },
+                    "p": { "a": 0, "k": [0, 0] },
+                    "s": { "a": 0, "k": [100, 100] },
+                    "r": { "a": 0, "k": 0 },
+                    "o": { "a": 0, "k": 100 },
+                    "sk": { "a": 0, "k": 0 },
+                    "sa": { "a": 0, "k": 0 }
+                }
+            }]
+        }))
+        .unwrap();
+
+        let image = composition.images.get("texture").unwrap();
+        assert_eq!(image.width, Some(64.0));
+        assert_eq!(image.height, Some(32.0));
+        assert_eq!(image.location(), "i/texture.png");
+        assert!(!image.embedded);
+        assert!(matches!(
+            &composition.layers[0].content,
+            Content::Image { asset_id } if asset_id == "texture"
+        ));
     }
 }

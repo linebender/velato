@@ -21,7 +21,10 @@ use std::{collections::HashSet, sync::Arc, time::Instant};
 
 use kurbo::{Affine, Point, Rect, Shape, Vec2};
 use peniko::{BlendMode, Brush, Color, Fill};
-use velato::{Composition, RenderSink, Renderer, model::fixed};
+use velato::{
+    Composition, RenderSink, Renderer,
+    model::{ImageAsset, fixed},
+};
 use vello::Scene;
 
 use crate::SceneParams;
@@ -195,6 +198,21 @@ impl RenderSink for PickingScene<'_> {
         } else {
             self.scene
                 .fill(Fill::NonZero, transform, brush, None, shape);
+        }
+    }
+
+    fn draw_image(&mut self, image: &ImageAsset, transform: Affine, _alpha: f64) {
+        if !self.tracker.is_inside_tracked_layer() {
+            return;
+        }
+        if let Some((width, height)) = image
+            .width
+            .zip(image.height)
+            .filter(|(width, height)| *width > 0.0 && *height > 0.0)
+        {
+            self.tracker.accumulate_bounds(
+                transform.transform_rect_bbox(Rect::new(0.0, 0.0, width, height)),
+            );
         }
     }
 

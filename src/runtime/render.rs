@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use super::Composition;
-use super::model::{Content, Draw, Geometry, GroupTransform, Layer, Shape, fixed};
+use super::model::{Content, Draw, Geometry, GroupTransform, ImageAsset, Layer, Shape, fixed};
 use kurbo::{
     Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
     Rect,
@@ -31,6 +31,9 @@ pub trait RenderSink {
         brush: &fixed::Brush,
         shape: &impl kurbo::Shape,
     );
+
+    /// Draws a previously loaded raster image asset.
+    fn draw_image(&mut self, image: &ImageAsset, transform: Affine, alpha: f64);
 
     /// Called before rendering a Lottie layer.
     ///
@@ -159,6 +162,22 @@ impl Renderer {
                             frame + frame_delta,
                             scene,
                         );
+                    }
+                }
+            }
+            Content::Image { asset_id } => {
+                if let Some(image) = animation.images.get(asset_id) {
+                    // Lottie requires visuals to stay within authored image bounds.
+                    let bounds = image
+                        .width
+                        .zip(image.height)
+                        .filter(|(w, h)| *w > 0.0 && *h > 0.0);
+                    if let Some((width, height)) = bounds {
+                        scene.push_clip_layer(transform, &Rect::new(0.0, 0.0, width, height));
+                    }
+                    scene.draw_image(image, transform, alpha);
+                    if bounds.is_some() {
+                        scene.pop_layer();
                     }
                 }
             }

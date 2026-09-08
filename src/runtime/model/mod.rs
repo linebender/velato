@@ -5,6 +5,41 @@ use kurbo::{Affine, PathEl, Point, Shape as _, Size, Vec2};
 use peniko::{BlendMode, Color};
 use std::ops::Range;
 
+/// Raster image metadata. Loading and decoding belong to [`crate::RenderSink`].
+#[derive(Clone, Debug, PartialEq)]
+pub struct ImageAsset {
+    /// Identifier referenced by an image layer's `refId`.
+    pub id: String,
+    /// Authored display width in pixels.
+    pub width: Option<f64>,
+    /// Authored display height in pixels.
+    pub height: Option<f64>,
+    /// Directory or URL prefix from the asset's `u` field.
+    pub directory: Option<String>,
+    /// File name or data URL from the asset's `p` field.
+    pub file_name: String,
+    /// Whether the asset is marked as embedded by its `e` field.
+    pub embedded: bool,
+}
+
+impl ImageAsset {
+    /// Asset location (`u` + `p`), or the unchanged data URL.
+    pub fn location(&self) -> String {
+        if self.is_data_url() {
+            return self.file_name.clone();
+        }
+        match &self.directory {
+            Some(directory) => format!("{directory}{}", self.file_name),
+            None => self.file_name.clone(),
+        }
+    }
+
+    /// Detects data URLs independently of the embedded flag.
+    pub fn is_data_url(&self) -> bool {
+        self.file_name.starts_with("data:")
+    }
+}
+
 mod spline;
 mod value;
 
@@ -258,6 +293,8 @@ pub enum Content {
         name: String,
         time_remap: Option<Value<f64>>,
     },
+    /// Raster image asset referenced by its Lottie `refId`.
+    Image { asset_id: String },
     /// Collection of shapes.
     Shape(Vec<Shape>),
 }

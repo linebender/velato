@@ -29,6 +29,8 @@ pub struct Composition {
     pub height: usize,
     /// Precomposed layers that may be instanced.
     pub assets: HashMap<String, Vec<model::Layer>>,
+    /// Raster image assets, keyed by the identifier used by layer `refId`s.
+    pub images: HashMap<String, model::ImageAsset>,
     /// Collection of layers.
     pub layers: Vec<model::Layer>,
 }

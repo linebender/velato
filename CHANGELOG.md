@@ -18,6 +18,11 @@ This release has an [MSRV][] of 1.88.
 ### Added
 
 - Retain unmodeled layer effects (`ef`) as raw JSON. ([#114][] by [@RobertBrewitz][])
+- Added image asset metadata and image layer rendering. ([#115][] by [@RobertBrewitz])
+
+### Changed
+
+- `RenderSink` implementations must now provide `draw_image`, passing a bare `vello::Scene` to `Renderer::append` panics when drawing an image. Use `Renderer::render_to_vello_scene` with a caller-owned image map, or use a custom sink instead. ([#115][] by [@RobertBrewitz])
 
 ## [0.11.0]
 
@@ -216,6 +221,7 @@ This release has an [MSRV][] of 1.75.
 [#110]: https://github.com/linebender/velato/pull/110
 [#113]: https://github.com/linebender/velato/pull/113
 [#114]: https://github.com/linebender/velato/pull/114
+[#115]: https://github.com/linebender/velato/pull/115
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.11.0...HEAD
 [0.11.0]: https://github.com/linebender/velato/compare/v0.10.0...v0.11.0

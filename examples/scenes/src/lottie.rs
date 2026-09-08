@@ -8,7 +8,8 @@ use crate::{ExampleScene, SceneSet};
 use anyhow::{Ok, Result};
 use instant::Instant;
 use kurbo::{Affine, Vec2};
-use std::sync::Arc;
+use peniko::ImageData;
+use std::{collections::HashMap, sync::Arc};
 #[cfg(not(target_arch = "wasm32"))]
 use std::{
     fs::read_dir,
@@ -101,19 +102,21 @@ pub fn lottie_function_of<R: AsRef<str>>(
     fn render_lottie_contents(
         renderer: &mut velato::Renderer,
         lottie: &Composition,
+        images: &HashMap<String, ImageData>,
         start: Instant,
     ) -> Scene {
         let frame = ((start.elapsed().as_secs_f64() * lottie.frame_rate)
             % (lottie.frames.end - lottie.frames.start))
             + lottie.frames.start;
-        renderer.render_to_vello_scene(lottie, frame, Affine::IDENTITY, 1.0)
+        renderer.render_to_vello_scene(lottie, images, frame, Affine::IDENTITY, 1.0)
     }
     let started = Instant::now();
     let mut renderer = velato::Renderer::new();
     let lottie = lottie.clone();
+    let images = HashMap::new();
     let resolution = Vec2::new(lottie.width as f64, lottie.height as f64);
     move |scene, params| {
         params.resolution = Some(resolution);
-        *scene = render_lottie_contents(&mut renderer, &lottie, started);
+        *scene = render_lottie_contents(&mut renderer, &lottie, &images, started);
     }
 }
