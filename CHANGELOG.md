@@ -7,7 +7,15 @@ This changelog follows the patterns described here: <https://keepachangelog.com/
 Subheadings to categorize changes are `added, changed, deprecated, removed, fixed, security`.
 
 -->
+
+The latest published Velato release is [0.12.0](#0120-2026-09-09) which was released on 2026-09-09.
+You can find its changes [documented below](#0120-2026-09-09).
+
 ## [Unreleased]
+
+This release has an [MSRV][] of 1.88.
+
+## [0.12.0][] (2026-09-09)
 
 This release has an [MSRV][] of 1.88.
 
@@ -228,7 +236,8 @@ This release has an [MSRV][] of 1.75.
 [#116]: https://github.com/linebender/velato/pull/116
 [#117]: https://github.com/linebender/velato/pull/117
 
-[Unreleased]: https://github.com/linebender/velato/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/linebender/velato/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/linebender/velato/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/linebender/velato/compare/v0.8.1...v0.9.0

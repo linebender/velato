@@ -23,7 +23,7 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 | velato     | vello |
 | ---------- | ----- |
-| main       | 0.10  |
+| 0.12, main | 0.10  |
 | 0.11       | 0.9   |
 | 0.10       | 0.7   |
 | 0.9        | 0.7   |
