@@ -39,15 +39,13 @@ impl Composition {
     /// Creates a new runtime composition from a buffer of Lottie file contents.
     pub fn from_slice(source: impl AsRef<[u8]>) -> Result<Composition, Error> {
         let source = Animation::from_slice(source.as_ref())?;
-        let composition = import::conv_animation(source);
-        Ok(composition)
+        import::conv_animation(source)
     }
 
     /// Creates a new runtime composition from a json object of Lottie file contents.
     pub fn from_json(v: serde_json::Value) -> Result<Composition, Error> {
         let source = Animation::from_json(v)?;
-        let composition = import::conv_animation(source);
-        Ok(composition)
+        import::conv_animation(source)
     }
 }
 
@@ -56,7 +54,6 @@ impl std::str::FromStr for Composition {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let source = Animation::from_str(s)?;
-        let composition = import::conv_animation(source);
-        Ok(composition)
+        import::conv_animation(source)
     }
 }

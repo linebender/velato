@@ -81,7 +81,10 @@ fn process_layers(
     layers
 }
 
-pub fn conv_animation(source: schema::Animation) -> Composition {
+pub fn conv_animation(source: schema::Animation) -> Result<Composition, crate::Error> {
+    if !source.frame_rate.is_finite() || source.frame_rate <= 0.0 {
+        return Err(crate::Error::InvalidFrameRate(source.frame_rate));
+    }
     let mut target = Composition {
         frames: source.in_point..source.out_point,
         frame_rate: source.frame_rate,
@@ -148,7 +151,7 @@ pub fn conv_animation(source: schema::Animation) -> Composition {
     target.layers = process_layers(&source.composition.layers, &mut idmap);
     // >>>>>>> main
 
-    target
+    Ok(target)
 }
 
 pub fn conv_layer(

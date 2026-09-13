@@ -26,6 +26,7 @@ This release has an [MSRV][] of 1.88.
 ### Fixed
 
 - Fixed reversed transform skew direction for nonzero `sk` values. ([#119][] by [@RobertBrewitz])
+- Reject invalid animation frame rates duriing import ([#121][] by [@RobertBrewitz][])
 
 ## [0.12.0][] (2026-09-09)
 
