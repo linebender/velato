@@ -239,9 +239,55 @@ pub struct GroupTransform {
     pub opacity: Value<f64>,
 }
 
+/// A Lottie layer effect (`ef`) with animatable parameters.
+///
+/// Effect behavior follows LottieFiles' ThorVG-powered player and editor.
+#[derive(Clone, Debug)]
+pub enum LayerEffect {
+    /// Lottie Gaussian Blur effect (`ty: 29`). Blurs source color and alpha together.
+    GaussianBlur {
+        blurriness: Value<f64>,
+        dimensions: Value<f64>,
+        wrap: Value<f64>,
+    },
+    /// Lottie Drop Shadow effect (`ty: 25`).
+    /// Blurs source alpha and scales it by `opacity` (0–255), then draws the source over it.
+    /// Ignores alpha in `color`.
+    DropShadow {
+        color: Value<peniko::Color>,
+        opacity: Value<f64>,
+        angle: Value<f64>,
+        distance: Value<f64>,
+        softness: Value<f64>,
+    },
+    /// Lottie Fill effect (`ty: 21`).
+    /// Replaces source RGB; output alpha is source alpha times `opacity` (0–1).
+    /// Ignores alpha in `color`.
+    Fill {
+        color: Value<peniko::Color>,
+        opacity: Value<f64>,
+    },
+    /// Lottie Tint effect (`ty: 20`).
+    /// Changes source RGB while keeping source alpha. Ignores alpha in `black` and `white`.
+    Tint {
+        black: Value<peniko::Color>,
+        white: Value<peniko::Color>,
+        amount: Value<f64>,
+    },
+}
+
+#[derive(Clone, Debug)]
+pub struct UnsupportedEffect {
+    pub name: String,
+    pub effect_type: Option<u64>,
+}
+
 /// Layer in an animation.
 #[derive(Clone, Debug, Default)]
 pub struct Layer {
+    pub effects: Vec<LayerEffect>,
+    /// Effects Velato could not import because their type is unsupported or their parameters are invalid.
+    pub unsupported_effects: Vec<UnsupportedEffect>,
     /// Name of the layer.
     pub name: String,
     /// Index of the transform parent layer.

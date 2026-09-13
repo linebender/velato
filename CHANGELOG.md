@@ -18,6 +18,7 @@ This release has an [MSRV][] of 1.88.
 ### Added
 
 - Added precomposition time remapping (`tm`) support. ([#121][] by [@RobertBrewitz][])
+- Added plumbing to support animated effects through `RenderSink::push_filter`; Requires a supporting render sink. ([#123][] by [@RobertBrewitz][])
 
 ### Changed
 
@@ -253,6 +254,7 @@ This release has an [MSRV][] of 1.75.
 [#120]: https://github.com/linebender/velato/pull/120
 [#121]: https://github.com/linebender/velato/pull/121
 [#122]: https://github.com/linebender/velato/pull/122
+[#123]: https://github.com/linebender/velato/pull/123
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0

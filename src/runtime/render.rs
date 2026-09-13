@@ -1,10 +1,10 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use super::Composition;
 use super::model::{
     Content, Draw, Geometry, GroupTransform, ImageAsset, Layer, RepeaterComposite, Shape, fixed,
 };
+use super::{Composition, FilterEffect, FilterLayerResult};
 use kurbo::{
     Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
     Rect,
@@ -25,6 +25,10 @@ pub trait RenderSink {
     fn push_clip_layer(&mut self, transform: Affine, shape: &impl kurbo::Shape);
 
     fn pop_layer(&mut self);
+
+    fn push_filter(&mut self, _transform: Affine, _effect: &FilterEffect) -> FilterLayerResult {
+        FilterLayerResult::Unsupported
+    }
 
     fn draw(
         &mut self,
@@ -136,6 +140,28 @@ impl Renderer {
             scene.push_layer(mode, 1.0, parent_transform, &full_rect);
         }
         let alpha = alpha * layer.opacity.evaluate(frame) / 100.0;
+
+        // NOTE: important for isolating opacity so it applies to the layer effect output.
+        let isolate_opacity = !layer.effects.is_empty() && alpha != 1.0;
+
+        if isolate_opacity {
+            scene.push_layer(Mix::Normal, alpha as f32, parent_transform, &full_rect);
+        }
+
+        let alpha = if isolate_opacity { 1.0 } else { alpha };
+        let mut filter_layers = usize::from(isolate_opacity);
+
+        for effect in layer
+            .effects
+            .iter()
+            .rev()
+            .filter_map(|effect| effect.evaluate(frame))
+        {
+            match scene.push_filter(transform, &effect) {
+                FilterLayerResult::Pushed => filter_layers += 1,
+                FilterLayerResult::Unsupported => {}
+            }
+        }
         for mask in &layer.masks {
             mask.geometry.evaluate(frame, &mut self.mask_elements);
             scene.push_clip_layer(transform, &self.mask_elements.as_slice());
@@ -191,7 +217,7 @@ impl Renderer {
                 self.batch.clear();
             }
         }
-        for _ in 0..layer.masks.len() + (layer.mask_layer.is_some() as usize * 2) {
+        for _ in 0..layer.masks.len() + filter_layers + (layer.mask_layer.is_some() as usize * 2) {
             scene.pop_layer();
         }
         scene.end_layer_group();

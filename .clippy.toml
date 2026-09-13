@@ -8,3 +8,5 @@
 trivial-copy-size-limit = 16
 msrv = "1.88.0"
 # END LINEBENDER LINT SET
+
+doc-valid-idents = ["ThorVG", "LottieFiles"]
