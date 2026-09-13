@@ -40,12 +40,14 @@ impl ImageAsset {
     }
 }
 
+mod position;
 mod spline;
 mod value;
 
 pub mod animated;
 pub mod fixed;
 
+pub use position::{SpatialKeyframe, SpatialPosition};
 pub use value::{Animated, Easing, EasingHandle, Time, Tween, Value, ValueRef};
 
 pub(crate) use spline::SplineToPath;

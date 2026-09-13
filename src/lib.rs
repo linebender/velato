@@ -35,7 +35,6 @@
 //! # Unsupported features
 //!
 //! Missing features include:
-//! - Position keyframe (`ti`, `to`) easing
 //! - Time remapping (`tm`)
 //! - Text
 //! - Image embedding

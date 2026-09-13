@@ -13,13 +13,32 @@ use kurbo::PathEl;
 pub enum Position {
     Value(Value<Point>),
     SplitValues((Value<f64>, Value<f64>)),
+    Spatial(SpatialPosition),
+}
+
+impl Position {
+    pub fn is_fixed(&self) -> bool {
+        match self {
+            Self::Value(value) => value.is_fixed(),
+            Self::SplitValues((x, y)) => x.is_fixed() && y.is_fixed(),
+            Self::Spatial(_) => false,
+        }
+    }
+
+    pub fn evaluate(&self, frame: f64) -> Point {
+        match self {
+            Self::Value(value) => value.evaluate(frame),
+            Self::SplitValues((x, y)) => Point::new(x.evaluate(frame), y.evaluate(frame)),
+            Self::Spatial(value) => value.evaluate(frame),
+        }
+    }
 }
 
 /// Animated affine transformation.
 #[derive(Clone, Debug)]
 pub struct Transform {
     /// Anchor point.
-    pub anchor: Value<Point>,
+    pub anchor: Position,
     /// Translation.
     pub position: Position,
     /// Rotation angle.
@@ -36,12 +55,7 @@ impl Transform {
     /// Returns true if the transform is fixed.
     pub fn is_fixed(&self) -> bool {
         self.anchor.is_fixed()
-            && match &self.position {
-                Position::Value(value) => value.is_fixed(),
-                Position::SplitValues((x_value, y_value)) => {
-                    x_value.is_fixed() && y_value.is_fixed()
-                }
-            }
+            && self.position.is_fixed()
             && self.rotation.is_fixed()
             && self.scale.is_fixed()
             && self.skew.is_fixed()
@@ -51,13 +65,7 @@ impl Transform {
     /// Evaluates the transform at the specified frame.
     pub fn evaluate(&self, frame: f64) -> Affine {
         let anchor = self.anchor.evaluate(frame);
-        let position = match &self.position {
-            Position::Value(value) => value.evaluate(frame),
-            Position::SplitValues((x_value, y_value)) => kurbo::Point {
-                x: x_value.evaluate(frame),
-                y: y_value.evaluate(frame),
-            },
-        };
+        let position = self.position.evaluate(frame);
         let rotation = self.rotation.evaluate(frame);
         let scale = self.scale.evaluate(frame);
         let skew = self.skew.evaluate(frame);
@@ -92,7 +100,7 @@ pub struct Ellipse {
     /// True if the ellipse should be drawn in CCW order.
     pub is_ccw: bool,
     /// Position of the ellipse.
-    pub position: Value<Point>,
+    pub position: Position,
     /// Size of the ellipse.
     pub size: Value<Size>,
 }
@@ -116,7 +124,7 @@ pub struct Rect {
     /// True if the rect should be drawn in CCW order.
     pub is_ccw: bool,
     /// Position of the rectangle.
-    pub position: Value<Point>,
+    pub position: Position,
     /// Size of the rectangle.
     pub size: Value<Size>,
     /// Radius of the rectangle corners.
@@ -153,7 +161,7 @@ impl Rect {
 pub struct Star {
     pub is_polygon: bool,
     pub direction: f64,
-    pub position: Value<Point>,
+    pub position: Position,
     pub inner_radius: Value<f64>,
     pub inner_roundness: Value<f64>,
     pub outer_radius: Value<f64>,
@@ -331,7 +339,7 @@ pub struct Repeater {
     /// Offset applied to each element.
     pub offset: Value<f64>,
     /// Anchor point.
-    pub anchor_point: Value<Point>,
+    pub anchor_point: Position,
     /// Translation.
     pub position: Position,
     /// Rotation in degrees.
@@ -352,10 +360,7 @@ impl Repeater {
         self.copies.is_fixed()
             && self.offset.is_fixed()
             && self.anchor_point.is_fixed()
-            && match &self.position {
-                Position::Value(value) => value.is_fixed(),
-                Position::SplitValues((x, y)) => x.is_fixed() && y.is_fixed(),
-            }
+            && self.position.is_fixed()
             && self.rotation.is_fixed()
             && self.scale.is_fixed()
             && self.start_opacity.is_fixed()
@@ -367,10 +372,7 @@ impl Repeater {
         let copies = self.copies.evaluate(frame).round() as usize;
         let offset = self.offset.evaluate(frame);
         let anchor_point = self.anchor_point.evaluate(frame);
-        let position = match &self.position {
-            Position::Value(value) => value.evaluate(frame),
-            Position::SplitValues((x, y)) => Point::new(x.evaluate(frame), y.evaluate(frame)),
-        };
+        let position = self.position.evaluate(frame);
         let rotation = self.rotation.evaluate(frame);
         let scale = self.scale.evaluate(frame);
         let start_opacity = self.start_opacity.evaluate(frame);
