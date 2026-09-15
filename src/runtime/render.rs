@@ -5,10 +5,7 @@ use super::model::{
     Content, Draw, Geometry, GroupTransform, ImageAsset, RepeaterComposite, Shape, fixed,
 };
 use super::{Composition, EvaluatedLayer, EvaluationError, FilterEffect, FilterLayerResult};
-use kurbo::{
-    Affine, BezPath, CubicBez, Line, ParamCurve, ParamCurveArclen, PathEl, PathSeg, Point, QuadBez,
-    Rect,
-};
+use kurbo::{Affine, PathEl, Rect};
 use peniko::Mix;
 use std::mem::swap;
 use std::ops::Range;
@@ -229,8 +226,6 @@ impl Renderer {
         // Keep track of our local top of the geometry stack. Any subsequent
         // draws are bounded by this.
         let geometry_start = self.batch.geometries.len();
-        // Geometry cannot merge across group coordinate spaces.
-        self.batch.drawn_geometry = geometry_start;
         // Also keep track of top of draw stack for repeater evaluation.
         let draw_start = self.batch.draws.len();
         // Top to bottom, collect geometries and draws.
@@ -271,7 +266,6 @@ impl Renderer {
         for draw in &mut self.batch.draws[draw_start..] {
             draw.transform = transform * draw.transform;
         }
-        self.batch.drawn_geometry = self.batch.geometries.len();
     }
 }
 
@@ -308,6 +302,8 @@ struct GeometryData {
     /// Range into `ShapeBatch::elements`
     elements: Range<usize>,
     transform: Affine,
+    // Sequential trimming follows copy indices independently of paint stacking.
+    trim_order: usize,
     // Inherited styles need copy opacity without inheriting the repeated styles' stacking position.
     copies: Vec<CopyLayer>,
 }
@@ -338,33 +334,20 @@ struct Batch {
     repeat_geometries: Vec<GeometryData>,
     repeat_draws: Vec<DrawData>,
     next_copy: usize,
-    /// Length of geometries at time of most recent draw. This is
-    /// used to prevent merging into already used geometries.
-    drawn_geometry: usize,
     trim_elements: Vec<PathEl>,
 }
 
 impl Batch {
     fn push_geometry(&mut self, geometry: &Geometry, transform: Affine, frame: f64) {
-        // Merge with the previous geometry if possible. There are two
-        // conditions:
-        // 1. The previous geometry has not yet been referenced by a draw
-        // 2. The geometries have the same transform
-        if self.drawn_geometry < self.geometries.len()
-            && self.geometries.last().map(|last| last.transform) == Some(transform)
-        {
-            geometry.evaluate(frame, &mut self.elements);
-            self.geometries.last_mut().unwrap().elements.end = self.elements.len();
-        } else {
-            let start = self.elements.len();
-            geometry.evaluate(frame, &mut self.elements);
-            let end = self.elements.len();
-            self.geometries.push(GeometryData {
-                elements: start..end,
-                transform,
-                copies: Vec::new(),
-            });
-        }
+        let start = self.elements.len();
+        geometry.evaluate(frame, &mut self.elements);
+        let end = self.elements.len();
+        self.geometries.push(GeometryData {
+            elements: start..end,
+            transform,
+            trim_order: self.geometries.len(),
+            copies: Vec::new(),
+        });
     }
 
     fn push_draw(&mut self, draw: &Draw, alpha: f64, geometry_start: usize, frame: f64) {
@@ -374,14 +357,12 @@ impl Batch {
             geometry_start..self.geometries.len(),
             frame,
         ));
-        self.drawn_geometry = self.geometries.len();
     }
 
     fn repeat(&mut self, repeater: &fixed::Repeater, geometry_start: usize, draw_start: usize) {
         if repeater.copies == 0 {
             self.geometries.truncate(geometry_start);
             self.draws.truncate(draw_start);
-            self.drawn_geometry = self.geometries.len();
             return;
         }
         if geometry_start == self.geometries.len() {
@@ -415,6 +396,7 @@ impl Batch {
             self.next_copy += 1;
             for geometry in &self.repeat_geometries {
                 let mut geometry = geometry.clone();
+                geometry.trim_order += i * geometry_count;
                 geometry.transform = transform * geometry.transform;
                 geometry.copies.insert(0, copy_layer);
                 self.geometries.push(geometry);
@@ -441,8 +423,6 @@ impl Batch {
         // Clear the side buffers
         self.repeat_geometries.clear();
         self.repeat_draws.clear();
-        // Prevent merging until new geometries are pushed
-        self.drawn_geometry = self.geometries.len();
     }
 
     fn apply_trim(&mut self, trim: &fixed::Trim, geometry_start: usize) {
@@ -462,76 +442,51 @@ impl Batch {
                 .extend(self.elements[geometry.elements.clone()].iter().cloned());
         }
 
-        const ACCURACY: f64 = 0.1;
-
-        for geometry in &mut self.geometries[geometry_start..] {
-            let path: BezPath = self.elements[geometry.elements.clone()]
-                .iter()
-                .cloned()
-                .collect();
-            let segs: Vec<PathSeg> = path.segments().collect();
-            let total_length: f64 = segs.iter().map(|s| s.arclen(ACCURACY)).sum();
-
-            if total_length <= 0.0 || segs.is_empty() {
-                let pos = self.trim_elements.len();
-                geometry.elements = pos..pos;
-                continue;
-            }
-
-            let trim_ranges = [Some(first), second];
-            let mut trimmed = BezPath::new();
-            for range in trim_ranges.into_iter().flatten() {
-                let (norm_start, norm_end) = range;
-                let start_len = norm_start * total_length;
-                let end_len = norm_end * total_length;
-                let mut current_len = 0.0;
-                let mut need_move = true;
-
-                for seg in &segs {
-                    let seg_len = seg.arclen(ACCURACY);
-                    let seg_end = current_len + seg_len;
-
-                    if seg_end < start_len - 1e-9 {
-                        current_len = seg_end;
-                        continue;
-                    }
-                    if current_len > end_len + 1e-9 {
-                        break;
-                    }
-
-                    let t_start = if current_len < start_len {
-                        seg.inv_arclen(start_len - current_len, ACCURACY)
-                            .clamp(0.0, 1.0)
-                    } else {
-                        0.0
-                    };
-                    let t_end = if seg_end > end_len {
-                        seg.inv_arclen(end_len - current_len, ACCURACY)
-                            .clamp(0.0, 1.0)
-                    } else {
-                        1.0
-                    };
-
-                    if t_end > t_start + 1e-9 {
-                        let sub = seg.subsegment(t_start..t_end);
-                        if need_move {
-                            trimmed.move_to(sub.start());
-                            need_move = false;
+        let sequential = trim.mode == super::model::TrimMode::Sequential;
+        let paths: Vec<Vec<PathEl>> = self.geometries[geometry_start..]
+            .iter()
+            .map(|geometry| {
+                self.elements[geometry.elements.clone()]
+                    .iter()
+                    .map(|element| {
+                        if sequential {
+                            *element
+                        } else {
+                            geometry.transform * *element
                         }
-                        match sub {
-                            PathSeg::Line(l) => trimmed.line_to(l.p1),
-                            PathSeg::Quad(q) => trimmed.quad_to(q.p1, q.p2),
-                            PathSeg::Cubic(c) => trimmed.curve_to(c.p1, c.p2, c.p3),
-                        }
-                    }
-                    current_len = seg_end;
-                }
+                    })
+                    .collect()
+            })
+            .collect();
+        let mut intervals = vec![(0.0, 0.0); paths.len()];
+        if sequential {
+            let lengths: Vec<_> = paths.iter().map(|path| super::trim::length(path)).collect();
+            let total_length = lengths.iter().sum();
+            let mut order: Vec<_> = (0..paths.len()).collect();
+            order.sort_unstable_by_key(|index| self.geometries[geometry_start + index].trim_order);
+            let mut offset = 0.0;
+            for index in order {
+                intervals[index] = (offset, total_length);
+                offset += lengths[index];
             }
-
+        }
+        let ranges: Vec<_> = [Some(first), second].into_iter().flatten().collect();
+        for ((geometry, path), interval) in self.geometries[geometry_start..]
+            .iter_mut()
+            .zip(paths)
+            .zip(intervals)
+        {
             let new_start = self.trim_elements.len();
-            self.trim_elements
-                .extend(trimmed.elements().iter().cloned());
+            super::trim::trim(
+                &path,
+                &ranges,
+                sequential.then_some(interval),
+                &mut self.trim_elements,
+            );
             geometry.elements = new_start..self.trim_elements.len();
+            if !sequential {
+                geometry.transform = Affine::IDENTITY;
+            }
         }
 
         let mut offset = 0;
@@ -651,7 +606,6 @@ impl Batch {
         self.repeat_geometries.clear();
         self.repeat_draws.clear();
         self.next_copy = 0;
-        self.drawn_geometry = 0;
         self.trim_elements.clear();
     }
 }

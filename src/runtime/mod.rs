@@ -4,6 +4,7 @@
 mod effects;
 mod evaluate;
 mod render;
+mod trim;
 
 use crate::Error;
 use crate::import;

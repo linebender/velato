@@ -410,6 +410,15 @@ pub enum Content {
     Shape(Vec<Shape>),
 }
 
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum TrimMode {
+    /// Apply the range independently to each contour (`m: 1`).
+    #[default]
+    Parallel,
+    /// Apply the range across combined contour lengths (`m: 2`).
+    Sequential,
+}
+
 #[derive(Clone, Debug)]
 pub enum Trim {
     Fixed(fixed::Trim),
