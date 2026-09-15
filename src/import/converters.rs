@@ -37,12 +37,12 @@ fn process_layers(source_layers: &[AnyLayer], idmap: &mut HashMap<usize, usize>)
         }
     }
 
-    let matte_targets: HashMap<usize, usize> = converted
-        .iter()
-        .enumerate()
-        .filter(|(_, (layer, _, _, _))| layer.is_mask)
-        .map(|(idx, (_, id, _, _))| (*id, idx))
-        .collect();
+    let resolve = |id| {
+        idmap.get(&id).copied().map_or(
+            model::LayerReference::Unresolved(id),
+            model::LayerReference::Resolved,
+        )
+    };
 
     let mut layers: Vec<Layer> = Vec::with_capacity(converted.len());
     let mut prev_matte_layer: Option<usize> = None;
@@ -50,23 +50,23 @@ fn process_layers(source_layers: &[AnyLayer], idmap: &mut HashMap<usize, usize>)
     for (idx, (mut layer, _id, matte_mode, explicit_matte_index)) in
         converted.into_iter().enumerate()
     {
-        if let Some(parent) = layer.parent {
-            layer.parent = idmap.get(&parent).copied();
+        if let Some(model::LayerReference::Unresolved(id)) = layer.parent {
+            layer.parent = Some(resolve(id));
         }
 
         if let Some(matte_mode) = matte_mode {
             let matte_layer_idx = if let Some(explicit_idx) = explicit_matte_index {
-                idmap.get(&explicit_idx).copied()
+                Some(resolve(explicit_idx))
             } else {
-                prev_matte_layer
+                prev_matte_layer.map(model::LayerReference::Resolved)
             };
 
             if let Some(matte_idx) = matte_layer_idx {
-                layer.mask_layer = Some((matte_mode, matte_idx));
+                layer.matte = Some((matte_mode, matte_idx));
             }
         }
 
-        if layer.is_mask {
+        if layer.is_matte_source {
             prev_matte_layer = Some(idx);
         } else if matte_mode.is_some() {
             prev_matte_layer = None;
@@ -121,32 +121,7 @@ pub fn conv_animation(source: schema::Animation) -> Result<Composition, crate::E
         }
     }
 
-    // <<<<<<< HEAD
-    //     idmap.clear();
-    //     let mut layers = vec![];
-    //     let mut mask_layer = None;
-    //     for layer in &source.composition.layers {
-    //         let index = layers.len();
-    //         if let Some((mut layer, id, mask_blend)) = conv_layer(layer) {
-    //             if let (Some(mask_blend), Some(mask_layer)) = (mask_blend, mask_layer.take()) {
-    //                 layer.mask_layer = Some((mask_blend, mask_layer));
-    //             }
-    //             if layer.is_mask {
-    //                 mask_layer = Some(index);
-    //             }
-    //             idmap.insert(id, index);
-    //             layers.push(layer);
-    //         }
-    //     }
-    //     for layer in &mut layers {
-    //         if let Some(parent) = layer.parent {
-    //             layer.parent = idmap.get(&parent).copied();
-    //         }
-    //     }
-    //     target.layers = layers;
-    // =======
     target.layers = process_layers(&source.composition.layers, &mut idmap);
-    // >>>>>>> main
 
     Ok(target)
 }
@@ -195,7 +170,7 @@ pub fn conv_layer(source: &AnyLayer) -> Option<(Layer, usize, Option<BlendMode>,
     };
 
     if hidden {
-        layer.is_mask = false;
+        layer.is_matte_source = false;
     } else {
         let visual = match source {
             AnyLayer::Null(l) => &l.visual_layer,
@@ -1254,17 +1229,17 @@ mod tests {
     }
 
     #[test]
-    fn hidden_matte_layer_has_is_mask_false() {
+    fn hidden_matte_layer_has_is_matte_source_false() {
         let source = make_shape_layer(true, true);
         let (layer, ..) = conv_layer(&source).unwrap();
-        assert!(!layer.is_mask);
+        assert!(!layer.is_matte_source);
     }
 
     #[test]
-    fn visible_matte_layer_has_is_mask_true() {
+    fn visible_matte_layer_has_is_matte_source_true() {
         let source = make_shape_layer(false, true);
         let (layer, ..) = conv_layer(&source).unwrap();
-        assert!(layer.is_mask);
+        assert!(layer.is_matte_source);
     }
 
     #[test]

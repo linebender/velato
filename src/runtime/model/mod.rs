@@ -324,6 +324,14 @@ pub struct UnsupportedEffect {
     pub effect_type: Option<u64>,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum LayerReference {
+    /// Runtime index in the containing composition's layer array.
+    Resolved(usize),
+    /// Authored Lottie `ind` for which import found no matching layer.
+    Unresolved(usize),
+}
+
 /// Layer in an animation.
 #[derive(Clone, Debug, Default)]
 pub struct Layer {
@@ -332,8 +340,8 @@ pub struct Layer {
     pub unsupported_effects: Vec<UnsupportedEffect>,
     /// Name of the layer.
     pub name: String,
-    /// Index of the transform parent layer.
-    pub parent: Option<usize>,
+    /// Transform parent in the same composition; `None` means no authored parent.
+    pub parent: Option<LayerReference>,
     /// Transform for the entire layer.
     pub transform: Transform,
     /// Opacity for the entire layer.
@@ -352,10 +360,10 @@ pub struct Layer {
     pub start_frame: f64,
     /// List of masks applied to the content.
     pub masks: Vec<Mask>,
-    /// True if the layer is used as a mask.
-    pub is_mask: bool,
-    /// Mask blend mode and layer.
-    pub mask_layer: Option<(BlendMode, usize)>,
+    /// True if the layer is used as a matte source.
+    pub is_matte_source: bool,
+    /// Matte blend mode and source layer.
+    pub matte: Option<(BlendMode, LayerReference)>,
     /// Content of the layer.
     pub content: Content,
 }

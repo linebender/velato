@@ -20,10 +20,14 @@ This release has an [MSRV][] of 1.88.
 - Added `TransformComponents` and `Transform::components()` for accessing authored anchor, position, scale, rotation, and skew values without matrix decomposition. ([#124][] by [@RobertBrewitz][])
 - Added precomposition time remapping (`tm`) support. ([#121][] by [@RobertBrewitz][])
 - Added plumbing to support animated effects through `RenderSink::push_filter`; Requires a supporting render sink. ([#123][] by [@RobertBrewitz][])
+- Added `Composition::evaluate()` to query layers, transforms, anchors, and authored paths without rendering. ([#125][] by [@RobertBrewitz][])
+- Added `Renderer::try_append()` for fallible rendering. ([#125][] by [@RobertBrewitz][])
 
 ### Changed
 
 - Position keyframes now retain spatial tangents (`ti`, `to`) and follow curved motion paths using temporally eased arc length. ([#120][] by [@RobertBrewitz])
+- Renamed `Layer::mask_layer` to `matte` and `Layer::is_mask` to `is_matte_source` to distinguish track mattes from path masks in accordance with lottie spec layers docs. ([#125][] by [@RobertBrewitz][])
+- Parent and matte references now use `LayerReference`. ([#125][] by [@RobertBrewitz][])
 
 ### Fixed
 
@@ -257,6 +261,7 @@ This release has an [MSRV][] of 1.75.
 [#122]: https://github.com/linebender/velato/pull/122
 [#123]: https://github.com/linebender/velato/pull/123
 [#124]: https://github.com/linebender/velato/pull/124
+[#125]: https://github.com/linebender/velato/pull/125
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0
