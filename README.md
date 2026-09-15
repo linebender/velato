@@ -38,7 +38,6 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 Several Lottie features are not yet supported, including:
 
-- Time remapping (`tm`)
 - Text
 - Image embedding
 - Advanced shapes (stroke dash, zig-zag, etc.)

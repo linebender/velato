@@ -15,6 +15,10 @@ You can find its changes [documented below](#0120-2026-09-09).
 
 This release has an [MSRV][] of 1.88.
 
+### Added
+
+- Added precomposition time remapping (`tm`) support. ([#121][] by [@RobertBrewitz][])
+
 ### Changed
 
 - Position keyframes now retain spatial tangents (`ti`, `to`) and follow curved motion paths using temporally eased arc length. ([#120][] by [@RobertBrewitz])
@@ -22,6 +26,7 @@ This release has an [MSRV][] of 1.88.
 ### Fixed
 
 - Fixed reversed transform skew direction for nonzero `sk` values. ([#119][] by [@RobertBrewitz])
+- Reject invalid animation frame rates duriing import ([#121][] by [@RobertBrewitz][])
 
 ## [0.12.0][] (2026-09-09)
 
@@ -245,6 +250,7 @@ This release has an [MSRV][] of 1.75.
 [#117]: https://github.com/linebender/velato/pull/117
 [#119]: https://github.com/linebender/velato/pull/119
 [#120]: https://github.com/linebender/velato/pull/120
+[#121]: https://github.com/linebender/velato/pull/121
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0

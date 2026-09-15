@@ -143,18 +143,14 @@ impl Renderer {
         }
         match &layer.content {
             Content::None => {}
-            Content::Instance {
-                name,
-                time_remap: _,
-            } => {
-                // TODO: Use time_remap
-                // let frame = time_remap
-                //     .as_ref()
-                //     .map(|tm| tm.evaluate(frame))
-                //     .unwrap_or(frame);
+            Content::Instance { name, time_remap } => {
                 if let Some(asset_layers) = animation.assets.get(name) {
-                    let frame = frame / layer.stretch;
-                    let frame_delta = -layer.start_frame / layer.stretch;
+                    let child_frame = if let Some(tm) = time_remap {
+                        let sample_frame = frame / layer.stretch - layer.start_frame;
+                        tm.evaluate(sample_frame) * animation.frame_rate
+                    } else {
+                        frame / layer.stretch - layer.start_frame / layer.stretch
+                    };
                     for asset_layer in asset_layers.iter().rev() {
                         if asset_layer.is_mask {
                             continue;
@@ -166,7 +162,7 @@ impl Renderer {
                             0,
                             transform,
                             alpha,
-                            frame + frame_delta,
+                            child_frame,
                             clip_bounds,
                             scene,
                         );

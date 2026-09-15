@@ -138,7 +138,11 @@ impl Time {
             i: EasingHandle { x: t0_ix, y: t0_iy },
         };
         let hold = t0.hold;
-        let t = (frame - t0.frame) / (t1.frame - t0.frame);
+        let t = if ix0 == ix1 {
+            0.0
+        } else {
+            (frame - t0.frame) / (t1.frame - t0.frame)
+        };
         Some(([ix0, ix1], t.clamp(0.0, 1.0), easing, hold))
     }
 }
