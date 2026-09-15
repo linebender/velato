@@ -64,33 +64,23 @@ impl Transform {
 
     /// Evaluates the transform at the specified frame.
     pub fn evaluate(&self, frame: f64) -> Affine {
-        let anchor = self.anchor.evaluate(frame);
-        let position = self.position.evaluate(frame);
-        let rotation = self.rotation.evaluate(frame);
-        let scale = self.scale.evaluate(frame);
-        let skew = self.skew.evaluate(frame);
-        let skew_angle = self.skew_angle.evaluate(frame);
-        let skew_matrix = if skew != 0.0 {
-            let skew = skew.to_radians();
-            let angle = skew_angle.to_radians();
-            Affine::rotate(-angle) * Affine::skew(-skew.tan(), 0.0) * Affine::rotate(angle)
-        } else {
-            Affine::IDENTITY
-        };
-        Affine::translate((position.x, position.y))
-            * Affine::rotate(rotation.to_radians())
-            * skew_matrix
-            * Affine::scale_non_uniform(scale.x / 100.0, scale.y / 100.0)
-            * Affine::translate((-anchor.x, -anchor.y))
+        self.components(frame).matrix()
+    }
+
+    pub fn components(&self, frame: f64) -> TransformComponents {
+        TransformComponents {
+            anchor: self.anchor.evaluate(frame),
+            position: self.position.evaluate(frame),
+            rotation: self.rotation.evaluate(frame),
+            scale: self.scale.evaluate(frame),
+            skew: self.skew.evaluate(frame),
+            skew_angle: self.skew_angle.evaluate(frame),
+        }
     }
 
     /// Converts the animated value to its model representation.
     pub fn into_model(self) -> super::Transform {
-        if self.is_fixed() {
-            super::Transform::Fixed(self.evaluate(0.0))
-        } else {
-            super::Transform::Animated(self)
-        }
+        super::Transform::Animated(self)
     }
 }
 

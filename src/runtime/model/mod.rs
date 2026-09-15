@@ -66,8 +66,20 @@ pub enum Transform {
 }
 impl Transform {
     pub fn is_fixed(&self) -> bool {
-        matches!(self, Self::Fixed(_))
+        match self {
+            Self::Fixed(_) => true,
+            Self::Animated(value) => value.is_fixed(),
+        }
     }
+
+    /// Authored components, unavailable for manually constructed matrix-only transforms.
+    pub fn components(&self, frame: f64) -> Option<TransformComponents> {
+        match self {
+            Self::Fixed(_) => None,
+            Self::Animated(value) => Some(value.components(frame)),
+        }
+    }
+
     pub fn evaluate(&self, frame: f64) -> ValueRef<'_, fixed::Transform> {
         match self {
             Self::Fixed(value) => ValueRef::Borrowed(value),
@@ -230,6 +242,36 @@ pub enum Shape {
     Repeater(Repeater),
     /// Trim element.
     Trim(Trim),
+}
+
+/// Evaluated authored transform values.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct TransformComponents {
+    pub anchor: Point,
+    pub position: Point,
+    pub scale: Vec2,
+    pub rotation: f64,
+    pub skew: f64,
+    pub skew_angle: f64,
+}
+
+impl TransformComponents {
+    pub fn matrix(self) -> Affine {
+        let skew = if self.skew != 0.0 {
+            let angle = self.skew_angle.to_radians();
+            Affine::rotate(-angle)
+                * Affine::skew(-self.skew.to_radians().tan(), 0.0)
+                * Affine::rotate(angle)
+        } else {
+            Affine::IDENTITY
+        };
+
+        Affine::translate(self.position.to_vec2())
+            * Affine::rotate(self.rotation.to_radians())
+            * skew
+            * Affine::scale_non_uniform(self.scale.x / 100.0, self.scale.y / 100.0)
+            * Affine::translate(-self.anchor.to_vec2())
+    }
 }
 
 /// Transform and opacity for a shape group.
