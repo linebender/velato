@@ -17,6 +17,7 @@ This release has an [MSRV][] of 1.88.
 
 ### Added
 
+- Added `TransformComponents` and `Transform::components()` for accessing authored anchor, position, scale, rotation, and skew values without matrix decomposition. ([#124][] by [@RobertBrewitz][])
 - Added precomposition time remapping (`tm`) support. ([#121][] by [@RobertBrewitz][])
 - Added plumbing to support animated effects through `RenderSink::push_filter`; Requires a supporting render sink. ([#123][] by [@RobertBrewitz][])
 
@@ -255,6 +256,7 @@ This release has an [MSRV][] of 1.75.
 [#121]: https://github.com/linebender/velato/pull/121
 [#122]: https://github.com/linebender/velato/pull/122
 [#123]: https://github.com/linebender/velato/pull/123
+[#124]: https://github.com/linebender/velato/pull/124
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0
