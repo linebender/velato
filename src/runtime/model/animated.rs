@@ -65,7 +65,7 @@ impl Transform {
         let skew_matrix = if skew != 0.0 {
             let skew = skew.to_radians();
             let angle = skew_angle.to_radians();
-            Affine::rotate(-angle) * Affine::skew(skew.tan(), 0.0) * Affine::rotate(angle)
+            Affine::rotate(-angle) * Affine::skew(-skew.tan(), 0.0) * Affine::rotate(angle)
         } else {
             Affine::IDENTITY
         };
