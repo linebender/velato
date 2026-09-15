@@ -18,16 +18,13 @@ use crate::schema::animated_properties::keyframe_bezier_handle::{
 use crate::schema::animated_properties::multi_dimensional::MultiDimensional;
 use crate::schema::animated_properties::split_vector::SplitVector;
 use crate::schema::constants::gradient_type::GradientType;
-use crate::schema::helpers::int_boolean::BoolInt;
+use crate::schema::{helpers::int_boolean::BoolInt, layers::AnyLayer};
 use crate::{Composition, schema};
 use kurbo::{Cap, Join, Point, Size, Vec2};
 use peniko::{BlendMode, Color, Mix};
 use std::collections::HashMap;
 
-fn process_layers(
-    source_layers: &[schema::layers::AnyLayer],
-    idmap: &mut HashMap<usize, usize>,
-) -> Vec<Layer> {
+fn process_layers(source_layers: &[AnyLayer], idmap: &mut HashMap<usize, usize>) -> Vec<Layer> {
     idmap.clear();
 
     let mut converted: Vec<(Layer, usize, Option<BlendMode>, Option<usize>)> = vec![];
@@ -154,18 +151,14 @@ pub fn conv_animation(source: schema::Animation) -> Result<Composition, crate::E
     Ok(target)
 }
 
-pub fn conv_layer(
-    source: &schema::layers::AnyLayer,
-) -> Option<(Layer, usize, Option<BlendMode>, Option<usize>)> {
+pub fn conv_layer(source: &AnyLayer) -> Option<(Layer, usize, Option<BlendMode>, Option<usize>)> {
     let mut layer = Layer::default();
 
     let hidden = is_layer_hidden(source);
 
     let params = match source {
-        schema::layers::AnyLayer::Null(null_layer) => {
-            setup_layer_base(&null_layer.visual_layer, &mut layer)
-        }
-        schema::layers::AnyLayer::Precomposition(precomp_layer) => {
+        AnyLayer::Null(null_layer) => setup_layer_base(&null_layer.visual_layer, &mut layer),
+        AnyLayer::Precomposition(precomp_layer) => {
             let params = setup_precomp_layer(precomp_layer, &mut layer);
             if !hidden {
                 let name = precomp_layer.ref_id.clone();
@@ -174,7 +167,7 @@ pub fn conv_layer(
             }
             params
         }
-        schema::layers::AnyLayer::Shape(shape_layer) => {
+        AnyLayer::Shape(shape_layer) => {
             let params = setup_shape_layer(shape_layer, &mut layer);
             if !hidden {
                 let mut shapes = vec![];
@@ -187,10 +180,10 @@ pub fn conv_layer(
             }
             params
         }
-        schema::layers::AnyLayer::Solid(solid_color_layer) => {
+        AnyLayer::Solid(solid_color_layer) => {
             setup_layer_base(&solid_color_layer.visual_layer, &mut layer)
         }
-        schema::layers::AnyLayer::Image(image_layer) => {
+        AnyLayer::Image(image_layer) => {
             let params = setup_layer_base(&image_layer.visual_layer, &mut layer);
             if !hidden {
                 layer.content = Content::Image {
@@ -203,6 +196,33 @@ pub fn conv_layer(
 
     if hidden {
         layer.is_mask = false;
+    } else {
+        let visual = match source {
+            AnyLayer::Null(l) => &l.visual_layer,
+            AnyLayer::Precomposition(l) => &l.visual_layer,
+            AnyLayer::Shape(l) => &l.visual_layer,
+            AnyLayer::Solid(l) => &l.visual_layer,
+            AnyLayer::Image(l) => &l.visual_layer,
+        };
+        for effect in visual.effects.iter().flatten() {
+            if effect.get("en").is_some_and(|enabled| {
+                enabled.as_bool() == Some(false) || enabled.as_u64() == Some(0)
+            }) {
+                continue;
+            }
+            if let Some(effect) = conv_layer_effect(effect) {
+                layer.effects.push(effect);
+            } else {
+                layer.unsupported_effects.push(model::UnsupportedEffect {
+                    name: effect
+                        .get("nm")
+                        .and_then(serde_json::Value::as_str)
+                        .unwrap_or_default()
+                        .to_owned(),
+                    effect_type: effect.get("ty").and_then(serde_json::Value::as_u64),
+                });
+            }
+        }
     }
 
     let LayerSetupParams {
@@ -214,13 +234,56 @@ pub fn conv_layer(
     Some((layer, id, matte_mode, matte_layer_index))
 }
 
-fn is_layer_hidden(source: &schema::layers::AnyLayer) -> bool {
+fn conv_layer_effect(effect: &serde_json::Value) -> Option<model::LayerEffect> {
+    let parameters = effect.get("ef")?.as_array()?;
+    let scalar = |index: usize| {
+        let value = parameters.get(index)?.get("v")?;
+        let value =
+            serde_json::from_value::<schema::animated_properties::value::FloatValue>(value.clone())
+                .ok()?;
+        Some(conv_scalar(&value))
+    };
+    let color = |index: usize| {
+        let value = parameters.get(index)?.get("v")?;
+        let value = serde_json::from_value::<schema::animated_properties::color_value::ColorValue>(
+            value.clone(),
+        )
+        .ok()?;
+        Some(conv_color(&value))
+    };
+    Some(match effect.get("ty")?.as_u64()? {
+        29 => model::LayerEffect::GaussianBlur {
+            blurriness: scalar(0)?,
+            dimensions: scalar(1).unwrap_or(Value::Fixed(1.0)),
+            wrap: scalar(2).unwrap_or(Value::Fixed(0.0)),
+        },
+        25 => model::LayerEffect::DropShadow {
+            color: color(0)?,
+            opacity: scalar(1)?,
+            angle: scalar(2)?,
+            distance: scalar(3)?,
+            softness: scalar(4)?,
+        },
+        21 => model::LayerEffect::Fill {
+            color: color(2)?,
+            opacity: scalar(6)?,
+        },
+        20 => model::LayerEffect::Tint {
+            black: color(0)?,
+            white: color(1)?,
+            amount: scalar(2)?,
+        },
+        _ => return None,
+    })
+}
+
+fn is_layer_hidden(source: &AnyLayer) -> bool {
     let hidden = match source {
-        schema::layers::AnyLayer::Null(l) => l.visual_layer.layer.hidden,
-        schema::layers::AnyLayer::Precomposition(l) => l.visual_layer.layer.hidden,
-        schema::layers::AnyLayer::Shape(l) => l.visual_layer.layer.hidden,
-        schema::layers::AnyLayer::Solid(l) => l.visual_layer.layer.hidden,
-        schema::layers::AnyLayer::Image(l) => l.visual_layer.layer.hidden,
+        AnyLayer::Null(l) => l.visual_layer.layer.hidden,
+        AnyLayer::Precomposition(l) => l.visual_layer.layer.hidden,
+        AnyLayer::Shape(l) => l.visual_layer.layer.hidden,
+        AnyLayer::Solid(l) => l.visual_layer.layer.hidden,
+        AnyLayer::Image(l) => l.visual_layer.layer.hidden,
     };
     hidden == Some(true)
 }
@@ -1066,14 +1129,14 @@ pub fn conv_stops(value: &[f64], count: usize) -> Vec<[f64; 5]> {
                         } else {
                             alpha_interp
                         }; // todo: this is a hack to get alpha rendering with a
-                        // falloff similar to lottiefiles'
+                        // falloff similar to LottieFiles
 
                         let alpha_interp = if (x >= a && x <= b) && (t >= 0.75) && (x >= 0.9) {
                             alpha_b
                         } else {
                             alpha_interp
                         }; // todo: this is a hack to get alpha rendering with a
-                        // falloff similar to lottiefiles'
+                        // falloff similar to LottieFiles
 
                         stop[4] = stop[4].min(alpha_interp);
                     }

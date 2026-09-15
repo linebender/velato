@@ -39,7 +39,7 @@
 //! - Text
 //! - Image embedding
 //! - Advanced shapes (stroke dash, zig-zag, etc.)
-//! - Advanced effects (motion blur, drop shadows, etc.)
+//! - Layer effects other than Gaussian blur, drop shadow, fill, and tint
 //! - Correct color stop handling
 //! - Split rotations
 //! - Split positions
@@ -94,4 +94,6 @@ pub use error::Error;
 #[cfg(feature = "vello")]
 pub use vello;
 
-pub use runtime::{Composition, RenderSink, Renderer, model};
+pub use runtime::{
+    BlurEdgeMode, Composition, FilterEffect, FilterLayerResult, RenderSink, Renderer, model,
+};

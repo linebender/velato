@@ -1,6 +1,7 @@
 // Copyright 2024 the Velato Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+mod effects;
 mod render;
 
 use crate::Error;
@@ -14,6 +15,7 @@ mod vello;
 
 pub mod model;
 
+pub use effects::{BlurEdgeMode, FilterEffect, FilterLayerResult};
 pub use render::{RenderSink, Renderer};
 
 /// Model of a Lottie file.

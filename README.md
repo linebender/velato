@@ -41,10 +41,16 @@ Several Lottie features are not yet supported, including:
 - Text
 - Image embedding
 - Advanced shapes (stroke dash, zig-zag, etc.)
-- Advanced effects (motion blur, drop shadows, etc.)
+- Layer effects other than Gaussian blur, drop shadow, fill, and tint (these require sink support; the built-in Vello sinks skip them)
 - Correct color stop handling
 - Split rotations
 - Split positions
+
+## Layer effects
+
+Gaussian blur, drop shadow, fill, and tint require a custom `RenderSink` implementing `push_filter`. The built-in Vello sinks skip these effects.
+
+**Important:** Effect color handling follows ThorVG, used by the LottieFiles' player: only RGB is used from effect colors. Fill and shadow use their separate opacity settings; tint keeps the layer's transparency. Gaussian blur blurs both color and alpha.
 
 ## Usage
 
