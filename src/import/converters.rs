@@ -6,11 +6,10 @@ use super::defaults::{
     FLOAT_VALUE_ONE_HUNDRED, FLOAT_VALUE_ZERO, MULTIDIM_ONE_HUNDRED, POSITION_ZERO,
 };
 use crate::import::builders::LayerSetupParams;
-use crate::runtime::model::Easing;
 use crate::runtime::model::animated::{self, Position};
 use crate::runtime::model::{
-    self, Content, Draw, EasingHandle, GroupTransform, Layer, RepeaterComposite, SplineToPath,
-    Time, Tween, Value,
+    self, Content, Draw, Easing, EasingHandle, GroupTransform, Layer, RepeaterComposite,
+    SpatialKeyframe, SpatialPosition, SplineToPath, Time, Tween, Value,
 };
 use crate::runtime::{self};
 use crate::schema::animated_properties::keyframe_bezier_handle::{
@@ -236,9 +235,7 @@ pub fn conv_transform(
     };
 
     let position = match &value.position {
-        schema::helpers::transform::AnyTransformP::Position(position) => {
-            Position::Value(conv_pos_point(position))
-        }
+        schema::helpers::transform::AnyTransformP::Position(position) => conv_pos_point(position),
         schema::helpers::transform::AnyTransformP::SplitPosition(SplitVector { x, y, .. }) => {
             Position::SplitValues((conv_scalar(x), conv_scalar(y)))
         }
@@ -283,7 +280,7 @@ pub fn conv_shape_transform(value: &schema::shapes::transform::TransformShape) -
                 .as_ref()
                 .unwrap_or(&POSITION_ZERO),
         ),
-        position: Position::Value(conv_pos_point(position_in)),
+        position: conv_pos_point(position_in),
         scale: conv_vec2(
             value
                 .transform
@@ -629,7 +626,7 @@ fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model:
 
             let transform = &value.transform.transform.transform;
             let position = match &transform.position {
-                AnyTransformP::Position(position) => Position::Value(conv_pos_point(position)),
+                AnyTransformP::Position(position) => conv_pos_point(position),
                 AnyTransformP::SplitPosition(SplitVector { x, y, .. }) => {
                     Position::SplitValues((conv_scalar(x), conv_scalar(y)))
                 }
@@ -934,30 +931,67 @@ pub fn conv_multi_color<T: Tween>(
     }
 }
 
-pub fn conv_pos<T: Tween>(
-    position: &schema::animated_properties::position::Position,
-    f: impl Fn(&Vec<f64>) -> T,
-) -> Value<T> {
+pub fn conv_pos_point(value: &schema::animated_properties::position::Position) -> Position {
     use crate::schema::animated_properties::position::PositionValueK::*;
 
-    match &position.value {
-        Static(components) => Value::Fixed(f(components)),
-        Animated(pos_keyframes) => {
-            // TODO: Are we using PositionKeyframes here how we're supposed to?
-            // there are in_tangents and out_tangents in addition to the keyframes.
-            conv_keyframes(pos_keyframes.iter().map(|pk| &pk.keyframe), |k| f(&k.value))
+    fn point(value: &[f64]) -> Point {
+        match value.get(..2) {
+            Some([x, y]) => Point::new(*x, *y),
+            _ => Point::ORIGIN,
         }
     }
-}
 
-pub fn conv_pos_point(value: &schema::animated_properties::position::Position) -> Value<Point> {
-    conv_pos(value, |x| {
-        let (x0, x1) = match x.get(0..=1) {
-            Some([x0, x1]) => (*x0, *x1),
-            _ => (0.0, 0.0),
-        };
-        Point::new(x0, x1)
-    })
+    fn temporal_handle(handle: &KeyframeBezierHandle) -> Option<EasingHandle> {
+        // use the first easing component for distance along the spatial path
+        fn first(component: &KeyframeComponent) -> Option<f64> {
+            match component {
+                KeyframeComponent::SingleValue(value) => Some(*value),
+                KeyframeComponent::ArrayOfValues(values) => values.first().copied(),
+            }
+        }
+        Some(EasingHandle {
+            x: first(&handle.x_coordinate)?,
+            y: first(&handle.y_coordinate)?,
+        })
+    }
+
+    match &value.value {
+        Static(components) => Position::Value(Value::Fixed(point(components))),
+        Animated(keyframes)
+            if keyframes.iter().any(|keyframe| {
+                keyframe.value_in_tangent.is_some() || keyframe.value_out_tangent.is_some()
+            }) =>
+        {
+            let spatial_keyframes = keyframes
+                .iter()
+                .map(|keyframe| {
+                    let base = &keyframe.keyframe.base;
+                    SpatialKeyframe {
+                        time: Time {
+                            frame: base.time,
+                            in_tangent: base.in_tangent.as_ref().and_then(temporal_handle),
+                            out_tangent: base.out_tangent.as_ref().and_then(temporal_handle),
+                            hold: base.hold == Some(BoolInt::True),
+                        },
+                        value: point(&keyframe.keyframe.value),
+                        out_tangent: keyframe
+                            .value_out_tangent
+                            .as_ref()
+                            .map(|v| point(v).to_vec2()),
+                        in_tangent: keyframe
+                            .value_in_tangent
+                            .as_ref()
+                            .map(|v| point(v).to_vec2()),
+                    }
+                })
+                .collect();
+            Position::Spatial(SpatialPosition::new(spatial_keyframes))
+        }
+        Animated(keyframes) => Position::Value(conv_keyframes(
+            keyframes.iter().map(|keyframe| &keyframe.keyframe),
+            |keyframe| point(&keyframe.value),
+        )),
+    }
 }
 
 pub fn conv_multi_point(

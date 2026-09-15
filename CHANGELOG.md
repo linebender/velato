@@ -15,6 +15,10 @@ You can find its changes [documented below](#0120-2026-09-09).
 
 This release has an [MSRV][] of 1.88.
 
+### Changed
+
+- Position keyframes now retain spatial tangents (`ti`, `to`) and follow curved motion paths using temporally eased arc length. ([#120][] by [@RobertBrewitz])
+
 ### Fixed
 
 - Fixed reversed transform skew direction for nonzero `sk` values. ([#119][] by [@RobertBrewitz])
@@ -240,6 +244,7 @@ This release has an [MSRV][] of 1.75.
 [#116]: https://github.com/linebender/velato/pull/116
 [#117]: https://github.com/linebender/velato/pull/117
 [#119]: https://github.com/linebender/velato/pull/119
+[#120]: https://github.com/linebender/velato/pull/120
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0
