@@ -25,6 +25,7 @@ This release has an [MSRV][] of 1.88.
 - Added opt-in `lottie-shape-paths` for Lottie-compatible ellipse and rectangle start points and drawing directions. ([#127][] by [@RobertBrewitz][])
 - Added sequential trimming across repeater copies without changing paint order. ([#128][] by [@RobertBrewitz][])
 - Added `EvaluatedLayer::evaluated_paths()` to query shape paths after transforms, trims, and repeaters without rendering. ([#129][] by [@RobertBrewitz][])
+- Added `Renderer::append_evaluated()` to render saved evaluations without repeating layer evaluation. ([#130][] by [@RobertBrewitz][])
 
 ### Changed
 
@@ -272,6 +273,7 @@ This release has an [MSRV][] of 1.75.
 [#127]: https://github.com/linebender/velato/pull/127
 [#128]: https://github.com/linebender/velato/pull/128
 [#129]: https://github.com/linebender/velato/pull/129
+[#130]: https://github.com/linebender/velato/pull/130
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0
