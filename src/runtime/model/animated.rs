@@ -100,11 +100,31 @@ impl Ellipse {
         self.position.is_fixed() && self.size.is_fixed()
     }
 
-    pub fn evaluate(&self, frame: f64) -> kurbo::Ellipse {
-        let position = self.position.evaluate(frame);
+    #[cfg(not(feature = "lottie-shape-paths"))]
+    pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) {
+        let center = self.position.evaluate(frame);
         let size = self.size.evaluate(frame);
-        let radii = (size.width * 0.5, size.height * 0.5);
-        kurbo::Ellipse::new(position, radii, 0.0)
+        let ellipse = kurbo::Ellipse::new(center, (size.width * 0.5, size.height * 0.5), 0.0);
+        path.extend(ellipse.path_elements(0.1));
+    }
+
+    #[cfg(feature = "lottie-shape-paths")]
+    pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) {
+        let center = self.position.evaluate(frame);
+        let size = self.size.evaluate(frame);
+        let arc = kurbo::Arc {
+            center,
+            radii: Vec2::new(size.width * 0.5, size.height * 0.5),
+            start_angle: -std::f64::consts::FRAC_PI_2,
+            sweep_angle: if self.is_ccw {
+                -std::f64::consts::TAU
+            } else {
+                std::f64::consts::TAU
+            },
+            x_rotation: 0.0,
+        };
+        path.extend(arc.path_elements(0.1));
+        path.push(PathEl::ClosePath);
     }
 }
 
@@ -127,22 +147,62 @@ impl Rect {
         self.position.is_fixed() && self.size.is_fixed() && self.corner_radius.is_fixed()
     }
 
-    /// Evaluates the rectangle at the specified frame.
-    pub fn evaluate(&self, frame: f64) -> kurbo::RoundedRect {
-        let position = self.position.evaluate(frame);
+    #[cfg(not(feature = "lottie-shape-paths"))]
+    pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) {
+        let center = self.position.evaluate(frame);
         let size = self.size.evaluate(frame);
-        let position = Point::new(
-            position.x - size.width * 0.5,
-            position.y - size.height * 0.5,
+        let rect = kurbo::RoundedRect::new(
+            center.x - size.width * 0.5,
+            center.y - size.height * 0.5,
+            center.x + size.width * 0.5,
+            center.y + size.height * 0.5,
+            self.corner_radius.evaluate(frame),
         );
-        let radius = self.corner_radius.evaluate(frame);
-        kurbo::RoundedRect::new(
-            position.x,
-            position.y,
-            position.x + size.width,
-            position.y + size.height,
-            radius,
-        )
+        path.extend(rect.path_elements(0.1));
+    }
+
+    #[cfg(feature = "lottie-shape-paths")]
+    pub fn evaluate(&self, frame: f64, path: &mut Vec<PathEl>) {
+        let center = self.position.evaluate(frame);
+        let size = self.size.evaluate(frame);
+        let left = center.x - size.width * 0.5;
+        let right = center.x + size.width * 0.5;
+        let top = center.y - size.height * 0.5;
+        let bottom = center.y + size.height * 0.5;
+        let radius = self
+            .corner_radius
+            .evaluate(frame)
+            .min(size.width * 0.5)
+            .min(size.height * 0.5)
+            .max(0.0);
+        use kurbo::ParamCurve;
+
+        let outline = kurbo::RoundedRect::new(left, top, right, bottom, radius).to_path(0.1);
+        let mut segments: Vec<_> = outline.segments().collect();
+        let start = Point::new(right, top + radius);
+        // Lottie starts at the top-right; choose the nearest endpoint to tolerate arc rounding.
+        let Some(first) = segments
+            .iter()
+            .enumerate()
+            .min_by(|(_, a), (_, b)| {
+                a.start()
+                    .distance_squared(start)
+                    .total_cmp(&b.start().distance_squared(start))
+            })
+            .map(|(index, _)| index)
+        else {
+            return;
+        };
+        segments.rotate_left(first);
+        if self.is_ccw {
+            segments.reverse();
+            for segment in &mut segments {
+                *segment = segment.reverse();
+            }
+        }
+        path.push(PathEl::MoveTo(segments[0].start()));
+        path.extend(segments.iter().map(|segment| segment.as_path_el()));
+        path.push(PathEl::ClosePath);
     }
 }
 
