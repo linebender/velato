@@ -3,6 +3,7 @@
 
 use super::Composition;
 use super::model::{Content, Layer, LayerReference, Shape, TransformComponents};
+use super::render::evaluate_paths;
 use kurbo::{Affine, PathEl, Point};
 use peniko::BlendMode;
 
@@ -71,6 +72,19 @@ pub struct EvaluatedLayer<'a> {
 }
 
 impl EvaluatedLayer<'_> {
+    /// Returns this layer's paths after moving, scaling, rotating, trimming, and repeating them.
+    ///
+    /// Coordinates are pixels in the main animation. Hidden and transparent paths are included,
+    /// but colors, stroke thickness, masks, and effects are not applied.
+    ///
+    /// Returns nothing for non-shape layers; for nested animations, query their child layers.
+    pub fn evaluated_paths(&self) -> Vec<kurbo::BezPath> {
+        match &self.layer.content {
+            Content::Shape(shapes) => evaluate_paths(shapes, self.full_transform, self.frame),
+            _ => Vec::new(),
+        }
+    }
+
     /// Anchor in main-composition pixels; None for matrix-only transforms.
     pub fn anchor(&self) -> Option<Point> {
         self.authored_components

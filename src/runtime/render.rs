@@ -211,7 +211,7 @@ impl Renderer {
                 }
             }
             Content::Shape(shapes) => {
-                self.render_shapes(shapes, transform, alpha, frame);
+                self.batch.evaluate(shapes, transform, alpha, frame, true);
                 self.batch.render(scene, clip_bounds);
                 self.batch.clear();
             }
@@ -220,52 +220,6 @@ impl Renderer {
             scene.pop_layer();
         }
         scene.end_layer_group();
-    }
-
-    fn render_shapes(&mut self, shapes: &[Shape], transform: Affine, alpha: f64, frame: f64) {
-        // Keep track of our local top of the geometry stack. Any subsequent
-        // draws are bounded by this.
-        let geometry_start = self.batch.geometries.len();
-        // Also keep track of top of draw stack for repeater evaluation.
-        let draw_start = self.batch.draws.len();
-        // Top to bottom, collect geometries and draws.
-        for shape in shapes {
-            match shape {
-                Shape::Group(shapes, group_transform) => {
-                    let (group_transform, group_alpha) =
-                        if let Some(GroupTransform { transform, opacity }) = group_transform {
-                            (
-                                transform.evaluate(frame).into_owned(),
-                                opacity.evaluate(frame) / 100.0,
-                            )
-                        } else {
-                            (Affine::IDENTITY, 1.0)
-                        };
-                    self.render_shapes(shapes, group_transform, alpha * group_alpha, frame);
-                }
-                Shape::Geometry(geometry) => {
-                    self.batch.push_geometry(geometry, Affine::IDENTITY, frame);
-                }
-                Shape::Draw(draw) => {
-                    self.batch.push_draw(draw, alpha, geometry_start, frame);
-                }
-                Shape::Repeater(repeater) => {
-                    let repeater = repeater.evaluate(frame);
-                    self.batch
-                        .repeat(repeater.as_ref(), geometry_start, draw_start);
-                }
-                Shape::Trim(trim) => {
-                    let trim = trim.evaluate(frame);
-                    self.batch.apply_trim(trim.as_ref(), geometry_start);
-                }
-            }
-        }
-        for geometry in &mut self.batch.geometries[geometry_start..] {
-            geometry.transform = transform * geometry.transform;
-        }
-        for draw in &mut self.batch.draws[draw_start..] {
-            draw.transform = transform * draw.transform;
-        }
     }
 }
 
@@ -337,7 +291,87 @@ struct Batch {
     trim_elements: Vec<PathEl>,
 }
 
+pub(crate) fn evaluate_paths(
+    shapes: &[Shape],
+    transform: Affine,
+    frame: f64,
+) -> Vec<kurbo::BezPath> {
+    let mut batch = Batch::default();
+    batch.evaluate(shapes, transform, 1.0, frame, false);
+    batch
+        .geometries
+        .iter()
+        .filter(|geometry| !geometry.elements.is_empty())
+        .map(|geometry| {
+            batch.elements[geometry.elements.clone()]
+                .iter()
+                .map(|element| geometry.transform * *element)
+                .collect()
+        })
+        .collect()
+}
+
 impl Batch {
+    fn evaluate(
+        &mut self,
+        shapes: &[Shape],
+        transform: Affine,
+        alpha: f64,
+        frame: f64,
+        collect_draws: bool,
+    ) {
+        let geometry_start = self.geometries.len();
+        let draw_start = self.draws.len();
+        for shape in shapes {
+            match shape {
+                Shape::Group(shapes, group_transform) => {
+                    let (group_transform, group_alpha) =
+                        if let Some(GroupTransform { transform, opacity }) = group_transform {
+                            (
+                                transform.evaluate(frame).into_owned(),
+                                if collect_draws {
+                                    opacity.evaluate(frame) / 100.0
+                                } else {
+                                    1.0
+                                },
+                            )
+                        } else {
+                            (Affine::IDENTITY, 1.0)
+                        };
+                    self.evaluate(
+                        shapes,
+                        group_transform,
+                        alpha * group_alpha,
+                        frame,
+                        collect_draws,
+                    );
+                }
+                Shape::Geometry(geometry) => {
+                    self.push_geometry(geometry, Affine::IDENTITY, frame);
+                }
+                Shape::Draw(draw) => {
+                    if collect_draws {
+                        self.push_draw(draw, alpha, geometry_start, frame);
+                    }
+                }
+                Shape::Repeater(repeater) => {
+                    let repeater = repeater.evaluate(frame);
+                    self.repeat(repeater.as_ref(), geometry_start, draw_start);
+                }
+                Shape::Trim(trim) => {
+                    let trim = trim.evaluate(frame);
+                    self.apply_trim(trim.as_ref(), geometry_start);
+                }
+            }
+        }
+        for geometry in &mut self.geometries[geometry_start..] {
+            geometry.transform = transform * geometry.transform;
+        }
+        for draw in &mut self.draws[draw_start..] {
+            draw.transform = transform * draw.transform;
+        }
+    }
+
     fn push_geometry(&mut self, geometry: &Geometry, transform: Affine, frame: f64) {
         let start = self.elements.len();
         geometry.evaluate(frame, &mut self.elements);
