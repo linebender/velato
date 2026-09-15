@@ -55,8 +55,8 @@ pub struct EvaluatedLayer<'a> {
     pub frame: f64,
     /// Frame is at or after the layer's in-point and before its out-point.
     pub in_range: bool,
-    /// Active in the normal render tree, excluding matte sources and inactive precomps.
-    /// Does not account for opacity, clipping, or hidden content discarded during import.
+    /// Active in the normal render tree, excluding hidden layers, matte sources, and inactive precomps.
+    /// Does not account for opacity or clipping.
     pub visible: bool,
     /// None for matrix-only transforms, whose original components cannot be recovered.
     pub authored_components: Option<TransformComponents>,
@@ -267,7 +267,7 @@ fn evaluate_layers<'a>(
             matte,
             frame,
             in_range,
-            visible: visible && in_range && !layer.is_matte_source,
+            visible: visible && in_range && !layer.hidden && !layer.is_matte_source,
             authored_components,
             local_transform,
             full_transform: local_transform,

@@ -31,6 +31,8 @@ This release has an [MSRV][] of 1.88.
 
 ### Fixed
 
+- Implicit mattes now use the preceding layer; matte sources no longer render separately without `td`. ([#126][] by [@RobertBrewitz][])
+- Hidden layers retain content and effects for matte use, per Lottie's hidden-layer rules. ([#126][] by [@RobertBrewitz][])
 - Fixed reversed transform skew direction for nonzero `sk` values. ([#119][] by [@RobertBrewitz])
 - Reject invalid animation frame rates duriing import ([#121][] by [@RobertBrewitz][])
 - Fixed omitted layer rotation causing panick during import. ([#122][] by [@RobertBrewitz][])
@@ -262,6 +264,7 @@ This release has an [MSRV][] of 1.75.
 [#123]: https://github.com/linebender/velato/pull/123
 [#124]: https://github.com/linebender/velato/pull/124
 [#125]: https://github.com/linebender/velato/pull/125
+[#126]: https://github.com/linebender/velato/pull/126
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0

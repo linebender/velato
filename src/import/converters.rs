@@ -45,7 +45,6 @@ fn process_layers(source_layers: &[AnyLayer], idmap: &mut HashMap<usize, usize>)
     };
 
     let mut layers: Vec<Layer> = Vec::with_capacity(converted.len());
-    let mut prev_matte_layer: Option<usize> = None;
 
     for (idx, (mut layer, _id, matte_mode, explicit_matte_index)) in
         converted.into_iter().enumerate()
@@ -54,11 +53,11 @@ fn process_layers(source_layers: &[AnyLayer], idmap: &mut HashMap<usize, usize>)
             layer.parent = Some(resolve(id));
         }
 
-        if let Some(matte_mode) = matte_mode {
+        if let Some(matte_mode) = matte_mode.filter(|mode| *mode != Mix::Normal.into()) {
             let matte_layer_idx = if let Some(explicit_idx) = explicit_matte_index {
                 Some(resolve(explicit_idx))
             } else {
-                prev_matte_layer.map(model::LayerReference::Resolved)
+                idx.checked_sub(1).map(model::LayerReference::Resolved)
             };
 
             if let Some(matte_idx) = matte_layer_idx {
@@ -66,13 +65,19 @@ fn process_layers(source_layers: &[AnyLayer], idmap: &mut HashMap<usize, usize>)
             }
         }
 
-        if layer.is_matte_source {
-            prev_matte_layer = Some(idx);
-        } else if matte_mode.is_some() {
-            prev_matte_layer = None;
-        }
-
         layers.push(layer);
+    }
+
+    // A layer's matte source is selected by `tp`, or defaults to the preceding layer when `tt`
+    // enables a matte. The source need not be marked `td` for this selection. Treat resolved
+    // sources as matte-only to avoid drawing their content separately.
+    //
+    // This matches ThorVG (also used by dotLottie-web), which marks resolved sources as matte-only
+    // regardless of `td`, the Lottie docs do not state this explicitly.
+    for index in 0..layers.len() {
+        if let Some((_, model::LayerReference::Resolved(source))) = layers[index].matte {
+            layers[source].is_matte_source = true;
+        }
     }
 
     layers
@@ -127,32 +132,29 @@ pub fn conv_animation(source: schema::Animation) -> Result<Composition, crate::E
 }
 
 pub fn conv_layer(source: &AnyLayer) -> Option<(Layer, usize, Option<BlendMode>, Option<usize>)> {
-    let mut layer = Layer::default();
-
-    let hidden = is_layer_hidden(source);
+    let mut layer = Layer {
+        hidden: is_layer_hidden(source),
+        ..Layer::default()
+    };
 
     let params = match source {
         AnyLayer::Null(null_layer) => setup_layer_base(&null_layer.visual_layer, &mut layer),
         AnyLayer::Precomposition(precomp_layer) => {
             let params = setup_precomp_layer(precomp_layer, &mut layer);
-            if !hidden {
-                let name = precomp_layer.ref_id.clone();
-                let time_remap = precomp_layer.time_remap.as_ref().map(conv_scalar);
-                layer.content = Content::Instance { name, time_remap };
-            }
+            let name = precomp_layer.ref_id.clone();
+            let time_remap = precomp_layer.time_remap.as_ref().map(conv_scalar);
+            layer.content = Content::Instance { name, time_remap };
             params
         }
         AnyLayer::Shape(shape_layer) => {
             let params = setup_shape_layer(shape_layer, &mut layer);
-            if !hidden {
-                let mut shapes = vec![];
-                for shape in &shape_layer.shapes {
-                    if let Some(shape) = conv_shape(shape) {
-                        shapes.push(shape);
-                    }
+            let mut shapes = vec![];
+            for shape in &shape_layer.shapes {
+                if let Some(shape) = conv_shape(shape) {
+                    shapes.push(shape);
                 }
-                layer.content = Content::Shape(shapes);
             }
+            layer.content = Content::Shape(shapes);
             params
         }
         AnyLayer::Solid(solid_color_layer) => {
@@ -160,18 +162,14 @@ pub fn conv_layer(source: &AnyLayer) -> Option<(Layer, usize, Option<BlendMode>,
         }
         AnyLayer::Image(image_layer) => {
             let params = setup_layer_base(&image_layer.visual_layer, &mut layer);
-            if !hidden {
-                layer.content = Content::Image {
-                    asset_id: image_layer.ref_id.clone(),
-                };
-            }
+            layer.content = Content::Image {
+                asset_id: image_layer.ref_id.clone(),
+            };
             params
         }
     };
 
-    if hidden {
-        layer.is_matte_source = false;
-    } else {
+    {
         let visual = match source {
             AnyLayer::Null(l) => &l.visual_layer,
             AnyLayer::Precomposition(l) => &l.visual_layer,
@@ -1222,17 +1220,19 @@ mod tests {
     }
 
     #[test]
-    fn hidden_layer_has_no_content() {
+    fn hidden_layer_retains_content() {
         let source = make_shape_layer(true, false);
         let (layer, ..) = conv_layer(&source).unwrap();
-        assert!(matches!(layer.content, Content::None));
+        assert!(layer.hidden);
+        assert!(matches!(layer.content, Content::Shape(_)));
     }
 
     #[test]
-    fn hidden_matte_layer_has_is_matte_source_false() {
+    fn hidden_matte_layer_retains_is_matte_source() {
         let source = make_shape_layer(true, true);
         let (layer, ..) = conv_layer(&source).unwrap();
-        assert!(!layer.is_matte_source);
+        assert!(layer.hidden);
+        assert!(layer.is_matte_source);
     }
 
     #[test]

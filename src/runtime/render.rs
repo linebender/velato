@@ -182,7 +182,7 @@ impl Renderer {
             Content::None => {}
             Content::Instance { .. } => {
                 for (index, child) in evaluated.children.iter().enumerate().rev() {
-                    if child.layer.is_matte_source {
+                    if child.layer.is_matte_source || child.layer.hidden {
                         continue;
                     }
                     self.render_layer(
