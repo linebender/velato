@@ -335,6 +335,8 @@ pub enum LayerReference {
 /// Layer in an animation.
 #[derive(Clone, Debug, Default)]
 pub struct Layer {
+    /// Excluded from normal rendering, but still usable as a matte source or parent.
+    pub hidden: bool,
     pub effects: Vec<LayerEffect>,
     /// Effects Velato could not import because their type is unsupported or their parameters are invalid.
     pub unsupported_effects: Vec<UnsupportedEffect>,
