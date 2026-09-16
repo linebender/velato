@@ -4,7 +4,10 @@
 use super::model::{
     Content, Draw, Geometry, GroupTransform, ImageAsset, RepeaterComposite, Shape, fixed,
 };
-use super::{Composition, EvaluatedLayer, EvaluationError, FilterEffect, FilterLayerResult};
+use super::{
+    Composition, EvaluatedComposition, EvaluatedLayer, EvaluationError, FilterEffect,
+    FilterLayerResult,
+};
 use kurbo::{Affine, PathEl, Rect};
 use peniko::Mix;
 use std::mem::swap;
@@ -89,6 +92,23 @@ impl Renderer {
         scene: &mut impl RenderSink,
     ) -> Result<(), EvaluationError> {
         let evaluated = animation.evaluate(frame)?;
+        self.append_evaluated(&evaluated, transform, alpha, scene);
+        Ok(())
+    }
+
+    /// Draws a saved evaluation without recalculating layer hierarchy, timing or transforms.
+    ///
+    /// Shape and paint properties are still sampled during drawing.
+    ///
+    /// NOTE: this is not a frame cache.
+    pub fn append_evaluated(
+        &mut self,
+        evaluated: &EvaluatedComposition<'_>,
+        transform: Affine,
+        alpha: f64,
+        scene: &mut impl RenderSink,
+    ) {
+        let animation = evaluated.composition;
         self.batch.clear();
         let clip = Rect::new(0.0, 0.0, animation.width as _, animation.height as _);
         let clip_bounds = transform.transform_rect_bbox(clip);
@@ -109,7 +129,6 @@ impl Renderer {
             );
         }
         scene.pop_layer();
-        Ok(())
     }
 
     #[expect(clippy::too_many_arguments, reason = "Deferred")]
