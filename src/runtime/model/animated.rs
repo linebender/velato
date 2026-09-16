@@ -606,6 +606,7 @@ impl Brush {
 
 #[derive(Clone, Debug)]
 pub struct Trim {
+    pub mode: super::TrimMode,
     /// Start of the visible segment (0.0 to 100.0).
     pub start: Value<f64>,
     /// End of the visible segment (0.0 to 100.0).
@@ -623,6 +624,7 @@ impl Trim {
     /// Evaluates the trim at the specified frame.
     pub fn evaluate(&self, frame: f64) -> fixed::Trim {
         fixed::Trim {
+            mode: self.mode,
             start: self.start.evaluate(frame),
             end: self.end.evaluate(frame),
             offset: self.offset.evaluate(frame),

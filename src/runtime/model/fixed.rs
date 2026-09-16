@@ -73,6 +73,7 @@ impl Repeater {
 
 #[derive(Clone, Debug)]
 pub struct Trim {
+    pub mode: super::TrimMode,
     /// Start of the visible segment (0.0 to 100.0).
     pub start: f64,
     /// End of the visible segment (0.0 to 100.0).
@@ -87,10 +88,13 @@ impl Trim {
     // Returns normalized segments in 0.0..1.0 range.
     /// Second tuple element is Some if offset causes wrap-around.
     pub fn normalized(&self) -> Option<NormalizedTrim> {
-        let (start_pct, end_pct) = if self.start <= self.end {
-            (self.start, self.end)
+        // LottieFiles' ThorVG player also clamps start/end before applying the offset.
+        let start = self.start.clamp(0.0, 100.0);
+        let end = self.end.clamp(0.0, 100.0);
+        let (start_pct, end_pct) = if start <= end {
+            (start, end)
         } else {
-            (self.end, self.start)
+            (end, start)
         };
 
         let range_pct = end_pct - start_pct;

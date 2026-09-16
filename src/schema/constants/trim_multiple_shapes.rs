@@ -7,8 +7,8 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[repr(u8)]
 #[derive(Deserialize_repr, Serialize_repr, Debug, Clone, PartialEq)]
 pub enum TrimMultipleShapes {
-    ///
-    Individually = 1,
-    ///
-    Simultaneously = 2,
+    /// Apply the range independently to each contour.
+    Parallel = 1,
+    /// Apply the range across combined contour lengths.
+    Sequential = 2,
 }

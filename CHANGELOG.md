@@ -23,6 +23,7 @@ This release has an [MSRV][] of 1.88.
 - Added `Composition::evaluate()` to query layers, transforms, anchors, and authored paths without rendering. ([#125][] by [@RobertBrewitz][])
 - Added `Renderer::try_append()` for fallible rendering. ([#125][] by [@RobertBrewitz][])
 - Added opt-in `lottie-shape-paths` for Lottie-compatible ellipse and rectangle start points and drawing directions. ([#127][] by [@RobertBrewitz][])
+- Added sequential trimming across repeater copies without changing paint order. ([#128][] by [@RobertBrewitz][])
 
 ### Changed
 
@@ -32,6 +33,7 @@ This release has an [MSRV][] of 1.88.
 
 ### Fixed
 
+- Fixed trim-path modes and stray lines between disconnected paths. ([#128][] by [@RobertBrewitz][])
 - Implicit mattes now use the preceding layer; matte sources no longer render separately without `td`. ([#126][] by [@RobertBrewitz][])
 - Hidden layers retain content and effects for matte use, per Lottie's hidden-layer rules. ([#126][] by [@RobertBrewitz][])
 - Fixed reversed transform skew direction for nonzero `sk` values. ([#119][] by [@RobertBrewitz])
@@ -267,6 +269,7 @@ This release has an [MSRV][] of 1.75.
 [#125]: https://github.com/linebender/velato/pull/125
 [#126]: https://github.com/linebender/velato/pull/126
 [#127]: https://github.com/linebender/velato/pull/127
+[#128]: https://github.com/linebender/velato/pull/128
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0

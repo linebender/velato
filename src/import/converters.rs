@@ -712,6 +712,12 @@ fn conv_shape(value: &schema::shapes::AnyShape) -> Option<crate::runtime::model:
         }
         schema::shapes::AnyShape::Trim(value) => {
             let trim = animated::Trim {
+                mode: match value.multiple {
+                    Some(
+                        schema::constants::trim_multiple_shapes::TrimMultipleShapes::Sequential,
+                    ) => model::TrimMode::Sequential,
+                    _ => model::TrimMode::Parallel,
+                },
                 start: conv_scalar(&value.start),
                 end: conv_scalar(&value.end),
                 offset: conv_scalar(&value.offset),
