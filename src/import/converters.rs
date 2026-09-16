@@ -727,8 +727,10 @@ fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::mod
     match value {
         AnyShape::Ellipse(value) => {
             let ellipse = animated::Ellipse {
-                is_ccw: false, /* todo: lottie schema does not have a field
-                                * for this (anymore?) */
+                is_ccw: matches!(
+                    value.shape.direction,
+                    Some(schema::constants::shape_direction::ShapeDirection::Reversed)
+                ),
                 position: conv_pos_point(&value.position),
                 size: conv_size(&value.size),
             };
@@ -736,8 +738,10 @@ fn conv_geometry(value: &schema::shapes::AnyShape) -> Option<crate::runtime::mod
         }
         AnyShape::Rectangle(value) => {
             let rect = animated::Rect {
-                is_ccw: false, /* todo: lottie schema does not have a field
-                                * for this (anymore?) */
+                is_ccw: matches!(
+                    value.shape.direction,
+                    Some(schema::constants::shape_direction::ShapeDirection::Reversed)
+                ),
                 position: conv_pos_point(&value.position),
                 size: conv_size(&value.size),
                 corner_radius: conv_scalar(&value.rounded_corner_radius),

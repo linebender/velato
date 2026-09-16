@@ -22,6 +22,7 @@ This release has an [MSRV][] of 1.88.
 - Added plumbing to support animated effects through `RenderSink::push_filter`; Requires a supporting render sink. ([#123][] by [@RobertBrewitz][])
 - Added `Composition::evaluate()` to query layers, transforms, anchors, and authored paths without rendering. ([#125][] by [@RobertBrewitz][])
 - Added `Renderer::try_append()` for fallible rendering. ([#125][] by [@RobertBrewitz][])
+- Added opt-in `lottie-shape-paths` for Lottie-compatible ellipse and rectangle start points and drawing directions. ([#127][] by [@RobertBrewitz][])
 
 ### Changed
 
@@ -265,6 +266,7 @@ This release has an [MSRV][] of 1.75.
 [#124]: https://github.com/linebender/velato/pull/124
 [#125]: https://github.com/linebender/velato/pull/125
 [#126]: https://github.com/linebender/velato/pull/126
+[#127]: https://github.com/linebender/velato/pull/127
 
 [Unreleased]: https://github.com/linebender/velato/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/linebender/velato/compare/v0.11.0...v0.12.0

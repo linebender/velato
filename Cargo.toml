@@ -111,5 +111,6 @@ wasm-bindgen-test = "0.3.70"
 
 [features]
 default = ["vello"]
+lottie-shape-paths = []
 vello = ["dep:vello"]
 wgpu = ["vello", "vello/wgpu"]
