@@ -96,5 +96,5 @@ pub use vello;
 
 pub use runtime::{
     AuthoredPath, BlurEdgeMode, Composition, EvaluatedComposition, EvaluatedLayer, EvaluationError,
-    FilterEffect, FilterLayerResult, OccurrencePath, RenderSink, Renderer, model,
+    FilterEffect, FilterLayerResult, OccurrencePath, PreparedScene, RenderSink, Renderer, model,
 };

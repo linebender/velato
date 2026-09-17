@@ -21,7 +21,7 @@ pub use effects::{BlurEdgeMode, FilterEffect, FilterLayerResult};
 pub use evaluate::{
     AuthoredPath, EvaluatedComposition, EvaluatedLayer, EvaluationError, OccurrencePath,
 };
-pub use render::{RenderSink, Renderer};
+pub use render::{PreparedScene, RenderSink, Renderer};
 
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]
